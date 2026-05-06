@@ -36,8 +36,9 @@ function buildIndex(resources: Resource[]): MiniSearch<Resource> {
       prefix: true,
     },
     // join array tags for indexing
-    extractField: (document: Record<string, unknown>, fieldName: string) => {
-      const value = document[fieldName];
+    extractField: (document: Resource, fieldName: string) => {
+      const doc = document as unknown as Record<string, unknown>;
+      const value = doc[fieldName];
       if (fieldName === "tags" && Array.isArray(value)) {
         return value.join(" ");
       }
