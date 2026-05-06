@@ -8,6 +8,7 @@ const valid: Resource = {
   url: "https://example.com/book",
   language: "en",
   category: "JavaScript",
+  collection: "books",
   type: "book",
   tags: ["JavaScript"],
   quality: "unchecked",

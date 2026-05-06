@@ -8,6 +8,7 @@ const base: Resource = {
   url: "https://example.com",
   language: "en",
   category: "General",
+  collection: "books",
   type: "book",
   tags: [],
   quality: "unchecked",
