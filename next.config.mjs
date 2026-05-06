@@ -1,6 +1,6 @@
 /** @type {import('next').NextConfig} */
 
-const repoName = "postsoma-devlibrary";
+const repoName = "PostSoma-DevLibrary";
 const isProd = process.env.NODE_ENV === "production";
 
 const nextConfig = {
