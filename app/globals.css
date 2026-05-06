@@ -1,0 +1,206 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─── Archive Design System ───────────────────────────── */
+:root {
+  --archive-bg: #0d0f12;
+  --archive-surface: #13161b;
+  --archive-border: #1e2228;
+  --archive-muted: #2a2f38;
+  --archive-text: #e8e4dc;
+  --archive-subtle: #8c8880;
+  --archive-accent: #c8a96e;
+  --archive-accent-dim: #9a7d4a;
+  --archive-accent-glow: #e8c88a;
+  --archive-en: #4a7fa5;
+  --archive-zh: #a55a4a;
+}
+
+/* ─── Base Resets ─────────────────────────────────────── */
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--archive-bg);
+  color: var(--archive-text);
+  min-height: 100vh;
+}
+
+/* ─── Scrollbar ───────────────────────────────────────── */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--archive-bg);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--archive-muted);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--archive-subtle);
+}
+
+/* ─── Selection ───────────────────────────────────────── */
+::selection {
+  background: rgba(200, 169, 110, 0.2);
+  color: var(--archive-accent-glow);
+}
+
+/* ─── Typography ──────────────────────────────────────── */
+.font-display {
+  font-family: var(--font-display), Georgia, serif;
+}
+
+.font-sans {
+  font-family: var(--font-sans), system-ui, sans-serif;
+}
+
+.font-mono {
+  font-family: var(--font-mono), monospace;
+}
+
+/* ─── Archive Components ──────────────────────────────── */
+@layer components {
+  /* Surface card */
+  .archive-card {
+    @apply bg-archive-surface border border-archive-border rounded-sm;
+    @apply transition-all duration-200;
+  }
+
+  .archive-card:hover {
+    @apply border-archive-muted;
+    box-shadow: 0 0 0 1px rgba(200, 169, 110, 0.08),
+                0 4px 24px rgba(0, 0, 0, 0.4);
+  }
+
+  /* Language badge */
+  .lang-badge-en {
+    @apply text-xs font-mono px-1.5 py-0.5 rounded-sm;
+    background: rgba(74, 127, 165, 0.15);
+    color: #7ab3d4;
+    border: 1px solid rgba(74, 127, 165, 0.25);
+  }
+
+  .lang-badge-zh {
+    @apply text-xs font-mono px-1.5 py-0.5 rounded-sm;
+    background: rgba(165, 90, 74, 0.15);
+    color: #d4836e;
+    border: 1px solid rgba(165, 90, 74, 0.25);
+  }
+
+  /* Type badge */
+  .type-badge {
+    @apply text-xs font-mono px-1.5 py-0.5 rounded-sm;
+    background: rgba(44, 51, 62, 0.8);
+    color: var(--archive-subtle);
+    border: 1px solid var(--archive-border);
+  }
+
+  /* Input field */
+  .archive-input {
+    @apply w-full bg-archive-surface border border-archive-border rounded-sm;
+    @apply px-4 py-2.5 text-sm text-archive-text font-sans;
+    @apply placeholder:text-archive-subtle;
+    @apply focus:outline-none focus:border-archive-accent-dim;
+    @apply transition-colors duration-150;
+  }
+
+  /* Button variants */
+  .btn-ghost {
+    @apply text-archive-subtle text-sm font-sans px-3 py-1.5 rounded-sm;
+    @apply border border-transparent;
+    @apply hover:text-archive-text hover:border-archive-border;
+    @apply transition-all duration-150;
+  }
+
+  .btn-accent {
+    @apply text-archive-bg text-sm font-sans font-medium px-4 py-2 rounded-sm;
+    background: var(--archive-accent);
+    @apply hover:opacity-90 transition-opacity duration-150;
+  }
+
+  .btn-outline {
+    @apply text-archive-subtle text-sm font-sans px-3 py-1.5 rounded-sm;
+    @apply border border-archive-border;
+    @apply hover:text-archive-text hover:border-archive-muted;
+    @apply transition-all duration-150;
+  }
+
+  /* Filter chip */
+  .filter-chip {
+    @apply text-xs font-mono px-2.5 py-1 rounded-sm cursor-pointer;
+    @apply border border-archive-border text-archive-subtle;
+    @apply hover:border-archive-muted hover:text-archive-text;
+    @apply transition-all duration-150;
+  }
+
+  .filter-chip.active {
+    @apply border-archive-accent-dim text-archive-accent;
+    background: rgba(200, 169, 110, 0.08);
+  }
+
+  /* Divider */
+  .archive-divider {
+    @apply border-t border-archive-border;
+  }
+}
+
+/* ─── Animations ──────────────────────────────────────── */
+@keyframes fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes slide-up {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slide-in-right {
+  from { opacity: 0; transform: translateX(8px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.3s ease forwards;
+}
+
+.animate-slide-up {
+  animation: slide-up 0.35s ease forwards;
+}
+
+/* Staggered children */
+.stagger-children > * {
+  opacity: 0;
+  animation: slide-up 0.3s ease forwards;
+}
+.stagger-children > *:nth-child(1)  { animation-delay: 0ms; }
+.stagger-children > *:nth-child(2)  { animation-delay: 40ms; }
+.stagger-children > *:nth-child(3)  { animation-delay: 80ms; }
+.stagger-children > *:nth-child(4)  { animation-delay: 120ms; }
+.stagger-children > *:nth-child(5)  { animation-delay: 160ms; }
+.stagger-children > *:nth-child(6)  { animation-delay: 200ms; }
+.stagger-children > *:nth-child(7)  { animation-delay: 240ms; }
+.stagger-children > *:nth-child(8)  { animation-delay: 280ms; }
+.stagger-children > *:nth-child(9)  { animation-delay: 320ms; }
+.stagger-children > *:nth-child(10) { animation-delay: 360ms; }
+.stagger-children > *:nth-child(n+11) { animation-delay: 400ms; }
+
+/* ─── Noise texture overlay ───────────────────────────── */
+.noise-overlay::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.025;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  z-index: 9999;
+}

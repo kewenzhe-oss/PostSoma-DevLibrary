@@ -1,0 +1,22 @@
+[
+  {
+    "id": "books",
+    "label": "Books",
+    "count": 2805
+  },
+  {
+    "id": "cheat_sheets",
+    "label": "Cheat Sheets",
+    "count": 308
+  },
+  {
+    "id": "courses",
+    "label": "Courses",
+    "count": 1342
+  },
+  {
+    "id": "interactive",
+    "label": "Interactive",
+    "count": 384
+  }
+]
