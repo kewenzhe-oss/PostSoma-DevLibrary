@@ -1,8 +1,9 @@
-import { notFound } from "next/navigation";
-import Link from "next/link";
-import AppShell from "@/components/layout/AppShell";
-import BookmarkButton from "@/components/resources/BookmarkButton";
-import { getResourceById } from "@/lib/data/resources";
+import { getAllResources, getResourceById } from "@/lib/data/resources";
+
+export async function generateStaticParams() {
+  const resources = await getAllResources();
+  return resources.map((r) => ({ id: r.id }));
+}
 
 export async function generateMetadata({ params }: { params: { id: string } }) {
   const resource = await getResourceById(params.id);
