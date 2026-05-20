@@ -15,6 +15,10 @@
   --archive-accent-glow: #e8c88a;
   --archive-en: #4a7fa5;
   --archive-zh: #a55a4a;
+  --archive-teal: #2dd4bf;
+  --archive-teal-dim: #0f766e;
+  --archive-purple: #a78bfa;
+  --archive-purple-dim: #6d28d9;
 }
 
 /* ─── Base Resets ─────────────────────────────────────── */
@@ -46,6 +50,22 @@ body {
 }
 ::-webkit-scrollbar-thumb:hover {
   background: var(--archive-subtle);
+}
+
+/* ─── Drawer scroll (floating TOC panel) ─────────────── */
+.drawer-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: var(--archive-muted) transparent;
+}
+.drawer-scroll::-webkit-scrollbar {
+  width: 3px;
+}
+.drawer-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+.drawer-scroll::-webkit-scrollbar-thumb {
+  background: var(--archive-muted);
+  border-radius: 2px;
 }
 
 /* ─── Selection ───────────────────────────────────────── */
@@ -150,6 +170,17 @@ body {
   /* Divider */
   .archive-divider {
     @apply border-t border-archive-border;
+  }
+
+  /* Neon teal highlight (drawer active states) */
+  .neon-teal {
+    color: var(--archive-teal);
+    text-shadow: 0 0 8px rgba(45, 212, 191, 0.4);
+  }
+
+  .neon-teal-border {
+    border-color: rgba(45, 212, 191, 0.25);
+    box-shadow: 0 0 0 1px rgba(45, 212, 191, 0.1), inset 0 0 12px rgba(45, 212, 191, 0.03);
   }
 }
 

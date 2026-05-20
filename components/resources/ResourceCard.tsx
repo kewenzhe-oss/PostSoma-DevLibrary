@@ -12,6 +12,33 @@ const TYPE_LABELS: Record<Resource["type"], string> = {
   unknown: "resource",
 };
 
+function generateDescription(resource: Resource): string {
+  const typeLabelsZh: Record<Resource["type"], string> = {
+    book: "编程书籍",
+    course: "精选课程",
+    tutorial: "实用教程",
+    documentation: "技术文档",
+    interactive: "互动教程",
+    article: "技术文章",
+    unknown: "学习资源",
+  };
+
+  const typeStrZh = typeLabelsZh[resource.type] || "学习资源";
+  const typeStrEn = TYPE_LABELS[resource.type] || "resource";
+
+  if (resource.language === "zh") {
+    const tagsStr = resource.tags && resource.tags.length > 0
+      ? `，涵盖 ${resource.tags.slice(0, 3).join("、")}`
+      : "";
+    return `收录于 ${resource.category} 分类下的免费开源${typeStrZh}${tagsStr}，助力开发者技能提升与深度学习。`;
+  } else {
+    const tagsStr = resource.tags && resource.tags.length > 0
+      ? ` covering ${resource.tags.slice(0, 3).join(", ")}`
+      : "";
+    return `A free open-source ${typeStrEn} in the ${resource.category} directory${tagsStr}, curated for software developers.`;
+  }
+}
+
 interface ResourceCardProps {
   resource: Resource;
 }
@@ -38,6 +65,11 @@ export default function ResourceCard({ resource }: ResourceCardProps) {
           {resource.title}
         </h2>
       </Link>
+
+      {/* Description */}
+      <p className="font-sans text-xs text-archive-subtle/85 line-clamp-3 leading-relaxed">
+        {generateDescription(resource)}
+      </p>
 
       {/* Category breadcrumb */}
       <p className="font-mono text-xs text-archive-subtle truncate">
@@ -73,3 +105,4 @@ export default function ResourceCard({ resource }: ResourceCardProps) {
     </article>
   );
 }
+

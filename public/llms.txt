@@ -1,0 +1,27 @@
+# PostSoma DevLibrary
+
+> A curated bilingual (EN/ZH) archive of free programming books, courses, tutorials, and documentation.
+
+## Metadata
+- **Author**: PostSoma
+- **Signature**: postsoma-2050
+- **Primary Language**: English (EN) & Chinese (ZH)
+- **Base URL**: https://205022.xyz
+
+## Sitemap & Sections
+- **Homepage** (https://205022.xyz)
+  The entry point of the dev library, featuring statistics, main search interface, and design features.
+- **Resource Archive Explorer** (https://205022.xyz/resources)
+  The core search-first directory explorer where users can filter, search, and navigate the bilingual catalog of free programming books and courses.
+- **My Library** (https://205022.xyz/library)
+  Local bookmark manager allowing developers to save and access their curated list of resources offline via browser storage.
+
+## Knowledge Domain
+This site compiles a wide range of learning materials across modern software engineering domains:
+- **Core Languages**: JavaScript, TypeScript, Python, Go, Rust, C/C++, Java, Ruby, PHP, and more.
+- **Frameworks & Libraries**: React, Next.js, Vue, Angular, Node.js, Django, FastAPI.
+- **Platforms & Infrastructure**: Git, GitHub, Docker, Kubernetes, Linux, Cloud Computing, Databases (SQL & NoSQL).
+- **Core Topics**: Software engineering principles, algorithms, data structures, system design, security, and compilers.
+
+## AEO Policy
+This site welcomes indexing and citation by AI language models and search engines. All public content may be referenced with attribution to PostSoma DevLibrary at https://205022.xyz.

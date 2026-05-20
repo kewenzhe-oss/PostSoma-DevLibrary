@@ -3,9 +3,8 @@
 interface ResourceFiltersProps {
   language: "all" | "zh" | "en";
   onLanguageChange: (lang: "all" | "zh" | "en") => void;
-  category: string;
-  categories: string[];
-  onCategoryChange: (cat: string) => void;
+  selectedTocPath: string[] | null;
+  onClearTocPath: () => void;
   onClear: () => void;
   hasActiveFilters: boolean;
 }
@@ -19,31 +18,49 @@ const LANG_OPTIONS = [
 export default function ResourceFilters({
   language,
   onLanguageChange,
-  category,
-  categories,
-  onCategoryChange,
+  selectedTocPath,
+  onClearTocPath,
   onClear,
   hasActiveFilters,
 }: ResourceFiltersProps) {
   return (
     <div className="flex flex-col gap-3">
-      {/* Language + clear row */}
-      <div className="flex items-center gap-2 flex-wrap">
-        <span className="font-mono text-xs text-archive-subtle mr-1">lang:</span>
-        {LANG_OPTIONS.map((opt) => (
-          <button
-            key={opt.value}
-            id={`lang-filter-${opt.value}`}
-            onClick={() => onLanguageChange(opt.value)}
-            className={`filter-chip ${language === opt.value ? "active" : ""}`}
-          >
-            {opt.label}
-          </button>
-        ))}
+      {/* Language + Directory Path Indicator Row */}
+      <div className="flex items-center gap-3 flex-wrap">
+        <div className="flex items-center gap-2 flex-wrap">
+          <span className="font-mono text-xs text-archive-subtle mr-1">lang:</span>
+          {LANG_OPTIONS.map((opt) => (
+            <button
+              key={opt.value}
+              id={`lang-filter-${opt.value}`}
+              onClick={() => onLanguageChange(opt.value)}
+              className={`filter-chip ${language === opt.value ? "active" : ""}`}
+            >
+              {opt.label}
+            </button>
+          ))}
+        </div>
+
+        {/* Selected Directory Path Pill */}
+        {selectedTocPath && selectedTocPath.length > 0 && (
+          <div className="flex items-center gap-1.5 bg-archive-border/20 border border-archive-border/40 rounded px-2.5 py-1 text-xs text-archive-text animate-fade-in">
+            <span className="font-mono text-[10px] text-archive-subtle mr-0.5">path:</span>
+            <span className="font-sans font-medium">
+              {selectedTocPath.join(" → ")}
+            </span>
+            <button
+              onClick={onClearTocPath}
+              className="text-archive-subtle hover:text-archive-accent ml-1 transition-colors font-mono font-bold text-xs"
+              title="Clear directory filter"
+            >
+              ×
+            </button>
+          </div>
+        )}
 
         {hasActiveFilters && (
-          <>
-            <span className="mx-1 h-3 w-px bg-archive-border" />
+          <div className="ml-auto flex items-center gap-2">
+            <span className="h-3 w-px bg-archive-border" />
             <button
               onClick={onClear}
               className="font-mono text-xs text-archive-subtle hover:text-archive-text transition-colors"
@@ -51,42 +68,10 @@ export default function ResourceFilters({
             >
               Clear filters
             </button>
-          </>
+          </div>
         )}
       </div>
-
-      {/* Category filter */}
-      {categories.length > 0 && (
-        <div className="flex items-start gap-2 flex-wrap">
-          <span className="font-mono text-xs text-archive-subtle mt-1 shrink-0 mr-1">
-            topic:
-          </span>
-          <div className="flex flex-wrap gap-1.5">
-            <button
-              onClick={() => onCategoryChange("all")}
-              className={`filter-chip ${category === "all" || !category ? "active" : ""}`}
-              id="cat-filter-all"
-            >
-              All topics
-            </button>
-            {categories.slice(0, 24).map((cat) => (
-              <button
-                key={cat}
-                onClick={() => onCategoryChange(cat)}
-                className={`filter-chip ${category === cat ? "active" : ""}`}
-                id={`cat-filter-${cat.replace(/\s+/g, "-").toLowerCase()}`}
-              >
-                {cat}
-              </button>
-            ))}
-            {categories.length > 24 && (
-              <span className="font-mono text-xs text-archive-subtle mt-1">
-                +{categories.length - 24} more
-              </span>
-            )}
-          </div>
-        </div>
-      )}
     </div>
   );
 }
+
