@@ -5,11 +5,23 @@ import BookmarkButton from "@/components/resources/BookmarkButton";
 import { getAllResources, getResourceById } from "@/lib/data/resources";
 
 export async function generateStaticParams() {
+  // getAllResources reads public/data/resources.json which is committed to the repo
   const resources = await getAllResources();
+
+  // Safety guard: if data is unavailable at build time, log and return empty
+  // (dynamicParams=false below ensures Next.js handles this gracefully)
+  if (!resources || resources.length === 0) {
+    console.warn(
+      "[generateStaticParams] resources.json is empty or missing — " +
+      "no resource detail pages will be pre-rendered."
+    );
+    return [];
+  }
+
   return resources.map((r) => ({ id: r.id }));
 }
 
-// Required for output: export — no dynamic routes allowed
+// Required for output: export — disables runtime dynamic routing
 export const dynamicParams = false;
 
 export async function generateMetadata({ params }: { params: { id: string } }) {
