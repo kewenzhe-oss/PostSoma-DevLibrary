@@ -9,6 +9,9 @@ export async function generateStaticParams() {
   return resources.map((r) => ({ id: r.id }));
 }
 
+// Required for output: export — no dynamic routes allowed
+export const dynamicParams = false;
+
 export async function generateMetadata({ params }: { params: { id: string } }) {
   const resource = await getResourceById(params.id);
   if (!resource) return { title: "Not Found" };
