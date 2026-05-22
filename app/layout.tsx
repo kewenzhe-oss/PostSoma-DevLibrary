@@ -24,14 +24,36 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://205022.xyz"),
   title: "PostSoma DevLibrary — Bilingual Programming Archive",
   description:
     "A curated bilingual (EN/ZH) archive of free programming books, courses, tutorials, and documentation. Search-first, dark mode, no noise.",
   keywords: ["programming", "books", "tutorials", "free", "bilingual", "Chinese", "English"],
+  alternates: {
+    canonical: "/",
+  },
   openGraph: {
-    title: "PostSoma DevLibrary",
-    description: "Curated bilingual programming learning archive",
+    title: "PostSoma DevLibrary — Bilingual Programming Archive",
+    description:
+      "A curated bilingual (EN/ZH) archive of free programming books, courses, tutorials, and documentation. Search-first, dark mode, no noise.",
+    url: "/",
+    siteName: "PostSoma DevLibrary",
     type: "website",
+    images: [
+      {
+        url: "/og-image.svg",
+        width: 1200,
+        height: 630,
+        alt: "PostSoma DevLibrary — Bilingual Programming Archive",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "PostSoma DevLibrary — Bilingual Programming Archive",
+    description:
+      "A curated bilingual (EN/ZH) archive of free programming books, courses, tutorials, and documentation. Search-first, dark mode, no noise.",
+    images: ["/og-image.svg"],
   },
 };
 

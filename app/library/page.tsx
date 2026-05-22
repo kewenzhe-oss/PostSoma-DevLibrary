@@ -1,9 +1,14 @@
 import AppShell from "@/components/layout/AppShell";
 import LocalLibraryClient from "@/components/library/LocalLibraryClient";
 import { getAllResources } from "@/lib/data/resources";
+import type { Metadata } from "next";
 
-export const metadata = {
+export const metadata: Metadata = {
   title: "My Library — PostSoma DevLibrary",
+  robots: {
+    index: false,
+    follow: true,
+  },
 };
 
 export default async function LibraryPage() {

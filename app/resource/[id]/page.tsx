@@ -3,6 +3,8 @@ import Link from "next/link";
 import AppShell from "@/components/layout/AppShell";
 import BookmarkButton from "@/components/resources/BookmarkButton";
 import { getAllResources, getResourceById } from "@/lib/data/resources";
+import JsonLd from "@/components/seo/JsonLd";
+import type { Metadata } from "next";
 
 export async function generateStaticParams() {
   // getAllResources reads public/data/resources.json which is committed to the repo
@@ -24,10 +26,35 @@ export async function generateStaticParams() {
 // Required for output: export — disables runtime dynamic routing
 export const dynamicParams = false;
 
-export async function generateMetadata({ params }: { params: { id: string } }) {
+export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
   const resource = await getResourceById(params.id);
   if (!resource) return { title: "Not Found" };
-  return { title: `${resource.title} — PostSoma DevLibrary` };
+
+  const description =
+    resource.language === "zh"
+      ? `收錄於 PostSoma DevLibrary 的免費 ${resource.category}${resource.subcategory ? " / " + resource.subcategory : ""} ${resource.type} 學習資源。`
+      : `Free ${resource.type} resource for learning ${resource.category}${resource.subcategory ? " / " + resource.subcategory : ""}. Curated in PostSoma DevLibrary.`;
+
+  return {
+    title: `${resource.title} — PostSoma DevLibrary`,
+    description,
+    alternates: {
+      canonical: `/resource/${resource.id}`,
+    },
+    openGraph: {
+      title: `${resource.title} — PostSoma DevLibrary`,
+      description,
+      url: `/resource/${resource.id}`,
+      type: "article",
+      siteName: "PostSoma DevLibrary",
+      locale: resource.language === "zh" ? "zh_TW" : "en_US",
+    },
+    twitter: {
+      card: "summary",
+      title: `${resource.title} — PostSoma DevLibrary`,
+      description,
+    },
+  };
 }
 
 export default async function ResourceDetailPage({
@@ -43,6 +70,48 @@ export default async function ResourceDetailPage({
 
   return (
     <AppShell>
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@graph": [
+            {
+              "@type": "WebPage",
+              "@id": `https://205022.xyz/resource/${resource.id}#webpage`,
+              "url": `https://205022.xyz/resource/${resource.id}`,
+              "name": `${resource.title} — PostSoma DevLibrary`,
+              "description": resource.language === "zh"
+                ? `收錄於 PostSoma DevLibrary 的免費 ${resource.category}${resource.subcategory ? " / " + resource.subcategory : ""} ${resource.type} 學習資源。`
+                : `Free ${resource.type} resource for learning ${resource.category}${resource.subcategory ? " / " + resource.subcategory : ""}. Curated in PostSoma DevLibrary.`,
+              "isPartOf": { "@id": "https://205022.xyz/#website" },
+              "inLanguage": resource.language === "zh" ? "zh-Hant" : "en"
+            },
+            {
+              "@type": "BreadcrumbList",
+              "@id": `https://205022.xyz/resource/${resource.id}#breadcrumb`,
+              "itemListElement": [
+                {
+                  "@type": "ListItem",
+                  "position": 1,
+                  "name": "Home",
+                  "item": "https://205022.xyz/"
+                },
+                {
+                  "@type": "ListItem",
+                  "position": 2,
+                  "name": "Resources",
+                  "item": "https://205022.xyz/resources"
+                },
+                {
+                  "@type": "ListItem",
+                  "position": 3,
+                  "name": resource.title,
+                  "item": `https://205022.xyz/resource/${resource.id}`
+                }
+              ]
+            }
+          ]
+        }}
+      />
       <div className="max-w-3xl mx-auto py-8 animate-slide-up">
         <Link
           href="/resources"

@@ -1,0 +1,99 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display&amp;family=Instrument+Sans:wght@400;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap');
+      
+      .bg { fill: #0d0f12; }
+      .grid { stroke: #1e2228; stroke-width: 1; opacity: 0.15; }
+      .border { fill: none; stroke: #1e2228; stroke-width: 16; }
+      .accent-glow-gold { fill: #c8a96e; opacity: 0.08; filter: blur(80px); }
+      .accent-glow-blue { fill: #4a7fa5; opacity: 0.06; filter: blur(80px); }
+      
+      .font-sans { font-family: 'Instrument Sans', -apple-system, sans-serif; }
+      .font-display { font-family: 'DM Serif Display', serif; }
+      .font-mono { font-family: 'JetBrains Mono', monospace; }
+      
+      .title-sub { font-size: 20px; font-weight: 600; fill: #8c8880; letter-spacing: 0.25em; text-transform: uppercase; }
+      .title-main-1 { font-size: 76px; font-weight: 700; fill: #e8e4dc; letter-spacing: -0.02em; }
+      .title-main-2 { font-size: 96px; fill: #c8a96e; letter-spacing: -0.01em; }
+      .tagline { font-size: 26px; fill: #8c8880; font-weight: 400; }
+      
+      .badge { fill: #13161b; stroke: #1e2228; stroke-width: 1.5; rx: 4px; }
+      .badge-text { font-size: 18px; font-weight: 500; fill: #e8e4dc; }
+      .badge-accent { fill: #c8a96e; }
+      .badge-lang-en { fill: #4a7fa5; }
+      .badge-lang-zh { fill: #a55a4a; }
+    </style>
+    
+    <pattern id="grid-pattern" width="60" height="60" patternUnits="userSpaceOnUse">
+      <path d="M 60 0 L 0 0 0 60" fill="none" class="grid"/>
+    </pattern>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="630" class="bg" />
+  
+  <!-- Subtle Grids -->
+  <rect width="1200" height="630" fill="url(#grid-pattern)" />
+  
+  <!-- Soft Ambient Glows -->
+  <circle cx="950" cy="150" r="280" class="accent-glow-gold" />
+  <circle cx="200" cy="480" r="250" class="accent-glow-blue" />
+
+  <!-- Content Group -->
+  <g transform="translate(100, 95)">
+    <!-- Subtitle Category Badge -->
+    <text x="0" y="0" class="font-mono title-sub">Bilingual Learning Archive</text>
+    
+    <!-- Big Branding Title -->
+    <text x="0" y="110" class="font-sans title-main-1">The Bilingual</text>
+    <text x="0" y="215" class="font-display title-main-2">Dev Library.</text>
+    
+    <!-- Tagline (Descriptions) -->
+    <text x="0" y="295" class="font-sans tagline">A curated directory of free programming books, courses, cheat sheets,</text>
+    <text x="0" y="335" class="font-sans tagline">and interactive tutorials — in English and Chinese.</text>
+    
+    <!-- Meta details & Statistics badges -->
+    <g transform="translate(0, 395)">
+      <!-- Badge 1: Resource Count -->
+      <g>
+        <rect x="0" y="0" width="290" height="42" class="badge" />
+        <circle cx="20" cy="21" r="5" fill="#4a7fa5" />
+        <text x="35" y="26" class="font-mono badge-text">4,800+ FREE RESOURCES</text>
+      </g>
+      
+      <!-- Badge 2: Languages -->
+      <g transform="translate(305, 0)">
+        <rect x="0" y="0" width="135" height="42" class="badge" />
+        <text x="20" y="26" class="font-mono badge-text">EN / 中文</text>
+      </g>
+      
+      <!-- Badge 3: User accessibility info -->
+      <g transform="translate(455, 0)">
+        <rect x="0" y="0" width="235" height="42" class="badge" />
+        <circle cx="20" cy="21" r="5" fill="#c8a96e" />
+        <text x="35" y="26" class="font-mono badge-text">NO ACCOUNT NEEDED</text>
+      </g>
+    </g>
+  </g>
+
+  <!-- Vector Logo Decoration (Top Right) -->
+  <g transform="translate(950, 240)">
+    <!-- Outer stylized brackets resembling library directories -->
+    <path d="M-60,-90 L-90,-90 L-90,90 L-60,90" fill="none" stroke="#1e2228" stroke-width="6" stroke-linecap="round"/>
+    <path d="M60,-90 L90,-90 L90,90 L60,90" fill="none" stroke="#1e2228" stroke-width="6" stroke-linecap="round"/>
+    
+    <!-- Gold central grid emblem -->
+    <rect x="-40" y="-40" width="80" height="80" rx="12" fill="none" stroke="#c8a96e" stroke-width="6" />
+    <line x1="-40" y1="0" x2="40" y2="0" stroke="#1e2228" stroke-width="3" />
+    <line x1="0" y1="-40" x2="0" y2="40" stroke="#1e2228" stroke-width="3" />
+    <circle cx="0" cy="0" r="10" fill="#c8a96e" />
+    
+    <!-- Code bracket accents -->
+    <path d="M-15,-20 L-25,-10 L-15,0" fill="none" stroke="#e8e4dc" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M15,0 L25,10 L15,20" fill="none" stroke="#e8e4dc" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+
+  <!-- Outer Framing Border -->
+  <rect width="1200" height="630" class="border" />
+</svg>

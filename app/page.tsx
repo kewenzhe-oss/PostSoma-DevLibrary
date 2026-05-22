@@ -1,6 +1,14 @@
 import Link from "next/link";
 import AppShell from "@/components/layout/AppShell";
 import { getAllResources, getManifest } from "@/lib/data/resources";
+import JsonLd from "@/components/seo/JsonLd";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  alternates: {
+    canonical: "/",
+  },
+};
 
 export default async function HomePage() {
   const [resources, manifest] = await Promise.all([
@@ -14,6 +22,30 @@ export default async function HomePage() {
 
   return (
     <AppShell>
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@graph": [
+            {
+              "@type": "WebSite",
+              "@id": "https://205022.xyz/#website",
+              "url": "https://205022.xyz/",
+              "name": "PostSoma DevLibrary",
+              "description": "A curated bilingual archive of free programming books, courses, tutorials, cheat sheets, and documentation.",
+              "inLanguage": ["en", "zh"]
+            },
+            {
+              "@type": "WebPage",
+              "@id": "https://205022.xyz/#webpage",
+              "url": "https://205022.xyz/",
+              "name": "PostSoma DevLibrary — Bilingual Programming Archive",
+              "isPartOf": { "@id": "https://205022.xyz/#website" },
+              "description": "A curated bilingual archive of free programming books, courses, tutorials, cheat sheets, and documentation.",
+              "inLanguage": ["en", "zh"]
+            }
+          ]
+        }}
+      />
       {/* Hero */}
       <section className="pt-16 pb-20 animate-slide-up">
         {/* Label */}
@@ -81,6 +113,37 @@ export default async function HomePage() {
           title="Local library"
           description="Save resources locally in your browser. No sign-in required."
         />
+      </section>
+
+      {/* About / ARO Section */}
+      <section className="border-t border-archive-border pt-16 pb-12 animate-fade-in max-w-3xl">
+        <h2 className="font-display text-2xl text-archive-text mb-6">
+          What is PostSoma DevLibrary?
+        </h2>
+        <div className="space-y-6 text-sm text-archive-subtle leading-relaxed font-sans">
+          <p>
+            PostSoma DevLibrary is a bilingual archive of free programming books, courses, cheat sheets, tutorials, and documentation. It helps English and Chinese learners find structured programming resources quickly through search-first navigation and collection-aware browsing.
+          </p>
+          <div>
+            <h3 className="font-mono text-xs text-archive-accent uppercase tracking-wider mb-3">
+              Key takeaways:
+            </h3>
+            <ul className="space-y-2 font-mono text-xs list-none pl-0">
+              <li className="flex items-start gap-2">
+                <span className="text-archive-accent">▪</span>
+                <span>4,800+ curated programming learning resources.</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="text-archive-accent">▪</span>
+                <span>Covers English and Chinese materials from books to interactive tools.</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="text-archive-accent">▪</span>
+                <span>No account required; users can save resources locally in the browser.</span>
+              </li>
+            </ul>
+          </div>
+        </div>
       </section>
     </AppShell>
   );
