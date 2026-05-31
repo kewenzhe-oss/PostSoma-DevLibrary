@@ -1,6 +1,6 @@
 import Link from "next/link";
 import AppShell from "@/components/layout/AppShell";
-import { getAllResources, getManifest } from "@/lib/data/resources";
+import { getManifest } from "@/lib/data/resources";
 import JsonLd from "@/components/seo/JsonLd";
 import type { Metadata } from "next";
 
@@ -11,14 +11,13 @@ export const metadata: Metadata = {
 };
 
 export default async function HomePage() {
-  const [resources, manifest] = await Promise.all([
-    getAllResources(),
-    getManifest(),
-  ]);
+  // Use the pre-generated manifest for all stats — avoids loading the full
+  // 4,839-item resources array on the homepage pre-render path.
+  const manifest = await getManifest();
 
-  const zhCount = manifest?.languages?.zh ?? resources.filter((r) => r.language === "zh").length;
-  const enCount = manifest?.languages?.en ?? resources.filter((r) => r.language === "en").length;
-  const total = manifest?.total ?? resources.length;
+  const zhCount = manifest?.languages?.zh ?? 0;
+  const enCount = manifest?.languages?.en ?? 0;
+  const total   = manifest?.total ?? 0;
 
   return (
     <AppShell>

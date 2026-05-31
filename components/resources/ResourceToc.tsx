@@ -465,6 +465,38 @@ export default function ResourceToc({
     return activeEntry.nodes;
   }, [activeEntry, isBooksCollection]);
 
+  // Progressive Disclosure: split drawer categories into visible and hidden
+  const { visibleNodes, hiddenNodes } = useMemo(() => {
+    const sorted = [...drawerNodes].sort((a, b) => b.resourceCount - a.resourceCount);
+    if (sorted.length <= 6) {
+      return { visibleNodes: sorted, hiddenNodes: [] };
+    }
+    
+    // Find if any node in the hidden section is selected or contains the selected path
+    const isSelected = (node: ResourceTocNode): boolean => {
+      if (!selectedPath) return false;
+      const selStr = selectedPath.join(":");
+      const checkNode = (n: ResourceTocNode): boolean =>
+        n.path.join(":") === selStr || (n.children ? n.children.some(checkNode) : false);
+      return checkNode(node);
+    };
+
+    const visible: ResourceTocNode[] = [];
+    const hidden: ResourceTocNode[] = [];
+
+    // Top 6 by resource Count go to visible.
+    // However, if a node beyond the top 6 is active, we move it to visible to preserve active context.
+    sorted.forEach((node, index) => {
+      if (index < 6 || isSelected(node)) {
+        visible.push(node);
+      } else {
+        hidden.push(node);
+      }
+    });
+
+    return { visibleNodes: visible, hiddenNodes: hidden };
+  }, [drawerNodes, selectedPath]);
+
   if (railEntries.length === 0) return null;
 
   return (
@@ -634,21 +666,51 @@ export default function ResourceToc({
             </div>
 
             {/* ── Subject Tree (Accordion) ── */}
-            <div className="px-2 pb-3 pt-2 max-h-[62vh] overflow-y-auto drawer-scroll flex flex-col gap-0.5">
-              {drawerNodes.length === 0 ? (
+            <div className="px-2 pb-3 pt-2 max-h-[62vh] overflow-y-auto drawer-scroll flex flex-col gap-0.5 animate-fade-in">
+              {visibleNodes.length === 0 ? (
                 <p className="px-3 py-6 text-xs font-mono text-archive-subtle opacity-40 text-center">
                   No subcategories
                 </p>
               ) : (
-                drawerNodes.map((node) => (
-                  <AccordionNode
-                    key={node.id}
-                    node={node}
-                    selectedPath={selectedPath}
-                    onSelectPath={onSelectPath}
-                    depth={0}
-                  />
-                ))
+                <>
+                  {visibleNodes.map((node) => (
+                    <AccordionNode
+                      key={node.id}
+                      node={node}
+                      selectedPath={selectedPath}
+                      onSelectPath={onSelectPath}
+                      depth={0}
+                    />
+                  ))}
+                  
+                  {hiddenNodes.length > 0 && (
+                    <details className="group mt-2 border-t border-archive-border/30 pt-2">
+                      <summary className="flex items-center gap-1.5 cursor-pointer text-[10px] font-mono text-archive-subtle hover:text-archive-text list-none px-3 py-1.5 rounded-lg hover:bg-white/[0.03] select-none transition-colors duration-150">
+                        <svg
+                          className="w-2.5 h-2.5 transition-transform group-open:rotate-90 text-archive-subtle opacity-50"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth={2.5}
+                        >
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                        </svg>
+                        <span>Show more topics (+{hiddenNodes.length})</span>
+                      </summary>
+                      <div className="mt-1 flex flex-col gap-0.5">
+                        {hiddenNodes.map((node) => (
+                          <AccordionNode
+                            key={node.id}
+                            node={node}
+                            selectedPath={selectedPath}
+                            onSelectPath={onSelectPath}
+                            depth={0}
+                          />
+                        ))}
+                      </div>
+                    </details>
+                  )}
+                </>
               )}
             </div>
           </div>

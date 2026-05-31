@@ -5,6 +5,9 @@ import BookmarkButton from "@/components/resources/BookmarkButton";
 import { getAllResources, getResourceById } from "@/lib/data/resources";
 import JsonLd from "@/components/seo/JsonLd";
 import type { Metadata } from "next";
+import BackLink from "@/components/resources/BackLink";
+import { getProviderLabel } from "@/lib/utils/provider";
+import { generateDescription, TYPE_LABELS } from "@/lib/utils/resource";
 
 export async function generateStaticParams() {
   // getAllResources reads public/data/resources.json which is committed to the repo
@@ -113,12 +116,7 @@ export default async function ResourceDetailPage({
         }}
       />
       <div className="max-w-3xl mx-auto py-8 animate-slide-up">
-        <Link
-          href="/resources"
-          className="inline-block font-mono text-xs text-archive-subtle hover:text-archive-text transition-colors mb-8"
-        >
-          ← Back to archive
-        </Link>
+        <BackLink />
 
         <article className="archive-card p-8 md:p-10 relative overflow-hidden">
           {/* Subtle background element */}
@@ -133,7 +131,7 @@ export default async function ResourceDetailPage({
             >
               {resource.language === "zh" ? "Chinese" : "English"}
             </span>
-            <span className="type-badge capitalize">{resource.type}</span>
+            <span className="type-badge capitalize">{TYPE_LABELS[resource.type] || resource.type}</span>
             <span className="font-mono text-xs text-archive-subtle ml-auto">
               ID: {resource.id.slice(0, 8)}
             </span>
@@ -142,6 +140,14 @@ export default async function ResourceDetailPage({
           <h1 className="font-display text-3xl md:text-4xl text-archive-text leading-snug mb-6 relative z-10">
             {resource.title}
           </h1>
+
+          {/* Description Block */}
+          <div className="bg-archive-bg/40 p-4 border border-archive-border rounded-sm relative overflow-hidden mb-8 z-10">
+            <div className="absolute top-0 left-0 w-1 h-full bg-archive-accent/40" />
+            <p className="font-sans text-sm text-archive-subtle leading-relaxed">
+              {generateDescription(resource, resource.language)}
+            </p>
+          </div>
 
           <div className="flex items-start flex-col sm:flex-row gap-6 mb-10 relative z-10">
             <div className="flex-1 space-y-4">
@@ -152,6 +158,15 @@ export default async function ResourceDetailPage({
                 <p className="font-sans text-sm text-archive-text">
                   {resource.category}
                   {resource.subcategory && ` / ${resource.subcategory}`}
+                </p>
+              </div>
+
+              <div>
+                <h3 className="font-mono text-[10px] uppercase tracking-widest text-archive-subtle mb-1">
+                  Provider
+                </h3>
+                <p className="font-sans text-sm text-archive-text">
+                  {getProviderLabel(resource.url)}
                 </p>
               </div>
 
