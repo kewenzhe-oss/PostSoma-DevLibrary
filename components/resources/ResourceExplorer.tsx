@@ -671,7 +671,7 @@ function FilterDrawer({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex flex-col justify-end overflow-hidden font-sans md:hidden">
+    <div className="fixed inset-0 z-[60] flex flex-col justify-end overflow-hidden font-sans md:hidden">
       {/* Backdrop overlay */}
       <div
         className={`absolute inset-0 bg-black/60 backdrop-blur-xs transition-opacity duration-300 ease-out ${
@@ -865,10 +865,10 @@ function ResourceDrawer({ resource, language, onClose }: ResourceDrawerProps) {
   const detailUrl = `/resource/${resource.id}${queryString ? "?" + queryString : ""}`;
 
   return (
-    <div className="fixed inset-0 z-50 flex justify-end overflow-hidden font-sans">
+    <div className="fixed inset-0 z-[60] flex justify-end overflow-hidden font-sans">
       {/* Backdrop overlay */}
       <div
-        className={`absolute inset-0 bg-black/60 backdrop-blur-xs transition-opacity duration-300 ease-out ${
+        className={`hidden md:block absolute inset-0 bg-black/60 backdrop-blur-xs transition-opacity duration-300 ease-out ${
           mounted ? "opacity-100" : "opacity-0"
         }`}
         onClick={handleClose}
@@ -880,7 +880,7 @@ function ResourceDrawer({ resource, language, onClose }: ResourceDrawerProps) {
         role="dialog"
         aria-modal="true"
         aria-label="Resource Details"
-        className={`relative w-full sm:w-[460px] h-full bg-archive-surface border-l border-archive-border shadow-2xl flex flex-col transition-transform duration-300 ease-out transform ${
+        className={`relative w-screen max-w-none md:w-full md:sm:w-[460px] h-dvh md:h-full bg-archive-bg md:bg-archive-surface md:border-l md:border-archive-border shadow-2xl flex flex-col transition-transform duration-300 ease-out transform ${
           mounted ? "translate-x-0" : "translate-x-full"
         }`}
       >
@@ -1232,10 +1232,10 @@ function TopicDrawer({
   }, [uniqueProviders, isZh]);
 
   return (
-    <div className="fixed inset-0 z-50 flex justify-end overflow-hidden font-sans">
+    <div className="fixed inset-0 z-[60] flex justify-end overflow-hidden font-sans">
       {/* Backdrop overlay */}
       <div
-        className={`absolute inset-0 bg-black/60 backdrop-blur-xs transition-opacity duration-300 ease-out ${
+        className={`hidden md:block absolute inset-0 bg-black/60 backdrop-blur-xs transition-opacity duration-300 ease-out ${
           mounted ? "opacity-100" : "opacity-0"
         }`}
         onClick={handleClose}
@@ -1247,7 +1247,7 @@ function TopicDrawer({
         role="dialog"
         aria-modal="true"
         aria-label="Topic Details"
-        className={`relative w-full sm:w-[460px] h-full bg-archive-surface border-l border-archive-border shadow-2xl flex flex-col transition-transform duration-300 ease-out transform ${
+        className={`relative w-screen max-w-none md:w-full md:sm:w-[460px] h-dvh md:h-full bg-archive-bg md:bg-archive-surface md:border-l md:border-archive-border shadow-2xl flex flex-col transition-transform duration-300 ease-out transform ${
           mounted ? "translate-x-0" : "translate-x-full"
         }`}
       >
@@ -1514,7 +1514,9 @@ function TopicDrawer({
         </div>
 
         {/* Footer actions */}
-        <div className="border-t border-archive-border/60 bg-archive-bg/30 p-6 flex flex-col gap-3 shrink-0 relative z-10">
+        <div className={`border-t border-archive-border/60 bg-archive-bg/30 p-6 flex-col gap-3 shrink-0 relative z-10 ${
+          selectedResource ? "flex" : "hidden md:flex"
+        }`}>
           {selectedResource ? (
             <>
               <a
