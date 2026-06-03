@@ -26,7 +26,7 @@ export default function BookmarkButton({ resourceId, variant = "icon" }: Bookmar
     return (
       <button
         onClick={handleClick}
-        className={`flex items-center justify-center w-8 h-8 rounded-full border transition-all ${
+        className={`flex items-center justify-center w-11 h-11 md:w-8 md:h-8 rounded-full border transition-all ${
           bookmarked
             ? "bg-archive-accent/10 border-archive-accent-dim text-archive-accent"
             : "bg-archive-bg border-archive-border text-archive-subtle hover:text-archive-text hover:border-archive-muted"
@@ -47,7 +47,7 @@ export default function BookmarkButton({ resourceId, variant = "icon" }: Bookmar
       </h3>
       <button
         onClick={handleClick}
-        className={`flex-1 h-10 px-4 rounded-sm border font-sans text-sm font-medium transition-all flex items-center justify-center gap-2 ${
+        className={`flex-1 h-11 md:h-10 px-4 rounded-sm border font-sans text-sm font-medium transition-all flex items-center justify-center gap-2 ${
           bookmarked
             ? "bg-archive-accent/10 border-archive-accent-dim text-archive-accent"
             : "bg-archive-bg border-archive-border text-archive-subtle hover:text-archive-text hover:border-archive-muted"

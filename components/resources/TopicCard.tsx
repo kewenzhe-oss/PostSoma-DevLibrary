@@ -65,7 +65,7 @@ export default function TopicCard({
     <article
       className="archive-card p-4 flex flex-col gap-3 group animate-fade-in transition-all duration-300"
     >
-      {/* Header row */}
+      {/* Row 1: Header */}
       <div className="flex items-center justify-between mb-1">
         <span className="type-badge uppercase font-mono tracking-wider font-semibold">
           {count} {typeLabel}
@@ -75,20 +75,15 @@ export default function TopicCard({
         </span>
       </div>
 
-      {/* Title */}
+      {/* Row 2: Title */}
       <div>
         <h3 className="font-display text-base text-archive-text leading-snug group-hover:text-archive-accent-glow transition-colors duration-150 line-clamp-1">
           {topicName}
         </h3>
       </div>
 
-      {/* Description */}
-      <p className="font-sans text-xs text-archive-subtle/85 line-clamp-3 leading-relaxed">
-        {description}
-      </p>
-
-      {/* Category breadcrumb — suppress CJK when UI is in EN/All mode */}
-      <p className="font-mono text-[10px] text-archive-subtle truncate">
+      {/* Row 3: Category breadcrumb */}
+      <p className="font-mono text-[11px] text-archive-subtle truncate">
         {hasCjk(category) && !isZh ? "Chinese Resource" : category}
         {subcategory && !hasCjk(subcategory) && (
           <span>
@@ -98,7 +93,12 @@ export default function TopicCard({
         )}
       </p>
 
-      {/* Provider variant badges row */}
+      {/* Row 4: Description */}
+      <p className="font-sans text-xs text-archive-subtle/85 line-clamp-2 md:line-clamp-3 leading-relaxed">
+        {description}
+      </p>
+
+      {/* Row 5: Providers */}
       <div className="flex flex-wrap gap-1.5 pt-1">
         {providers.map((res) => (
           <a
@@ -106,16 +106,16 @@ export default function TopicCard({
             href={res.url}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-[9px] font-mono px-2 py-0.5 rounded-sm bg-archive-bg border border-archive-border text-archive-accent-dim hover:text-archive-accent hover:border-archive-accent-dim/40 transition-all flex items-center gap-0.5 shrink-0"
-            title={`Launch ${res.title}`}
+            className="text-[10px] md:text-[9px] px-2.5 py-1.5 md:px-2 md:py-0.5 rounded border border-archive-border bg-archive-bg text-archive-accent-dim hover:text-archive-accent hover:border-archive-accent-dim/40 transition-all flex items-center justify-center gap-0.5 shrink-0 min-h-[32px] md:min-h-0"
+            title={`Open ${res.title}`}
           >
             {getProviderLabel(res.url)} ↗
           </a>
         ))}
       </div>
 
-      {/* Footer: Preview action */}
-      <div className="flex items-center justify-between mt-auto pt-2 border-t border-archive-border">
+      {/* Row 6: Footer */}
+      <div className="flex items-center justify-between gap-3 mt-auto pt-2 border-t border-archive-border">
         <button
           onClick={() => {
             if (onPreviewTopic) {
@@ -124,12 +124,12 @@ export default function TopicCard({
               onPreview(sampleResource);
             }
           }}
-          className="font-mono text-xs text-archive-subtle hover:text-archive-text transition-colors select-none text-left"
+          className="flex-1 md:flex-initial h-11 md:h-auto border border-archive-border md:border-none rounded bg-archive-surface md:bg-transparent font-mono text-xs text-archive-subtle hover:text-archive-text flex items-center justify-center transition-all duration-150 active:scale-[0.98] md:active:scale-100 text-left md:text-center select-none"
         >
           Preview Topic
         </button>
         <span className="font-mono text-[10px] text-archive-subtle opacity-40 select-none">
-          {resources.some(r => r.language === "zh") ? "ZH / EN" : "EN"}
+          {resources.some((r) => r.language === "zh") ? "ZH / EN" : "EN"}
         </span>
       </div>
     </article>

@@ -55,11 +55,11 @@ export default async function ResourcesPage() {
           ]
         }}
       />
-      <div className="mb-8 animate-fade-in">
-        <h1 className="font-display text-3xl text-archive-text mb-2">
+      <div className="mb-4 md:mb-8 animate-fade-in">
+        <h1 className="font-display text-2xl md:text-3xl text-archive-text mb-1 md:mb-2">
           Resource Archive
         </h1>
-        <p className="font-sans text-sm text-archive-subtle">
+        <p className="font-sans text-xs md:text-sm text-archive-subtle">
           Search and filter the complete collection.
         </p>
       </div>

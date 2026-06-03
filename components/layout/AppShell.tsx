@@ -6,12 +6,12 @@ export default function AppShell({
   children: React.ReactNode;
 }) {
   return (
-    <div className="noise-overlay min-h-screen flex flex-col">
+    <div className="noise-overlay min-h-screen flex flex-col overflow-x-hidden w-full">
       <AppHeader />
-      <main className="flex-1 max-w-7xl mx-auto w-full px-6 py-8">
+      <main className="flex-1 max-w-7xl mx-auto w-full px-4 py-6 pb-24 md:px-6 md:py-8 md:pb-8">
         {children}
       </main>
-      <footer className="border-t border-archive-border mt-auto">
+      <footer className="border-t border-archive-border mt-auto pb-20 md:pb-0">
         <div className="max-w-7xl mx-auto px-6 py-4 flex flex-col sm:flex-row sm:items-center sm:justify-between w-full">
           <span className="font-mono text-[10px] sm:text-xs text-archive-subtle">
             PostSoma DevLibrary

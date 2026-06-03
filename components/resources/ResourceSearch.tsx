@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 interface ResourceSearchProps {
   value: string;
@@ -16,6 +16,14 @@ export default function ResourceSearch({
   isSearching = false,
 }: ResourceSearchProps) {
   const inputRef = useRef<HTMLInputElement>(null);
+  const [placeholder, setPlaceholder] = useState("Search resources… (⌘K)");
+
+  // Remove keyboard shortcut hint from placeholder on mobile screens
+  useEffect(() => {
+    if (typeof window !== "undefined" && window.innerWidth < 768) {
+      setPlaceholder("Search resources…");
+    }
+  }, []);
 
   // Keyboard shortcut: Cmd+K / Ctrl+K
   useEffect(() => {
@@ -58,7 +66,7 @@ export default function ResourceSearch({
         type="search"
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        placeholder="Search resources… (⌘K)"
+        placeholder={placeholder}
         className="archive-input pl-9 pr-24"
         autoComplete="off"
         spellCheck={false}

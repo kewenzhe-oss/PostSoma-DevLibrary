@@ -118,7 +118,7 @@ export default async function ResourceDetailPage({
       <div className="max-w-3xl mx-auto py-8 animate-slide-up">
         <BackLink />
 
-        <article className="archive-card p-8 md:p-10 relative overflow-hidden">
+        <article className="archive-card p-4 sm:p-8 md:p-10 relative overflow-hidden">
           {/* Subtle background element */}
           <div className="absolute -top-24 -right-24 w-64 h-64 bg-archive-accent opacity-[0.03] rounded-full blur-3xl pointer-events-none" />
 
@@ -190,7 +190,7 @@ export default async function ResourceDetailPage({
             </div>
           </div>
 
-          <div className="archive-divider pt-6 flex justify-between items-center relative z-10">
+          <div className="archive-divider pt-6 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 relative z-10">
             <div className="flex gap-2 flex-wrap">
               {resource.tags.map((tag) => (
                 <span
@@ -205,7 +205,7 @@ export default async function ResourceDetailPage({
               href={resource.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="btn-accent"
+              className="btn-accent w-full sm:w-auto h-11 md:h-auto flex items-center justify-center"
             >
               Open Resource ↗
             </a>

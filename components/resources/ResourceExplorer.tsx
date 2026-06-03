@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo, useTransition, useRef, useEffect } from "react";
+import { useState, useMemo, useTransition, useRef, useEffect, useCallback } from "react";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import Link from "next/link";
 import type { Resource, ResourceTocNode } from "@/lib/types/resource";
@@ -107,7 +107,10 @@ export default function ResourceExplorer({
   const [previewResource, setPreviewResource] = useState<Resource | null>(null);
   const [previewTopic, setPreviewTopic] = useState<{ topicName: string; category: string; subcategory?: string; resources: Resource[] } | null>(null);
   const [viewMode, setViewMode] = useState<"topics" | "resources">("topics");
+  const [isFilterDrawerOpen, setIsFilterDrawerOpen] = useState(false);
   const [, startTransition] = useTransition();
+
+
 
   // Sync viewMode default state to collection type (topics for books/courses, resources for cheat sheets/interactive)
   useEffect(() => {
@@ -213,6 +216,41 @@ export default function ResourceExplorer({
     });
   }, [resources, query, language, selectedCollection, selectedTocPath]);
 
+  // Lazy loading / pagination state for scroll performance
+  const [visibleCount, setVisibleCount] = useState(24);
+  const observerRef = useRef<IntersectionObserver | null>(null);
+
+  const resultsRef = useRef(results);
+  resultsRef.current = results;
+
+  const sentinelRef = useCallback((node: HTMLDivElement | null) => {
+    if (observerRef.current) {
+      observerRef.current.disconnect();
+      observerRef.current = null;
+    }
+
+    if (node) {
+      observerRef.current = new IntersectionObserver(
+        (entries) => {
+          if (entries[0]?.isIntersecting) {
+            setVisibleCount((prev) => Math.min(prev + 24, resultsRef.current.length));
+          }
+        },
+        { rootMargin: "200px" }
+      );
+      observerRef.current.observe(node);
+    }
+  }, []);
+
+  // Reset pagination count on search/filter changes
+  useEffect(() => {
+    setVisibleCount(24);
+  }, [query, language, selectedCollection, selectedTocPath]);
+
+  const displayedResults = useMemo(() => {
+    return results.slice(0, visibleCount);
+  }, [results, visibleCount]);
+
   // Scroll Restoration and Card Highlighting on Mount / results loaded
   useEffect(() => {
     if (typeof sessionStorage === "undefined" || results.length === 0) return;
@@ -255,6 +293,8 @@ export default function ResourceExplorer({
 
   const hasActiveFilters =
     query !== "" || language !== "all" || selectedTocPath !== null;
+
+  const activeFilterCount = (language !== "all" ? 1 : 0) + (selectedTocPath ? 1 : 0);
 
   // ── Handlers ──────────────────────────────────────────────────────────────
 
@@ -309,82 +349,104 @@ export default function ResourceExplorer({
 
   return (
     <div className="flex flex-col gap-4 w-full">
-      {/* ── Collection Tabs ─────────────────────────────────────────────── */}
-      {collections && collections.length > 0 && (
-        <div className="flex items-center gap-1.5 overflow-x-auto pb-1 border-b border-archive-border/50 no-scrollbar">
-          {collections.map((col) => (
-            <CollectionTab
-              key={col.id}
-              collection={col}
-              isActive={selectedCollection === col.id}
-              onClick={() => handleCollectionSelect(col.id)}
+      {/* ── Mobile Sticky Filter & Search Area ──────────────── */}
+      <div className="sticky top-[56px] lg:relative lg:top-0 z-30 bg-archive-bg/95 backdrop-blur-md -mx-4 px-4 py-3 lg:mx-0 lg:px-0 lg:py-0 border-b border-archive-border/50 lg:border-none flex flex-col gap-3">
+        {/* Search Input + Filter button on mobile */}
+        <div className="flex items-center gap-2">
+          <div className="flex-1">
+            <ResourceSearch
+              value={query}
+              onChange={handleQueryChange}
+              resultCount={results.length}
             />
-          ))}
-        </div>
-      )}
-
-      {/* ── Search ──────────────────────────────────────────────────────── */}
-      <ResourceSearch
-        value={query}
-        onChange={handleQueryChange}
-        resultCount={results.length}
-      />
-
-      {/* ── Popular Topics Pill Bar ──────────────────────────────────────── */}
-      <div className="flex items-center gap-2 flex-wrap -mt-2">
-        <span className="font-mono text-[10px] text-archive-subtle opacity-60">
-          Popular:
-        </span>
-        {["React", "Python", "TypeScript", "Docker", "SQL", "AI"].map((pill) => (
+          </div>
           <button
-            key={pill}
-            onClick={() => handlePopularPillClick(pill)}
-            className={`px-2 py-0.5 rounded-full text-[10px] font-mono border transition-all ${
-              query.toLowerCase() === pill.toLowerCase()
-                ? "border-archive-accent text-archive-accent bg-archive-accent/5"
-                : "border-archive-border text-archive-subtle hover:border-archive-muted hover:text-archive-text bg-transparent"
-            }`}
+            onClick={() => setIsFilterDrawerOpen(true)}
+            className="lg:hidden h-[38px] px-3.5 border border-archive-border bg-archive-surface rounded-sm text-archive-subtle hover:text-archive-text flex items-center justify-center gap-1.5 active:scale-95 active:bg-archive-muted/40 transition-all shrink-0"
+            title="Open Directory & Filters"
           >
-            #{pill.toLowerCase()}
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} className="w-5 h-5">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 11-3 0m3 0a1.5 1.5 0 10-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-9.75 0h9.75" />
+            </svg>
+            <span className="text-xs font-mono hidden sm:inline">Filters</span>
+            {activeFilterCount > 0 && (
+              <span className="min-w-4 h-4 px-1 rounded-full bg-archive-accent text-archive-bg font-mono text-[9px] font-bold flex items-center justify-center">
+                {activeFilterCount}
+              </span>
+            )}
           </button>
-        ))}
-      </div>
+        </div>
 
-      {/* ── Active Filter State Summary ──────────────────────────────────── */}
-      <div className="flex items-center gap-3 flex-wrap min-h-[28px]">
-        {/* Path breadcrumb pill */}
-        {selectedTocPath && selectedTocPath.length > 0 && (
-          <PathPill
-            path={selectedTocPath}
-            onClear={() => handleSelectTocPath(null)}
-          />
-        )}
-
-        {/* Language pill (shown when not "all") */}
-        {language !== "all" && (
-          <div className="inline-flex items-center gap-1.5 bg-archive-border/20 border border-archive-border/40 rounded-full px-3 py-1 text-xs animate-fade-in">
-            <span className="font-mono text-[10px] text-archive-subtle mr-0.5">lang:</span>
-            <span className="font-sans text-archive-text font-medium">
-              {language === "zh" ? "中文" : "English"}
-            </span>
-            <button
-              onClick={() => handleLanguageChange("all")}
-              className="text-archive-subtle hover:text-archive-accent transition-colors font-mono font-bold text-xs ml-0.5 shrink-0"
-            >
-              ×
-            </button>
+        {/* Collection Tabs */}
+        {collections && collections.length > 0 && (
+          <div className="flex items-center gap-1.5 overflow-x-auto pb-1 border-b border-archive-border/30 no-scrollbar">
+            {collections.map((col) => (
+              <CollectionTab
+                key={col.id}
+                collection={col}
+                isActive={selectedCollection === col.id}
+                onClick={() => handleCollectionSelect(col.id)}
+              />
+            ))}
           </div>
         )}
 
-        {/* Clear all */}
-        {hasActiveFilters && (
-          <button
-            onClick={handleClear}
-            className="ml-auto font-mono text-xs text-archive-subtle hover:text-archive-text transition-colors"
-          >
-            Clear all ×
-          </button>
-        )}
+        {/* Popular Topics Pill Bar — hidden on extra-small screens to save space */}
+        <div className="hidden sm:flex items-center gap-2 flex-wrap">
+          <span className="font-mono text-[10px] text-archive-subtle opacity-60">
+            Popular:
+          </span>
+          {["React", "Python", "TypeScript", "Docker", "SQL", "AI"].map((pill) => (
+            <button
+              key={pill}
+              onClick={() => handlePopularPillClick(pill)}
+              className={`px-2 py-0.5 rounded-full text-[10px] font-mono border transition-all ${
+                query.toLowerCase() === pill.toLowerCase()
+                  ? "border-archive-accent text-archive-accent bg-archive-accent/5"
+                  : "border-archive-border text-archive-subtle hover:border-archive-muted hover:text-archive-text bg-transparent"
+              }`}
+            >
+              #{pill.toLowerCase()}
+            </button>
+          ))}
+        </div>
+
+        {/* Active Filter Chips */}
+        <div className="flex items-center gap-3 flex-wrap min-h-[20px] empty:hidden">
+          {/* Path breadcrumb pill */}
+          {selectedTocPath && selectedTocPath.length > 0 && (
+            <PathPill
+              path={selectedTocPath}
+              onClear={() => handleSelectTocPath(null)}
+            />
+          )}
+
+          {/* Language pill (shown when not "all") */}
+          {language !== "all" && (
+            <div className="inline-flex items-center gap-1.5 bg-archive-border/20 border border-archive-border/40 rounded-full px-3 py-1 text-xs animate-fade-in">
+              <span className="font-mono text-[10px] text-archive-subtle mr-0.5">lang:</span>
+              <span className="font-sans text-archive-text font-medium">
+                {language === "zh" ? "中文" : "English"}
+              </span>
+              <button
+                onClick={() => handleLanguageChange("all")}
+                className="text-archive-subtle hover:text-archive-accent transition-colors font-mono font-bold text-xs ml-0.5 shrink-0"
+              >
+                ×
+              </button>
+            </div>
+          )}
+
+          {/* Clear all */}
+          {hasActiveFilters && (
+            <button
+              onClick={handleClear}
+              className="ml-auto font-mono text-xs text-archive-subtle hover:text-archive-text transition-colors"
+            >
+              Clear all ×
+            </button>
+          )}
+        </div>
       </div>
 
       {/* ── Results Count ────────────────────────────────────────────────── */}
@@ -445,78 +507,30 @@ export default function ResourceExplorer({
           />
         </div>
 
-        {/* Mobile: collapsible flat TOC */}
-        <details className="lg:hidden w-full group mb-4 border border-archive-border/40 rounded-lg overflow-hidden">
-          <summary className="flex items-center gap-2 cursor-pointer text-sm font-mono text-archive-subtle hover:text-archive-text list-none py-2.5 px-4 bg-archive-surface/60">
-            <svg
-              className="w-3.5 h-3.5 transition-transform group-open:rotate-90"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth={2}
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-            </svg>
-            Directory
-            {selectedTocPath && (
-              <span className="ml-auto text-teal-400 text-[10px] truncate max-w-[160px]">
-                {selectedTocPath[selectedTocPath.length - 1]}
-              </span>
-            )}
-          </summary>
-          {/* Mobile language toggle */}
-          <div className="flex gap-1.5 px-4 pt-3 pb-1">
-            {(["all", "en", "zh"] as const).map((lang) => (
-              <button
-                key={lang}
-                onClick={() => handleLanguageChange(lang)}
-                className={`text-xs font-mono px-2.5 py-1 rounded-md border transition-all ${
-                  language === lang
-                    ? "text-teal-300 bg-teal-500/10 border-teal-500/20"
-                    : "text-archive-subtle border-archive-border/40 hover:text-archive-text hover:bg-white/[0.04]"
-                }`}
-              >
-                {lang === "zh" ? "中文" : lang === "en" ? "EN" : "All"}
-              </button>
-            ))}
-          </div>
-          <div className="px-3 pb-3 pt-1 flex flex-col gap-0.5 max-h-64 overflow-y-auto">
-            {flatActiveNodes.map((node) => (
-              <button
-                key={node.id}
-                disabled={node.resourceCount === 0}
-                onClick={() =>
-                  handleSelectTocPath(
-                    selectedTocPath?.join(":") === node.path.join(":") ? null : node.path
-                  )
-                }
-                className={`text-left px-3 py-2 rounded-md text-sm transition-all duration-150 ${
-                  node.resourceCount === 0
-                    ? "opacity-30 pointer-events-none"
-                    : selectedTocPath?.join(":") === node.path.join(":")
-                    ? "text-teal-300 bg-teal-500/10 border border-teal-500/20"
-                    : "text-archive-subtle hover:text-archive-text hover:bg-white/[0.04] border border-transparent"
-                }`}
-              >
-                {node.label}
-                <span className="ml-2 font-mono text-[10px] opacity-50">
-                  {node.resourceCount}
-                </span>
-              </button>
-            ))}
-          </div>
-        </details>
+
 
         {/* Card Grid */}
         <div className="flex-1 w-full min-w-0">
-          {results.length > 0 ? (
-            <ResourceGrid
-              resources={results}
-              viewMode={viewMode}
-              language={language}
-              onPreview={setPreviewResource}
-              onPreviewTopic={setPreviewTopic}
-            />
+          {displayedResults.length > 0 ? (
+            <>
+              <ResourceGrid
+                resources={displayedResults}
+                viewMode={viewMode}
+                language={language}
+                onPreview={setPreviewResource}
+                onPreviewTopic={setPreviewTopic}
+              />
+              {results.length > visibleCount && (
+                <div ref={sentinelRef} className="py-8 flex justify-center w-full">
+                  <button
+                    onClick={() => setVisibleCount((prev) => Math.min(prev + 24, results.length))}
+                    className="px-6 py-2.5 rounded border border-archive-border hover:border-archive-muted text-xs font-mono text-archive-subtle hover:text-archive-text bg-archive-surface active:scale-95 transition-all"
+                  >
+                    Load More (showing {visibleCount} of {results.length})
+                  </button>
+                </div>
+              )}
+            </>
           ) : (
             <EmptyState
               icon="search"
@@ -550,6 +564,228 @@ export default function ResourceExplorer({
           onClose={() => setPreviewTopic(null)}
         />
       )}
+
+      <FilterDrawer
+        isOpen={isFilterDrawerOpen}
+        onClose={() => setIsFilterDrawerOpen(false)}
+        language={language}
+        onLanguageChange={handleLanguageChange}
+        flatActiveNodes={flatActiveNodes}
+        selectedTocPath={selectedTocPath}
+        onSelectTocPath={handleSelectTocPath}
+        resultCount={results.length}
+      />
+    </div>
+  );
+}
+
+// ─── Mobile Filter Drawer Component ─────────────────────────────────────────────
+
+interface FilterDrawerProps {
+  isOpen: boolean;
+  onClose: () => void;
+  language: "all" | "zh" | "en";
+  onLanguageChange: (lang: "all" | "zh" | "en") => void;
+  flatActiveNodes: ResourceTocNode[];
+  selectedTocPath: string[] | null;
+  onSelectTocPath: (path: string[] | null) => void;
+  resultCount: number;
+}
+
+function FilterDrawer({
+  isOpen,
+  onClose,
+  language,
+  onLanguageChange,
+  flatActiveNodes,
+  selectedTocPath,
+  onSelectTocPath,
+  resultCount,
+}: FilterDrawerProps) {
+  const [mounted, setMounted] = useState(false);
+  const drawerRef = useRef<HTMLDivElement>(null);
+  const triggerRef = useRef<HTMLElement | null>(null);
+
+  // Preserve and restore body scroll correctly
+  useEffect(() => {
+    if (isOpen) {
+      setMounted(true);
+      const originalStyle = document.body.style.overflow;
+      document.body.style.overflow = "hidden";
+      return () => {
+        document.body.style.overflow = originalStyle;
+      };
+    } else {
+      setMounted(false);
+    }
+  }, [isOpen]);
+
+  // Focus trap, Escape key, and initial/return focus
+  useEffect(() => {
+    if (isOpen) {
+      triggerRef.current = document.activeElement as HTMLElement;
+
+      const timer = setTimeout(() => {
+        const focusables = drawerRef.current?.querySelectorAll(
+          'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+        );
+        if (focusables && focusables.length > 0) {
+          (focusables[0] as HTMLElement).focus();
+        }
+      }, 50);
+
+      const handleKeyDown = (e: KeyboardEvent) => {
+        if (e.key === "Escape") onClose();
+        if (e.key === "Tab") {
+          const focusables = drawerRef.current?.querySelectorAll(
+            'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+          ) as NodeListOf<HTMLElement>;
+          if (!focusables || focusables.length === 0) return;
+
+          const first = focusables[0]!;
+          const last = focusables[focusables.length - 1]!;
+
+          if (e.shiftKey) {
+            if (document.activeElement === first) {
+              last.focus();
+              e.preventDefault();
+            }
+          } else {
+            if (document.activeElement === last) {
+              first.focus();
+              e.preventDefault();
+            }
+          }
+        }
+      };
+
+      window.addEventListener("keydown", handleKeyDown);
+      return () => {
+        clearTimeout(timer);
+        window.removeEventListener("keydown", handleKeyDown);
+        triggerRef.current?.focus();
+      };
+    }
+  }, [isOpen, onClose]);
+
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 z-50 flex flex-col justify-end overflow-hidden font-sans md:hidden">
+      {/* Backdrop overlay */}
+      <div
+        className={`absolute inset-0 bg-black/60 backdrop-blur-xs transition-opacity duration-300 ease-out ${
+          mounted ? "opacity-100" : "opacity-0"
+        }`}
+        onClick={onClose}
+      />
+
+      {/* Sheet container */}
+      <div
+        ref={drawerRef}
+        role="dialog"
+        aria-modal="true"
+        aria-label="Filters and Directory"
+        className={`relative w-full max-h-[85vh] bg-archive-surface border-t border-archive-border rounded-t-xl shadow-2xl flex flex-col transition-transform duration-300 ease-out transform z-10 ${
+          mounted ? "translate-y-0" : "translate-y-full"
+        }`}
+      >
+        {/* Drag handle decoration */}
+        <div className="flex justify-center py-2 shrink-0">
+          <div className="w-12 h-1 bg-archive-muted rounded-full" />
+        </div>
+
+        {/* Header */}
+        <div className="flex items-center justify-between px-5 pb-3 border-b border-archive-border/60 shrink-0">
+          <h3 className="font-mono text-xs uppercase tracking-widest text-archive-subtle font-semibold">
+            Filters & Directory
+          </h3>
+          <button
+            onClick={onClose}
+            className="w-11 h-11 flex items-center justify-center rounded-full border border-archive-border text-archive-subtle hover:text-archive-text hover:bg-archive-border/50 transition-all text-lg font-mono"
+            aria-label="Close filters"
+          >
+            ×
+          </button>
+        </div>
+
+        {/* Scrollable contents */}
+        <div className="flex-1 overflow-y-auto px-5 py-4 space-y-6 drawer-scroll">
+          {/* Section 1: Language */}
+          <div className="space-y-2.5">
+            <h4 className="font-mono text-[10px] uppercase tracking-widest text-archive-subtle border-b border-archive-border/40 pb-1 font-bold">
+              Language / 语言
+            </h4>
+            <div className="grid grid-cols-3 gap-2">
+              {(["all", "en", "zh"] as const).map((lang) => {
+                const isActive = language === lang;
+                return (
+                  <button
+                    key={lang}
+                    onClick={() => onLanguageChange(lang)}
+                    className={`h-11 px-3 rounded text-xs font-mono border transition-all flex items-center justify-center active:scale-95 ${
+                      isActive
+                        ? "text-teal-300 bg-teal-500/10 border-teal-500/30 font-semibold"
+                        : "text-archive-subtle border-archive-border/60 hover:text-archive-text"
+                    }`}
+                  >
+                    {lang === "zh" ? "中文 (ZH)" : lang === "en" ? "English (EN)" : "All (全部)"}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Section 2: Directory Categories */}
+          <div className="space-y-2.5">
+            <h4 className="font-mono text-[10px] uppercase tracking-widest text-archive-subtle border-b border-archive-border/40 pb-1 font-bold">
+              Directory / 目录分类
+            </h4>
+            <div className="flex flex-col gap-1.5 max-h-[35vh] overflow-y-auto pr-1">
+              {flatActiveNodes.length === 0 ? (
+                <p className="py-4 text-xs font-mono text-archive-subtle opacity-40 text-center">
+                  No categories available
+                </p>
+              ) : (
+                flatActiveNodes.map((node) => {
+                  const isSelected = selectedTocPath?.join(":") === node.path.join(":");
+                  return (
+                    <button
+                      key={node.id}
+                      disabled={node.resourceCount === 0}
+                      onClick={() => {
+                        onSelectTocPath(isSelected ? null : node.path);
+                      }}
+                      className={`text-left px-3 py-3 h-12 rounded transition-all duration-150 flex items-center justify-between border active:scale-[0.99] ${
+                        node.resourceCount === 0
+                          ? "opacity-25 pointer-events-none"
+                          : isSelected
+                          ? "text-teal-300 bg-teal-500/10 border-teal-500/30"
+                          : "text-archive-subtle hover:text-archive-text bg-archive-bg/20 border-archive-border/40 hover:bg-white/[0.04]"
+                      }`}
+                    >
+                      <span className="text-xs truncate mr-2">{node.label}</span>
+                      <span className="font-mono text-[10px] opacity-55 shrink-0 bg-archive-muted/40 px-1.5 py-0.5 rounded">
+                        {node.resourceCount}
+                      </span>
+                    </button>
+                  );
+                })
+              )}
+            </div>
+          </div>
+        </div>
+
+        {/* Footer actions */}
+        <div className="border-t border-archive-border/60 bg-archive-bg/30 p-4 shrink-0 flex flex-col gap-2">
+          <button
+            onClick={onClose}
+            className="w-full h-12 bg-teal-500 text-archive-bg text-sm font-sans font-semibold flex items-center justify-center rounded hover:opacity-90 active:scale-[0.98] transition-all"
+          >
+            Show {resultCount.toLocaleString()} Resource{resultCount !== 1 ? "s" : ""}
+          </button>
+        </div>
+      </div>
     </div>
   );
 }
@@ -565,18 +801,58 @@ interface ResourceDrawerProps {
 function ResourceDrawer({ resource, language, onClose }: ResourceDrawerProps) {
   const [mounted, setMounted] = useState(false);
   const searchParams = useSearchParams();
+  const drawerRef = useRef<HTMLDivElement>(null);
+  const triggerRef = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
-    // Trigger animation frame on mount
-    const timer = setTimeout(() => setMounted(true), 10);
-    
-    // Lock scroll on the body container
-    const originalStyle = window.getComputedStyle(document.body).overflow;
+    const originalStyle = document.body.style.overflow;
     document.body.style.overflow = "hidden";
-    
+
+    triggerRef.current = document.activeElement as HTMLElement;
+
+    const animTimer = setTimeout(() => setMounted(true), 10);
+    const focusTimer = setTimeout(() => {
+      const focusables = drawerRef.current?.querySelectorAll(
+        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+      );
+      if (focusables && focusables.length > 0) {
+        (focusables[0] as HTMLElement).focus();
+      }
+    }, 50);
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") handleClose();
+      if (e.key === "Tab") {
+        const focusables = drawerRef.current?.querySelectorAll(
+          'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+        ) as NodeListOf<HTMLElement>;
+        if (!focusables || focusables.length === 0) return;
+
+        const first = focusables[0]!;
+        const last = focusables[focusables.length - 1]!;
+
+        if (e.shiftKey) {
+          if (document.activeElement === first) {
+            last.focus();
+            e.preventDefault();
+          }
+        } else {
+          if (document.activeElement === last) {
+            first.focus();
+            e.preventDefault();
+          }
+        }
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+
     return () => {
-      clearTimeout(timer);
+      clearTimeout(animTimer);
+      clearTimeout(focusTimer);
+      window.removeEventListener("keydown", handleKeyDown);
       document.body.style.overflow = originalStyle;
+      triggerRef.current?.focus();
     };
   }, []);
 
@@ -600,6 +876,10 @@ function ResourceDrawer({ resource, language, onClose }: ResourceDrawerProps) {
 
       {/* Side sheet container */}
       <div
+        ref={drawerRef}
+        role="dialog"
+        aria-modal="true"
+        aria-label="Resource Details"
         className={`relative w-full sm:w-[460px] h-full bg-archive-surface border-l border-archive-border shadow-2xl flex flex-col transition-transform duration-300 ease-out transform ${
           mounted ? "translate-x-0" : "translate-x-full"
         }`}
@@ -616,7 +896,7 @@ function ResourceDrawer({ resource, language, onClose }: ResourceDrawerProps) {
           </div>
           <button
             onClick={handleClose}
-            className="w-8 h-8 flex items-center justify-center rounded-full border border-archive-border text-archive-subtle hover:text-archive-text hover:bg-archive-border/50 hover:border-archive-muted transition-all duration-150 text-lg font-mono"
+            className="w-11 h-11 md:w-8 md:h-8 flex items-center justify-center rounded-full border border-archive-border text-archive-subtle hover:text-archive-text hover:bg-archive-border/50 hover:border-archive-muted transition-all duration-150 text-lg font-mono"
             aria-label="Close preview"
           >
             ×
@@ -819,19 +1099,74 @@ function TopicDrawer({
 }: TopicDrawerProps) {
   const [mounted, setMounted] = useState(false);
   const [selectedResource, setSelectedResource] = useState<Resource | null>(null);
+  const drawerRef = useRef<HTMLDivElement>(null);
+  const triggerRef = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
-    const timer = setTimeout(() => setMounted(true), 10);
-    
-    // Lock scroll on body
-    const originalStyle = window.getComputedStyle(document.body).overflow;
+    const originalStyle = document.body.style.overflow;
     document.body.style.overflow = "hidden";
-    
+
+    triggerRef.current = document.activeElement as HTMLElement;
+
+    const animTimer = setTimeout(() => setMounted(true), 10);
+    const focusTimer = setTimeout(() => {
+      const focusables = drawerRef.current?.querySelectorAll(
+        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+      );
+      if (focusables && focusables.length > 0) {
+        (focusables[0] as HTMLElement).focus();
+      }
+    }, 50);
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") handleClose();
+      if (e.key === "Tab") {
+        const focusables = drawerRef.current?.querySelectorAll(
+          'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+        ) as NodeListOf<HTMLElement>;
+        if (!focusables || focusables.length === 0) return;
+
+        const first = focusables[0]!;
+        const last = focusables[focusables.length - 1]!;
+
+        if (e.shiftKey) {
+          if (document.activeElement === first) {
+            last.focus();
+            e.preventDefault();
+          }
+        } else {
+          if (document.activeElement === last) {
+            first.focus();
+            e.preventDefault();
+          }
+        }
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+
     return () => {
-      clearTimeout(timer);
+      clearTimeout(animTimer);
+      clearTimeout(focusTimer);
+      window.removeEventListener("keydown", handleKeyDown);
       document.body.style.overflow = originalStyle;
+      triggerRef.current?.focus();
     };
   }, []);
+
+  useEffect(() => {
+    if (mounted) {
+      const timer = setTimeout(() => {
+        const focusables = drawerRef.current?.querySelectorAll(
+          'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+        );
+        if (focusables && focusables.length > 0) {
+          (focusables[0] as HTMLElement).focus();
+        }
+      }, 50);
+      return () => clearTimeout(timer);
+    }
+  }, [selectedResource, mounted]);
 
   const handleClose = () => {
     setMounted(false);
@@ -908,6 +1243,10 @@ function TopicDrawer({
 
       {/* Side sheet container */}
       <div
+        ref={drawerRef}
+        role="dialog"
+        aria-modal="true"
+        aria-label="Topic Details"
         className={`relative w-full sm:w-[460px] h-full bg-archive-surface border-l border-archive-border shadow-2xl flex flex-col transition-transform duration-300 ease-out transform ${
           mounted ? "translate-x-0" : "translate-x-full"
         }`}
@@ -924,7 +1263,7 @@ function TopicDrawer({
           </div>
           <button
             onClick={handleClose}
-            className="w-8 h-8 flex items-center justify-center rounded-full border border-archive-border text-archive-subtle hover:text-archive-text hover:bg-archive-border/50 hover:border-archive-muted transition-all duration-150 text-lg font-mono"
+            className="w-11 h-11 md:w-8 md:h-8 flex items-center justify-center rounded-full border border-archive-border text-archive-subtle hover:text-archive-text hover:bg-archive-border/50 hover:border-archive-muted transition-all duration-150 text-lg font-mono"
             aria-label="Close preview"
           >
             ×
@@ -1152,7 +1491,7 @@ function TopicDrawer({
                       <div
                         key={res.id}
                         onClick={() => setSelectedResource(res)}
-                        className="flex flex-col gap-1 p-2.5 border border-archive-border rounded bg-archive-surface/40 hover:bg-white/[0.03] hover:border-archive-border cursor-pointer transition-all duration-150 group"
+                        className="flex flex-col gap-1 p-2.5 border border-archive-border rounded bg-archive-surface/40 hover:bg-white/[0.03] hover:border-archive-border cursor-pointer transition-all duration-150 active:scale-[0.99] active:bg-archive-muted/40 group"
                       >
                         <div className="flex items-center justify-between gap-2">
                           <span className="font-mono text-[8px] opacity-40 group-hover:opacity-75 transition-opacity capitalize">

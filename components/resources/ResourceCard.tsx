@@ -41,7 +41,7 @@ export default function ResourceCard({ resource, language = "all", onPreview }: 
       id={`resource-card-${resource.id}`}
       className="archive-card p-4 flex flex-col gap-3 group animate-fade-in transition-all duration-300"
     >
-      {/* Header row: badges */}
+      {/* Row 1: badges & bookmark */}
       <div className="flex items-center justify-between mb-1">
         <div className="flex items-center gap-2 flex-wrap">
           <span
@@ -54,20 +54,15 @@ export default function ResourceCard({ resource, language = "all", onPreview }: 
         <BookmarkButton resourceId={resource.id} variant="icon" />
       </div>
 
-      {/* Title */}
+      {/* Row 2: Title */}
       <Link href={detailUrl} onClick={handleTitleClick}>
         <h2 className="font-display text-base text-archive-text leading-snug group-hover:text-archive-accent-glow transition-colors duration-150 line-clamp-2">
           {resource.title}
         </h2>
       </Link>
 
-      {/* Description */}
-      <p className="font-sans text-xs text-archive-subtle/85 line-clamp-3 leading-relaxed">
-        {generateDescription(resource, language)}
-      </p>
-
-      {/* Category breadcrumb */}
-      <p className="font-mono text-xs text-archive-subtle truncate">
+      {/* Row 3: Category breadcrumb */}
+      <p className="font-mono text-[11px] text-archive-subtle truncate">
         {resource.category}
         {resource.subcategory && (
           <span>
@@ -77,11 +72,16 @@ export default function ResourceCard({ resource, language = "all", onPreview }: 
         )}
       </p>
 
-      {/* Footer: open link + detail link */}
-      <div className="flex items-center justify-between mt-auto pt-2 border-t border-archive-border">
+      {/* Row 4: Description */}
+      <p className="font-sans text-xs text-archive-subtle/85 line-clamp-2 md:line-clamp-3 leading-relaxed">
+        {generateDescription(resource, language)}
+      </p>
+
+      {/* Row 5: Footer Actions */}
+      <div className="flex items-center justify-between gap-3 mt-auto pt-2 border-t border-archive-border">
         <Link
           href={detailUrl}
-          className="font-mono text-xs text-archive-subtle hover:text-archive-text transition-colors"
+          className="flex-1 md:flex-initial h-11 md:h-auto border border-archive-border md:border-none rounded bg-archive-surface md:bg-transparent font-mono text-xs text-archive-subtle hover:text-archive-text flex items-center justify-center transition-all duration-150 active:scale-[0.98] md:active:scale-100"
           id={`resource-detail-${resource.id}`}
           onClick={(e) => {
             if (onPreview) {
@@ -99,7 +99,7 @@ export default function ResourceCard({ resource, language = "all", onPreview }: 
           target="_blank"
           rel="noopener noreferrer"
           id={`resource-open-${resource.id}`}
-          className="font-mono text-xs text-archive-accent-dim hover:text-archive-accent transition-colors"
+          className="flex-1 md:flex-initial h-11 md:h-auto border border-archive-accent-dim/40 md:border-none rounded bg-archive-accent/5 md:bg-transparent font-mono text-xs text-archive-accent-dim hover:text-archive-accent flex items-center justify-center transition-all duration-150 active:scale-[0.98] md:active:scale-100"
           title={`Open ${resource.title}`}
         >
           ↗ Open

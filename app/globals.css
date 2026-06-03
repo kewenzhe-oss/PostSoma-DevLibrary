@@ -95,10 +95,18 @@ body {
     @apply transition-all duration-200;
   }
 
-  .archive-card:hover {
-    @apply border-archive-muted;
-    box-shadow: 0 0 0 1px rgba(200, 169, 110, 0.08),
-                0 4px 24px rgba(0, 0, 0, 0.4);
+  @media (hover: hover) {
+    .archive-card:hover {
+      @apply border-archive-muted;
+      box-shadow: 0 0 0 1px rgba(200, 169, 110, 0.08),
+                  0 4px 24px rgba(0, 0, 0, 0.4);
+    }
+  }
+
+  .archive-card:active {
+    transform: scale(0.99);
+    border-color: var(--archive-accent-dim);
+    background: rgba(200, 169, 110, 0.02);
   }
 
   /* Language badge */
@@ -137,29 +145,70 @@ body {
   .btn-ghost {
     @apply text-archive-subtle text-sm font-sans px-3 py-1.5 rounded-sm;
     @apply border border-transparent;
-    @apply hover:text-archive-text hover:border-archive-border;
     @apply transition-all duration-150;
+  }
+
+  @media (hover: hover) {
+    .btn-ghost:hover {
+      @apply text-archive-text hover:border-archive-border;
+    }
+  }
+
+  .btn-ghost:active {
+    transform: scale(0.97);
+    @apply bg-white/[0.02];
   }
 
   .btn-accent {
     @apply text-archive-bg text-sm font-sans font-medium px-4 py-2 rounded-sm;
     background: var(--archive-accent);
-    @apply hover:opacity-90 transition-opacity duration-150;
+    @apply transition-opacity duration-150;
+  }
+
+  @media (hover: hover) {
+    .btn-accent:hover {
+      @apply opacity-90;
+    }
+  }
+
+  .btn-accent:active {
+    transform: scale(0.97);
+    opacity: 0.8;
   }
 
   .btn-outline {
     @apply text-archive-subtle text-sm font-sans px-3 py-1.5 rounded-sm;
     @apply border border-archive-border;
-    @apply hover:text-archive-text hover:border-archive-muted;
     @apply transition-all duration-150;
+  }
+
+  @media (hover: hover) {
+    .btn-outline:hover {
+      @apply text-archive-text hover:border-archive-muted;
+    }
+  }
+
+  .btn-outline:active {
+    transform: scale(0.97);
+    @apply bg-white/[0.02];
   }
 
   /* Filter chip */
   .filter-chip {
     @apply text-xs font-mono px-2.5 py-1 rounded-sm cursor-pointer;
     @apply border border-archive-border text-archive-subtle;
-    @apply hover:border-archive-muted hover:text-archive-text;
     @apply transition-all duration-150;
+  }
+
+  @media (hover: hover) {
+    .filter-chip:hover {
+      @apply border-archive-muted hover:text-archive-text;
+    }
+  }
+
+  .filter-chip:active {
+    transform: scale(0.95);
+    background: rgba(255, 255, 255, 0.03);
   }
 
   .filter-chip.active {
@@ -234,4 +283,10 @@ body {
   opacity: 0.025;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   z-index: 9999;
+}
+
+@layer utilities {
+  .pb-safe {
+    padding-bottom: calc(0.5rem + env(safe-area-inset-bottom));
+  }
 }
