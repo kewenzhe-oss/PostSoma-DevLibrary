@@ -44,7 +44,7 @@ export function generateDescription(resource: Resource, uiLanguage: "all" | "zh"
   const typeStrZh = typeLabelsZh[resource.type] || "学习资源";
   const typeStrEn = TYPE_LABELS[resource.type] || "resource";
 
-  const isZh = uiLanguage === "zh";
+  const isZh = uiLanguage === "zh" || (uiLanguage === "all" && resource.language === "zh");
   const cleanCat = getCleanCategory(resource.category, isZh);
 
   // Clean tags of structural/duplicate items to prevent robotic redundancy

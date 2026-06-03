@@ -672,12 +672,12 @@ function FilterDrawer({
   if (!isOpen || typeof document === "undefined") return null;
 
   return createPortal(
-    <div className="fixed inset-0 z-[60] flex flex-col justify-end overflow-hidden font-sans md:hidden">
+    <div className="font-sans md:hidden">
       {/* Backdrop overlay */}
       <div
-        className={`absolute inset-0 bg-black/60 backdrop-blur-xs transition-opacity duration-300 ease-out ${
+        className={`fixed inset-0 z-[60] bg-black/60 backdrop-blur-xs transition-opacity duration-300 ease-out ${
           mounted ? "opacity-100" : "opacity-0"
-        }`}
+        } ${mounted ? "" : "pointer-events-none"}`}
         onClick={onClose}
       />
 
@@ -687,7 +687,7 @@ function FilterDrawer({
         role="dialog"
         aria-modal="true"
         aria-label="Filters and Directory"
-        className={`relative w-full max-h-[85vh] bg-archive-surface border-t border-archive-border rounded-t-xl shadow-2xl flex flex-col transition-transform duration-300 ease-out transform z-10 ${
+        className={`fixed left-0 right-0 bottom-0 z-[70] w-full max-h-[85vh] bg-archive-surface border-t border-archive-border rounded-t-xl shadow-2xl flex flex-col transition-transform duration-300 ease-out transform ${
           mounted ? "translate-y-0" : "translate-y-full"
         }`}
       >
@@ -869,12 +869,12 @@ function ResourceDrawer({ resource, language, onClose }: ResourceDrawerProps) {
   if (typeof document === "undefined") return null;
 
   return createPortal(
-    <div className="fixed inset-0 z-[60] flex justify-end overflow-hidden font-sans">
+    <div className="font-sans">
       {/* Backdrop overlay */}
       <div
-        className={`hidden sm:block absolute inset-0 bg-black/60 backdrop-blur-xs transition-opacity duration-300 ease-out ${
+        className={`hidden sm:block fixed inset-0 z-[60] bg-black/60 backdrop-blur-xs transition-opacity duration-300 ease-out ${
           mounted ? "opacity-100" : "opacity-0"
-        }`}
+        } ${mounted ? "" : "pointer-events-none"}`}
         onClick={handleClose}
       />
 
@@ -884,7 +884,7 @@ function ResourceDrawer({ resource, language, onClose }: ResourceDrawerProps) {
         role="dialog"
         aria-modal="true"
         aria-label="Resource Details"
-        className={`relative w-full sm:w-[460px] h-dvh sm:h-full bg-archive-bg sm:bg-archive-surface sm:border-l sm:border-archive-border shadow-2xl flex flex-col transition-transform duration-300 ease-out transform ${
+        className={`fixed right-0 top-0 bottom-0 z-[70] w-full sm:w-[460px] h-dvh sm:h-full bg-archive-bg sm:bg-archive-surface sm:border-l sm:border-archive-border shadow-2xl flex flex-col transition-transform duration-300 ease-out transform ${
           mounted ? "translate-x-0" : "translate-x-full"
         }`}
       >
@@ -1178,7 +1178,7 @@ function TopicDrawer({
     setTimeout(onClose, 250);
   };
 
-  const isZh = language === "zh";
+  const isZh = language === "zh" || (language === "all" && resources.some((r) => r.language === "zh"));
   const chrome = isZh ? UI_TEXT.zh : UI_TEXT.en;
   
   // Topic metadata
@@ -1239,12 +1239,12 @@ function TopicDrawer({
   if (typeof document === "undefined") return null;
 
   return createPortal(
-    <div className="fixed inset-0 z-[60] flex justify-end overflow-hidden font-sans">
+    <div className="font-sans">
       {/* Backdrop overlay */}
       <div
-        className={`hidden sm:block absolute inset-0 bg-black/60 backdrop-blur-xs transition-opacity duration-300 ease-out ${
+        className={`hidden sm:block fixed inset-0 z-[60] bg-black/60 backdrop-blur-xs transition-opacity duration-300 ease-out ${
           mounted ? "opacity-100" : "opacity-0"
-        }`}
+        } ${mounted ? "" : "pointer-events-none"}`}
         onClick={handleClose}
       />
 
@@ -1254,7 +1254,7 @@ function TopicDrawer({
         role="dialog"
         aria-modal="true"
         aria-label="Topic Details"
-        className={`relative w-full sm:w-[460px] h-dvh sm:h-full bg-archive-bg sm:bg-archive-surface sm:border-l sm:border-archive-border shadow-2xl flex flex-col transition-transform duration-300 ease-out transform ${
+        className={`fixed right-0 top-0 bottom-0 z-[70] w-full sm:w-[460px] h-dvh sm:h-full bg-archive-bg sm:bg-archive-surface sm:border-l sm:border-archive-border shadow-2xl flex flex-col transition-transform duration-300 ease-out transform ${
           mounted ? "translate-x-0" : "translate-x-full"
         }`}
       >
