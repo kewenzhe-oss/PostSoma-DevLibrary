@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useMemo, useTransition, useRef, useEffect, useCallback } from "react";
+import { createPortal } from "react-dom";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import Link from "next/link";
 import type { Resource, ResourceTocNode } from "@/lib/types/resource";
@@ -668,9 +669,9 @@ function FilterDrawer({
     }
   }, [isOpen, onClose]);
 
-  if (!isOpen) return null;
+  if (!isOpen || typeof document === "undefined") return null;
 
-  return (
+  return createPortal(
     <div className="fixed inset-0 z-[60] flex flex-col justify-end overflow-hidden font-sans md:hidden">
       {/* Backdrop overlay */}
       <div
@@ -786,7 +787,8 @@ function FilterDrawer({
           </button>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }
 
@@ -864,11 +866,13 @@ function ResourceDrawer({ resource, language, onClose }: ResourceDrawerProps) {
   const queryString = searchParams ? searchParams.toString() : "";
   const detailUrl = `/resource/${resource.id}${queryString ? "?" + queryString : ""}`;
 
-  return (
+  if (typeof document === "undefined") return null;
+
+  return createPortal(
     <div className="fixed inset-0 z-[60] flex justify-end overflow-hidden font-sans">
       {/* Backdrop overlay */}
       <div
-        className={`hidden md:block absolute inset-0 bg-black/60 backdrop-blur-xs transition-opacity duration-300 ease-out ${
+        className={`hidden sm:block absolute inset-0 bg-black/60 backdrop-blur-xs transition-opacity duration-300 ease-out ${
           mounted ? "opacity-100" : "opacity-0"
         }`}
         onClick={handleClose}
@@ -880,7 +884,7 @@ function ResourceDrawer({ resource, language, onClose }: ResourceDrawerProps) {
         role="dialog"
         aria-modal="true"
         aria-label="Resource Details"
-        className={`relative w-screen max-w-none md:w-full md:sm:w-[460px] h-dvh md:h-full bg-archive-bg md:bg-archive-surface md:border-l md:border-archive-border shadow-2xl flex flex-col transition-transform duration-300 ease-out transform ${
+        className={`relative w-full sm:w-[460px] h-dvh sm:h-full bg-archive-bg sm:bg-archive-surface sm:border-l sm:border-archive-border shadow-2xl flex flex-col transition-transform duration-300 ease-out transform ${
           mounted ? "translate-x-0" : "translate-x-full"
         }`}
       >
@@ -1025,7 +1029,8 @@ function ResourceDrawer({ resource, language, onClose }: ResourceDrawerProps) {
           </div>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }
 
@@ -1231,11 +1236,13 @@ function TopicDrawer({
       : `${cnt} platform${cnt > 1 ? "s" : ""}`;
   }, [uniqueProviders, isZh]);
 
-  return (
+  if (typeof document === "undefined") return null;
+
+  return createPortal(
     <div className="fixed inset-0 z-[60] flex justify-end overflow-hidden font-sans">
       {/* Backdrop overlay */}
       <div
-        className={`hidden md:block absolute inset-0 bg-black/60 backdrop-blur-xs transition-opacity duration-300 ease-out ${
+        className={`hidden sm:block absolute inset-0 bg-black/60 backdrop-blur-xs transition-opacity duration-300 ease-out ${
           mounted ? "opacity-100" : "opacity-0"
         }`}
         onClick={handleClose}
@@ -1247,7 +1254,7 @@ function TopicDrawer({
         role="dialog"
         aria-modal="true"
         aria-label="Topic Details"
-        className={`relative w-screen max-w-none md:w-full md:sm:w-[460px] h-dvh md:h-full bg-archive-bg md:bg-archive-surface md:border-l md:border-archive-border shadow-2xl flex flex-col transition-transform duration-300 ease-out transform ${
+        className={`relative w-full sm:w-[460px] h-dvh sm:h-full bg-archive-bg sm:bg-archive-surface sm:border-l sm:border-archive-border shadow-2xl flex flex-col transition-transform duration-300 ease-out transform ${
           mounted ? "translate-x-0" : "translate-x-full"
         }`}
       >
@@ -1514,8 +1521,8 @@ function TopicDrawer({
         </div>
 
         {/* Footer actions */}
-        <div className={`border-t border-archive-border/60 bg-archive-bg/30 p-6 flex-col gap-3 shrink-0 relative z-10 ${
-          selectedResource ? "flex" : "hidden md:flex"
+        <div className={`border-t border-archive-border/60 bg-archive-bg/30 p-6 gap-3 shrink-0 relative z-10 ${
+          selectedResource ? "flex flex-col" : "hidden md:flex md:flex-col"
         }`}>
           {selectedResource ? (
             <>
@@ -1549,6 +1556,7 @@ function TopicDrawer({
           )}
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }
