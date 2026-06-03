@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import type { Resource } from "@/lib/types/resource";
 import BookmarkButton from "@/components/resources/BookmarkButton";
 import { generateDescription, TYPE_LABELS } from "@/lib/utils/resource";
@@ -12,6 +12,8 @@ interface ResourceCardProps {
 
 export default function ResourceCard({ resource, language = "all", onPreview }: ResourceCardProps) {
   const searchParams = useSearchParams();
+  const router = useRouter();
+
   const handleCardClick = () => {
     if (typeof sessionStorage !== "undefined") {
       sessionStorage.setItem("postsoma_last_clicked_id", resource.id);
@@ -36,10 +38,28 @@ export default function ResourceCard({ resource, language = "all", onPreview }: 
     }
   };
 
+  const handleCardBodyClick = (e: React.MouseEvent) => {
+    const target = e.target as HTMLElement;
+    // Don't trigger if clicked element is interactive
+    if (target.closest("button") || target.closest("a")) {
+      return;
+    }
+
+    if (isDirectOutbound) {
+      window.open(resource.url, "_blank", "noopener,noreferrer");
+    } else if (onPreview) {
+      onPreview(resource);
+    } else {
+      handleCardClick();
+      router.push(detailUrl);
+    }
+  };
+
   return (
     <article
       id={`resource-card-${resource.id}`}
-      className="archive-card p-4 flex flex-col gap-3 group animate-fade-in transition-all duration-300"
+      onClick={handleCardBodyClick}
+      className="archive-card p-4 flex flex-col gap-3 group animate-fade-in transition-all duration-300 cursor-pointer active:bg-white/[0.01] md:active:bg-transparent"
     >
       {/* Row 1: badges & bookmark */}
       <div className="flex items-center justify-between mb-1">
@@ -81,7 +101,7 @@ export default function ResourceCard({ resource, language = "all", onPreview }: 
       <div className="flex items-center justify-between gap-3 mt-auto pt-2 border-t border-archive-border">
         <Link
           href={detailUrl}
-          className="flex-1 md:flex-initial h-11 md:h-auto border border-archive-border md:border-none rounded bg-archive-surface md:bg-transparent font-mono text-xs text-archive-subtle hover:text-archive-text flex items-center justify-center transition-all duration-150 active:scale-[0.98] md:active:scale-100"
+          className="flex-1 md:flex-initial h-11 md:h-auto bg-archive-accent text-archive-bg rounded font-sans text-xs font-semibold flex items-center justify-center transition-all duration-150 active:scale-[0.98] md:active:scale-100 md:bg-transparent md:border-none md:text-archive-subtle md:hover:text-archive-text md:font-mono md:text-xs"
           id={`resource-detail-${resource.id}`}
           onClick={(e) => {
             if (onPreview) {
@@ -92,17 +112,20 @@ export default function ResourceCard({ resource, language = "all", onPreview }: 
             }
           }}
         >
-          Preview
+          {language === "zh" ? "查看详情 →" : "View Details →"}
         </Link>
         <a
           href={resource.url}
           target="_blank"
           rel="noopener noreferrer"
           id={`resource-open-${resource.id}`}
-          className="flex-1 md:flex-initial h-11 md:h-auto border border-archive-accent-dim/40 md:border-none rounded bg-archive-accent/5 md:bg-transparent font-mono text-xs text-archive-accent-dim hover:text-archive-accent flex items-center justify-center transition-all duration-150 active:scale-[0.98] md:active:scale-100"
+          className="w-11 h-11 md:w-auto md:h-auto shrink-0 border border-archive-border rounded bg-archive-surface text-archive-subtle flex items-center justify-center transition-all duration-150 active:scale-[0.98] md:active:scale-100 md:border-none md:bg-transparent md:text-archive-accent-dim md:hover:text-archive-accent md:font-mono md:text-xs"
           title={`Open ${resource.title}`}
         >
-          ↗ Open
+          <span>↗</span>
+          <span className="hidden md:inline ml-1">
+            {language === "zh" ? "打开" : "Open"}
+          </span>
         </a>
       </div>
     </article>

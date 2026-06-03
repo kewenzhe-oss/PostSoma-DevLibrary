@@ -30,7 +30,7 @@ function BackLinkInner() {
     <a
       href={backUrl}
       onClick={handleBack}
-      className="inline-block font-mono text-xs text-archive-subtle hover:text-archive-text transition-colors mb-8"
+      className="inline-flex items-center gap-1.5 py-2.5 pr-4 font-mono text-xs text-archive-subtle hover:text-archive-text transition-colors mb-5 md:mb-8"
     >
       ← Back to archive
     </a>
@@ -42,7 +42,7 @@ export default function BackLink() {
     <Suspense fallback={
       <a
         href="/resources"
-        className="inline-block font-mono text-xs text-archive-subtle hover:text-archive-text transition-colors mb-8"
+        className="inline-flex items-center gap-1.5 py-2.5 pr-4 font-mono text-xs text-archive-subtle hover:text-archive-text transition-colors mb-5 md:mb-8"
       >
         ← Back to archive
       </a>

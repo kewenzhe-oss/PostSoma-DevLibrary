@@ -61,9 +61,24 @@ export default function TopicCard({
     ? `已收录 ${count} ${typeLabel}，涵盖 ${topicName} 的核心概念、入门教程与进阶实战项目，由各大优质平台及社区提供。`
     : `A curated collection of ${count} ${typeLabel} covering ${topicName} core fundamentals, syntax patterns, and hands-on developer projects.`;
 
+  const handleCardBodyClick = (e: React.MouseEvent) => {
+    const target = e.target as HTMLElement;
+    // Don't trigger if clicked element is interactive
+    if (target.closest("button") || target.closest("a")) {
+      return;
+    }
+
+    if (onPreviewTopic) {
+      onPreviewTopic({ topicName, category, subcategory, resources });
+    } else if (onPreview) {
+      onPreview(sampleResource);
+    }
+  };
+
   return (
     <article
-      className="archive-card p-4 flex flex-col gap-3 group animate-fade-in transition-all duration-300"
+      onClick={handleCardBodyClick}
+      className="archive-card p-4 flex flex-col gap-3 group animate-fade-in transition-all duration-300 cursor-pointer active:bg-white/[0.01] md:active:bg-transparent"
     >
       {/* Row 1: Header */}
       <div className="flex items-center justify-between mb-1">
@@ -124,9 +139,9 @@ export default function TopicCard({
               onPreview(sampleResource);
             }
           }}
-          className="flex-1 md:flex-initial h-11 md:h-auto border border-archive-border md:border-none rounded bg-archive-surface md:bg-transparent font-mono text-xs text-archive-subtle hover:text-archive-text flex items-center justify-center transition-all duration-150 active:scale-[0.98] md:active:scale-100 text-left md:text-center select-none"
+          className="flex-1 md:flex-initial h-11 md:h-auto bg-archive-accent text-archive-bg rounded font-sans text-xs font-semibold flex items-center justify-center transition-all duration-150 active:scale-[0.98] md:active:scale-100 md:bg-transparent md:border-none md:text-archive-subtle md:hover:text-archive-text md:font-mono md:text-xs select-none"
         >
-          Preview Topic
+          {language === "zh" ? "查看主题 →" : "View Topic →"}
         </button>
         <span className="font-mono text-[10px] text-archive-subtle opacity-40 select-none">
           {resources.some((r) => r.language === "zh") ? "ZH / EN" : "EN"}
