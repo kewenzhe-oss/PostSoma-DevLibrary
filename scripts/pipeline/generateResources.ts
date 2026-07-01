@@ -61,7 +61,7 @@ async function main() {
 
   console.log(`\n📂 Loading GitHub Content Library CSV...`);
   try {
-    const csvPath = "/Users/grangerfdad/Desktop/Untitled 32541278ad09806a8299c76286e6f2cb_GitHub Content Library v2 34041278ad098132b432000b3737c0e4.csv";
+    const csvPath = path.join(PIPELINE_CONFIG.sourceDir, "github-content-library.csv");
     const githubResources = await loadAndTransformGitHubCsv(csvPath);
     totalRead += githubResources.length;
     parsed.push(...githubResources);
