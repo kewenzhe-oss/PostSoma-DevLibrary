@@ -30,7 +30,7 @@ export default async function HomePage() {
               "@id": "https://205022.xyz/#website",
               "url": "https://205022.xyz/",
               "name": "PostSoma DevLibrary",
-              "description": "A curated bilingual archive of free programming books, courses, tutorials, cheat sheets, and documentation.",
+              "description": "A curated bilingual archive of free programming books, courses, cheat sheets, interactive tutorials, and GitHub open-source projects.",
               "inLanguage": ["en", "zh"]
             },
             {
@@ -39,7 +39,7 @@ export default async function HomePage() {
               "url": "https://205022.xyz/",
               "name": "PostSoma DevLibrary — Bilingual Programming Archive",
               "isPartOf": { "@id": "https://205022.xyz/#website" },
-              "description": "A curated bilingual archive of free programming books, courses, tutorials, cheat sheets, and documentation.",
+              "description": "A curated bilingual archive of free programming books, courses, cheat sheets, interactive tutorials, and GitHub open-source projects.",
               "inLanguage": ["en", "zh"]
             }
           ]
@@ -61,7 +61,7 @@ export default async function HomePage() {
 
         {/* Tagline */}
         <p className="font-sans text-base text-archive-subtle max-w-lg leading-relaxed mb-10">
-          A curated archive of free programming books, courses, cheat sheets, and interactive resources — in English and Chinese. Search-first, directory-aware, no account required.
+          A curated bilingual archive of free programming books, courses, cheat sheets, interactive tutorials, and GitHub open-source projects. Search-first, directory-aware, no account required.
         </p>
 
         {/* CTA */}
@@ -90,7 +90,7 @@ export default async function HomePage() {
                       month: "short",
                       day: "numeric",
                       year: "numeric",
-                    })
+                     })
                   : "—"
               }
             />
@@ -106,7 +106,7 @@ export default async function HomePage() {
         />
         <FeatureCard
           title="Structured archive"
-          description="Browse Books, Cheat Sheets, Courses, and Interactive resources through collection-aware directories."
+          description="Browse Books, Cheat Sheets, Courses, Interactive tutorials, and GitHub projects through directories."
         />
         <FeatureCard
           title="Local library"
@@ -121,7 +121,7 @@ export default async function HomePage() {
         </h2>
         <div className="space-y-6 text-sm text-archive-subtle leading-relaxed font-sans">
           <p>
-            PostSoma DevLibrary is a bilingual archive of free programming books, courses, cheat sheets, tutorials, and documentation. It helps English and Chinese learners find structured programming resources quickly through search-first navigation and collection-aware browsing.
+            PostSoma DevLibrary is a bilingual archive of free programming books, courses, cheat sheets, interactive tutorials, and GitHub open-source projects. It helps English and Chinese learners find structured programming resources quickly through search-first navigation and collection-aware browsing.
           </p>
           <div>
             <h3 className="font-mono text-xs text-archive-accent uppercase tracking-wider mb-3">
@@ -130,11 +130,11 @@ export default async function HomePage() {
             <ul className="space-y-2 font-mono text-xs list-none pl-0">
               <li className="flex items-start gap-2">
                 <span className="text-archive-accent">▪</span>
-                <span>4,800+ curated programming learning resources.</span>
+                <span>5,000+ curated programming and open-source learning resources.</span>
               </li>
               <li className="flex items-start gap-2">
                 <span className="text-archive-accent">▪</span>
-                <span>Covers English and Chinese materials from books to interactive tools.</span>
+                <span>Covers bilingual materials from books and courses to active GitHub repositories.</span>
               </li>
               <li className="flex items-start gap-2">
                 <span className="text-archive-accent">▪</span>

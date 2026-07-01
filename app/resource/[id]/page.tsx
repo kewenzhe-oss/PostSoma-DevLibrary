@@ -7,7 +7,7 @@ import JsonLd from "@/components/seo/JsonLd";
 import type { Metadata } from "next";
 import BackLink from "@/components/resources/BackLink";
 import { getProviderLabel } from "@/lib/utils/provider";
-import { generateDescription, TYPE_LABELS } from "@/lib/utils/resource";
+import { generateDescription, TYPE_LABELS, generateEditorialData } from "@/lib/utils/resource";
 
 export async function generateStaticParams() {
   // getAllResources reads public/data/resources.json which is committed to the repo
@@ -66,10 +66,16 @@ export default async function ResourceDetailPage({
   params: { id: string };
 }) {
   const resource = await getResourceById(params.id);
-
+  
   if (!resource) {
     notFound();
   }
+
+  // Pre-calculate fallback editorial content to ensure every book, course, docs or tutorial has rich review metadata
+  const editorial = generateEditorialData(resource);
+  const displayDetailSummary = resource.detailSummary || resource.summary || editorial.detailSummary;
+  const displayBestFor = (resource.bestFor && resource.bestFor.length > 0) ? resource.bestFor : editorial.bestFor;
+  const displayAccessNote = resource.accessNote || editorial.accessNote;
 
   return (
     <AppShell>
@@ -145,7 +151,7 @@ export default async function ResourceDetailPage({
           <div className="bg-archive-bg/40 p-4 border border-archive-border rounded-sm relative overflow-hidden mb-8 z-10">
             <div className="absolute top-0 left-0 w-1 h-full bg-archive-accent/40" />
             <p className="font-sans text-sm text-archive-subtle leading-relaxed">
-              {generateDescription(resource, resource.language)}
+              {displayDetailSummary}
             </p>
           </div>
 
@@ -189,6 +195,59 @@ export default async function ResourceDetailPage({
               <BookmarkButton resourceId={resource.id} variant="full" />
             </div>
           </div>
+
+          {/* Editorial Decision Panel (Best For & Access Note) */}
+          {(displayBestFor.length > 0 || displayAccessNote) && (
+            <div className="bg-archive-surface border border-archive-border rounded-sm p-4 sm:p-5 mb-8 relative z-10 space-y-4">
+              <h3 className="font-mono text-[10px] uppercase tracking-widest text-teal-400 mb-1">
+                Editorial Review & Decision Guide
+              </h3>
+              {displayBestFor.length > 0 && (
+                <div className="space-y-1.5">
+                  <p className="font-sans text-xs text-archive-text font-semibold">
+                    Best For:
+                  </p>
+                  <ul className="list-disc pl-4 space-y-1 text-xs text-archive-subtle font-sans">
+                    {displayBestFor.map((item, idx) => (
+                      <li key={idx}>{item}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+              {displayAccessNote && (
+                <p className="font-sans text-xs text-archive-subtle leading-relaxed pt-1 border-t border-archive-border/30">
+                  <strong className="text-archive-text font-semibold">Access Recommendation: </strong> 
+                  {displayAccessNote}
+                </p>
+              )}
+            </div>
+          )}
+
+          {/* Low-Emphasis AI Meta Box */}
+          {(resource.keyTakeaway || resource.priority || resource.action) && (
+            <div className="bg-archive-surface border border-archive-border rounded-sm p-4 sm:p-5 mb-8 relative z-10 space-y-3">
+              <h3 className="font-mono text-[10px] uppercase tracking-widest text-archive-subtle mb-1">
+                AI Workflow Audit Data
+              </h3>
+              {resource.keyTakeaway && (
+                <p className="font-sans text-xs sm:text-sm text-archive-subtle leading-relaxed">
+                  <strong className="text-archive-text font-medium">Key Takeaway:</strong> {resource.keyTakeaway}
+                </p>
+              )}
+              <div className="flex gap-4 flex-wrap text-xs font-mono text-archive-subtle/80 pt-1">
+                {resource.priority && (
+                  <span>
+                    Priority: <span className="text-archive-text font-medium">{resource.priority}</span>
+                  </span>
+                )}
+                {resource.action && (
+                  <span>
+                    Suggested Action: <span className="text-archive-text font-medium">{resource.action}</span>
+                  </span>
+                )}
+              </div>
+            </div>
+          )}
 
           <div className="archive-divider pt-6 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 relative z-10">
             <div className="flex gap-2 flex-wrap">

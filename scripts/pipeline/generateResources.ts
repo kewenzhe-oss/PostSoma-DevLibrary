@@ -7,6 +7,7 @@ import { dedupeResources } from "./dedupeResources";
 import { validateResources } from "./validateResources";
 import { buildResourceToc } from "./buildToc";
 import type { Resource } from "../../lib/types/resource";
+import { loadAndTransformGitHubCsv } from "./transformCsv";
 
 // Resolve paths relative to the postsoma-devlibrary app directory
 const APP_DIR = path.resolve(__dirname, "../../");
@@ -56,6 +57,16 @@ async function main() {
     } catch (err) {
       console.error(`   ✗ Failed to read ${fileConfig.path}:`, err);
     }
+  }
+
+  console.log(`\n📂 Loading GitHub Content Library CSV...`);
+  try {
+    const csvPath = "/Users/grangerfdad/Desktop/Untitled 32541278ad09806a8299c76286e6f2cb_GitHub Content Library v2 34041278ad098132b432000b3737c0e4.csv";
+    const githubResources = await loadAndTransformGitHubCsv(csvPath);
+    totalRead += githubResources.length;
+    parsed.push(...githubResources);
+  } catch (err) {
+    console.error("❌ Failed to parse GitHub CSV:", err);
   }
 
   console.log(`\n📊 Pipeline stages:`);

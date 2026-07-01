@@ -153,13 +153,19 @@ function normalizeResourceType(r: Resource): Resource {
   return r;
 }
 
+let cachedResources: Resource[] | null = null;
+
 export async function getAllResources(): Promise<Resource[]> {
+  if (cachedResources) {
+    return cachedResources;
+  }
   try {
     const filePath = path.join(process.cwd(), "public", "data", "resources.json");
     const fileContents = await fs.readFile(filePath, "utf8");
     const raw = JSON.parse(fileContents) as Resource[];
     // Apply conservative collection-level type normalisation at the data seam.
-    return raw.map(normalizeResourceType);
+    cachedResources = raw.map(normalizeResourceType);
+    return cachedResources;
   } catch (error) {
     console.error("Failed to read resources.json", error);
     // Return empty array if JSON hasn't been generated yet

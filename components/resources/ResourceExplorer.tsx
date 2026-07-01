@@ -113,9 +113,9 @@ export default function ResourceExplorer({
 
 
 
-  // Sync viewMode default state to collection type (topics for books/courses, resources for cheat sheets/interactive)
+  // Sync viewMode default state to collection type (topics for books/courses/github, resources for cheat sheets/interactive)
   useEffect(() => {
-    if (selectedCollection === "books" || selectedCollection === "courses") {
+    if (selectedCollection === "books" || selectedCollection === "courses" || selectedCollection === "github") {
       setViewMode("topics");
     } else {
       setViewMode("resources");
@@ -476,9 +476,9 @@ export default function ResourceExplorer({
                 ? "bg-archive-border text-archive-accent shadow-sm"
                 : "text-archive-subtle hover:text-archive-text"
             }`}
-            title="Browse by dynamic guided topic-level clusters"
+            title="Browse curated topic clusters"
           >
-            Guided Topics
+            Topics
           </button>
           <button
             onClick={() => setViewMode("resources")}
@@ -487,9 +487,9 @@ export default function ResourceExplorer({
                 ? "bg-archive-border text-archive-accent shadow-sm"
                 : "text-archive-subtle hover:text-archive-text"
             }`}
-            title="Browse raw individual resources archive"
+            title="Browse all individual resources in raw data"
           >
-            Raw Archives
+            Raw Data
           </button>
         </div>
       </div>
@@ -520,6 +520,7 @@ export default function ResourceExplorer({
                 language={language}
                 onPreview={setPreviewResource}
                 onPreviewTopic={setPreviewTopic}
+                onToggleViewMode={setViewMode}
               />
               {results.length > visibleCount && (
                 <div ref={sentinelRef} className="py-8 flex justify-center w-full">

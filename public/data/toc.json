@@ -15086,5 +15086,1716 @@
         "children": []
       }
     ]
+  },
+  "github": {
+    "zh": [],
+    "en": [
+      {
+        "id": "en:AI",
+        "label": "AI",
+        "language": "en",
+        "level": 1,
+        "path": [
+          "AI"
+        ],
+        "resourceCount": 109,
+        "children": [
+          {
+            "id": "en:AI:agents",
+            "label": "agents",
+            "language": "en",
+            "level": 2,
+            "path": [
+              "AI",
+              "agents"
+            ],
+            "resourceCount": 43,
+            "children": []
+          },
+          {
+            "id": "en:AI:api",
+            "label": "api",
+            "language": "en",
+            "level": 2,
+            "path": [
+              "AI",
+              "api"
+            ],
+            "resourceCount": 6,
+            "children": []
+          },
+          {
+            "id": "en:AI:automation",
+            "label": "automation",
+            "language": "en",
+            "level": 2,
+            "path": [
+              "AI",
+              "automation"
+            ],
+            "resourceCount": 13,
+            "children": []
+          },
+          {
+            "id": "en:AI:browser-extension",
+            "label": "browser-extension",
+            "language": "en",
+            "level": 2,
+            "path": [
+              "AI",
+              "browser-extension"
+            ],
+            "resourceCount": 2,
+            "children": []
+          },
+          {
+            "id": "en:AI:cli",
+            "label": "cli",
+            "language": "en",
+            "level": 2,
+            "path": [
+              "AI",
+              "cli"
+            ],
+            "resourceCount": 1,
+            "children": []
+          },
+          {
+            "id": "en:AI:coding-assistant",
+            "label": "coding-assistant",
+            "language": "en",
+            "level": 2,
+            "path": [
+              "AI",
+              "coding-assistant"
+            ],
+            "resourceCount": 2,
+            "children": []
+          },
+          {
+            "id": "en:AI:content-creation",
+            "label": "content-creation",
+            "language": "en",
+            "level": 2,
+            "path": [
+              "AI",
+              "content-creation"
+            ],
+            "resourceCount": 9,
+            "children": []
+          },
+          {
+            "id": "en:AI:developer-tooling",
+            "label": "developer-tooling",
+            "language": "en",
+            "level": 2,
+            "path": [
+              "AI",
+              "developer-tooling"
+            ],
+            "resourceCount": 8,
+            "children": []
+          },
+          {
+            "id": "en:AI:knowledge-base",
+            "label": "knowledge-base",
+            "language": "en",
+            "level": 2,
+            "path": [
+              "AI",
+              "knowledge-base"
+            ],
+            "resourceCount": 10,
+            "children": []
+          },
+          {
+            "id": "en:AI:llm",
+            "label": "llm",
+            "language": "en",
+            "level": 2,
+            "path": [
+              "AI",
+              "llm"
+            ],
+            "resourceCount": 7,
+            "children": []
+          },
+          {
+            "id": "en:AI:local-first",
+            "label": "local-first",
+            "language": "en",
+            "level": 2,
+            "path": [
+              "AI",
+              "local-first"
+            ],
+            "resourceCount": 1,
+            "children": []
+          },
+          {
+            "id": "en:AI:ocr",
+            "label": "ocr",
+            "language": "en",
+            "level": 2,
+            "path": [
+              "AI",
+              "ocr"
+            ],
+            "resourceCount": 2,
+            "children": []
+          },
+          {
+            "id": "en:AI:stt",
+            "label": "stt",
+            "language": "en",
+            "level": 2,
+            "path": [
+              "AI",
+              "stt"
+            ],
+            "resourceCount": 3,
+            "children": []
+          }
+        ]
+      },
+      {
+        "id": "en:Automation",
+        "label": "Automation",
+        "language": "en",
+        "level": 1,
+        "path": [
+          "Automation"
+        ],
+        "resourceCount": 12,
+        "children": [
+          {
+            "id": "en:Automation:agents",
+            "label": "agents",
+            "language": "en",
+            "level": 2,
+            "path": [
+              "Automation",
+              "agents"
+            ],
+            "resourceCount": 1,
+            "children": []
+          },
+          {
+            "id": "en:Automation:api",
+            "label": "api",
+            "language": "en",
+            "level": 2,
+            "path": [
+              "Automation",
+              "api"
+            ],
+            "resourceCount": 2,
+            "children": []
+          },
+          {
+            "id": "en:Automation:automation",
+            "label": "automation",
+            "language": "en",
+            "level": 2,
+            "path": [
+              "Automation",
+              "automation"
+            ],
+            "resourceCount": 7,
+            "children": []
+          },
+          {
+            "id": "en:Automation:scraping",
+            "label": "scraping",
+            "language": "en",
+            "level": 2,
+            "path": [
+              "Automation",
+              "scraping"
+            ],
+            "resourceCount": 2,
+            "children": []
+          }
+        ]
+      },
+      {
+        "id": "en:Browser",
+        "label": "Browser",
+        "language": "en",
+        "level": 1,
+        "path": [
+          "Browser"
+        ],
+        "resourceCount": 4,
+        "children": [
+          {
+            "id": "en:Browser:automation",
+            "label": "automation",
+            "language": "en",
+            "level": 2,
+            "path": [
+              "Browser",
+              "automation"
+            ],
+            "resourceCount": 1,
+            "children": []
+          },
+          {
+            "id": "en:Browser:browser-extension",
+            "label": "browser-extension",
+            "language": "en",
+            "level": 2,
+            "path": [
+              "Browser",
+              "browser-extension"
+            ],
+            "resourceCount": 3,
+            "children": []
+          }
+        ]
+      },
+      {
+        "id": "en:Data",
+        "label": "Data",
+        "language": "en",
+        "level": 1,
+        "path": [
+          "Data"
+        ],
+        "resourceCount": 13,
+        "children": [
+          {
+            "id": "en:Data:agents",
+            "label": "agents",
+            "language": "en",
+            "level": 2,
+            "path": [
+              "Data",
+              "agents"
+            ],
+            "resourceCount": 2,
+            "children": []
+          },
+          {
+            "id": "en:Data:api",
+            "label": "api",
+            "language": "en",
+            "level": 2,
+            "path": [
+              "Data",
+              "api"
+            ],
+            "resourceCount": 2,
+            "children": []
+          },
+          {
+            "id": "en:Data:automation",
+            "label": "automation",
+            "language": "en",
+            "level": 2,
+            "path": [
+              "Data",
+              "automation"
+            ],
+            "resourceCount": 5,
+            "children": []
+          },
+          {
+            "id": "en:Data:content-creation",
+            "label": "content-creation",
+            "language": "en",
+            "level": 2,
+            "path": [
+              "Data",
+              "content-creation"
+            ],
+            "resourceCount": 1,
+            "children": []
+          },
+          {
+            "id": "en:Data:developer-tooling",
+            "label": "developer-tooling",
+            "language": "en",
+            "level": 2,
+            "path": [
+              "Data",
+              "developer-tooling"
+            ],
+            "resourceCount": 1,
+            "children": []
+          },
+          {
+            "id": "en:Data:scraping",
+            "label": "scraping",
+            "language": "en",
+            "level": 2,
+            "path": [
+              "Data",
+              "scraping"
+            ],
+            "resourceCount": 1,
+            "children": []
+          }
+        ]
+      },
+      {
+        "id": "en:DevTools",
+        "label": "DevTools",
+        "language": "en",
+        "level": 1,
+        "path": [
+          "DevTools"
+        ],
+        "resourceCount": 27,
+        "children": [
+          {
+            "id": "en:DevTools:agents",
+            "label": "agents",
+            "language": "en",
+            "level": 2,
+            "path": [
+              "DevTools",
+              "agents"
+            ],
+            "resourceCount": 1,
+            "children": []
+          },
+          {
+            "id": "en:DevTools:api",
+            "label": "api",
+            "language": "en",
+            "level": 2,
+            "path": [
+              "DevTools",
+              "api"
+            ],
+            "resourceCount": 6,
+            "children": []
+          },
+          {
+            "id": "en:DevTools:automation",
+            "label": "automation",
+            "language": "en",
+            "level": 2,
+            "path": [
+              "DevTools",
+              "automation"
+            ],
+            "resourceCount": 9,
+            "children": []
+          },
+          {
+            "id": "en:DevTools:cli",
+            "label": "cli",
+            "language": "en",
+            "level": 2,
+            "path": [
+              "DevTools",
+              "cli"
+            ],
+            "resourceCount": 3,
+            "children": []
+          },
+          {
+            "id": "en:DevTools:content-creation",
+            "label": "content-creation",
+            "language": "en",
+            "level": 2,
+            "path": [
+              "DevTools",
+              "content-creation"
+            ],
+            "resourceCount": 2,
+            "children": []
+          },
+          {
+            "id": "en:DevTools:developer-tooling",
+            "label": "developer-tooling",
+            "language": "en",
+            "level": 2,
+            "path": [
+              "DevTools",
+              "developer-tooling"
+            ],
+            "resourceCount": 4,
+            "children": []
+          },
+          {
+            "id": "en:DevTools:knowledge-base",
+            "label": "knowledge-base",
+            "language": "en",
+            "level": 2,
+            "path": [
+              "DevTools",
+              "knowledge-base"
+            ],
+            "resourceCount": 1,
+            "children": []
+          }
+        ]
+      },
+      {
+        "id": "en:Infra",
+        "label": "Infra",
+        "language": "en",
+        "level": 1,
+        "path": [
+          "Infra"
+        ],
+        "resourceCount": 5,
+        "children": [
+          {
+            "id": "en:Infra:automation",
+            "label": "automation",
+            "language": "en",
+            "level": 2,
+            "path": [
+              "Infra",
+              "automation"
+            ],
+            "resourceCount": 1,
+            "children": []
+          },
+          {
+            "id": "en:Infra:developer-tooling",
+            "label": "developer-tooling",
+            "language": "en",
+            "level": 2,
+            "path": [
+              "Infra",
+              "developer-tooling"
+            ],
+            "resourceCount": 1,
+            "children": []
+          },
+          {
+            "id": "en:Infra:knowledge-base",
+            "label": "knowledge-base",
+            "language": "en",
+            "level": 2,
+            "path": [
+              "Infra",
+              "knowledge-base"
+            ],
+            "resourceCount": 2,
+            "children": []
+          }
+        ]
+      },
+      {
+        "id": "en:Media",
+        "label": "Media",
+        "language": "en",
+        "level": 1,
+        "path": [
+          "Media"
+        ],
+        "resourceCount": 8,
+        "children": [
+          {
+            "id": "en:Media:automation",
+            "label": "automation",
+            "language": "en",
+            "level": 2,
+            "path": [
+              "Media",
+              "automation"
+            ],
+            "resourceCount": 5,
+            "children": []
+          },
+          {
+            "id": "en:Media:content-creation",
+            "label": "content-creation",
+            "language": "en",
+            "level": 2,
+            "path": [
+              "Media",
+              "content-creation"
+            ],
+            "resourceCount": 1,
+            "children": []
+          },
+          {
+            "id": "en:Media:developer-tooling",
+            "label": "developer-tooling",
+            "language": "en",
+            "level": 2,
+            "path": [
+              "Media",
+              "developer-tooling"
+            ],
+            "resourceCount": 1,
+            "children": []
+          },
+          {
+            "id": "en:Media:scraping",
+            "label": "scraping",
+            "language": "en",
+            "level": 2,
+            "path": [
+              "Media",
+              "scraping"
+            ],
+            "resourceCount": 1,
+            "children": []
+          }
+        ]
+      },
+      {
+        "id": "en:Other",
+        "label": "Other",
+        "language": "en",
+        "level": 1,
+        "path": [
+          "Other"
+        ],
+        "resourceCount": 6,
+        "children": [
+          {
+            "id": "en:Other:automation",
+            "label": "automation",
+            "language": "en",
+            "level": 2,
+            "path": [
+              "Other",
+              "automation"
+            ],
+            "resourceCount": 1,
+            "children": []
+          },
+          {
+            "id": "en:Other:knowledge-base",
+            "label": "knowledge-base",
+            "language": "en",
+            "level": 2,
+            "path": [
+              "Other",
+              "knowledge-base"
+            ],
+            "resourceCount": 2,
+            "children": []
+          }
+        ]
+      },
+      {
+        "id": "en:Privacy",
+        "label": "Privacy",
+        "language": "en",
+        "level": 1,
+        "path": [
+          "Privacy"
+        ],
+        "resourceCount": 8,
+        "children": [
+          {
+            "id": "en:Privacy:automation",
+            "label": "automation",
+            "language": "en",
+            "level": 2,
+            "path": [
+              "Privacy",
+              "automation"
+            ],
+            "resourceCount": 2,
+            "children": []
+          },
+          {
+            "id": "en:Privacy:content-creation",
+            "label": "content-creation",
+            "language": "en",
+            "level": 2,
+            "path": [
+              "Privacy",
+              "content-creation"
+            ],
+            "resourceCount": 1,
+            "children": []
+          },
+          {
+            "id": "en:Privacy:knowledge-base",
+            "label": "knowledge-base",
+            "language": "en",
+            "level": 2,
+            "path": [
+              "Privacy",
+              "knowledge-base"
+            ],
+            "resourceCount": 2,
+            "children": []
+          }
+        ]
+      },
+      {
+        "id": "en:Productivity",
+        "label": "Productivity",
+        "language": "en",
+        "level": 1,
+        "path": [
+          "Productivity"
+        ],
+        "resourceCount": 19,
+        "children": [
+          {
+            "id": "en:Productivity:api",
+            "label": "api",
+            "language": "en",
+            "level": 2,
+            "path": [
+              "Productivity",
+              "api"
+            ],
+            "resourceCount": 1,
+            "children": []
+          },
+          {
+            "id": "en:Productivity:automation",
+            "label": "automation",
+            "language": "en",
+            "level": 2,
+            "path": [
+              "Productivity",
+              "automation"
+            ],
+            "resourceCount": 7,
+            "children": []
+          },
+          {
+            "id": "en:Productivity:cli",
+            "label": "cli",
+            "language": "en",
+            "level": 2,
+            "path": [
+              "Productivity",
+              "cli"
+            ],
+            "resourceCount": 1,
+            "children": []
+          },
+          {
+            "id": "en:Productivity:content-creation",
+            "label": "content-creation",
+            "language": "en",
+            "level": 2,
+            "path": [
+              "Productivity",
+              "content-creation"
+            ],
+            "resourceCount": 2,
+            "children": []
+          },
+          {
+            "id": "en:Productivity:knowledge-base",
+            "label": "knowledge-base",
+            "language": "en",
+            "level": 2,
+            "path": [
+              "Productivity",
+              "knowledge-base"
+            ],
+            "resourceCount": 2,
+            "children": []
+          },
+          {
+            "id": "en:Productivity:workflow",
+            "label": "workflow",
+            "language": "en",
+            "level": 2,
+            "path": [
+              "Productivity",
+              "workflow"
+            ],
+            "resourceCount": 3,
+            "children": []
+          }
+        ]
+      },
+      {
+        "id": "en:Reading",
+        "label": "Reading",
+        "language": "en",
+        "level": 1,
+        "path": [
+          "Reading"
+        ],
+        "resourceCount": 3,
+        "children": [
+          {
+            "id": "en:Reading:knowledge-base",
+            "label": "knowledge-base",
+            "language": "en",
+            "level": 2,
+            "path": [
+              "Reading",
+              "knowledge-base"
+            ],
+            "resourceCount": 2,
+            "children": []
+          }
+        ]
+      },
+      {
+        "id": "en:Security",
+        "label": "Security",
+        "language": "en",
+        "level": 1,
+        "path": [
+          "Security"
+        ],
+        "resourceCount": 27,
+        "children": [
+          {
+            "id": "en:Security:automation",
+            "label": "automation",
+            "language": "en",
+            "level": 2,
+            "path": [
+              "Security",
+              "automation"
+            ],
+            "resourceCount": 13,
+            "children": []
+          },
+          {
+            "id": "en:Security:browser-extension",
+            "label": "browser-extension",
+            "language": "en",
+            "level": 2,
+            "path": [
+              "Security",
+              "browser-extension"
+            ],
+            "resourceCount": 2,
+            "children": []
+          },
+          {
+            "id": "en:Security:cli",
+            "label": "cli",
+            "language": "en",
+            "level": 2,
+            "path": [
+              "Security",
+              "cli"
+            ],
+            "resourceCount": 5,
+            "children": []
+          },
+          {
+            "id": "en:Security:content-creation",
+            "label": "content-creation",
+            "language": "en",
+            "level": 2,
+            "path": [
+              "Security",
+              "content-creation"
+            ],
+            "resourceCount": 1,
+            "children": []
+          },
+          {
+            "id": "en:Security:developer-tooling",
+            "label": "developer-tooling",
+            "language": "en",
+            "level": 2,
+            "path": [
+              "Security",
+              "developer-tooling"
+            ],
+            "resourceCount": 1,
+            "children": []
+          },
+          {
+            "id": "en:Security:knowledge-base",
+            "label": "knowledge-base",
+            "language": "en",
+            "level": 2,
+            "path": [
+              "Security",
+              "knowledge-base"
+            ],
+            "resourceCount": 1,
+            "children": []
+          },
+          {
+            "id": "en:Security:scraping",
+            "label": "scraping",
+            "language": "en",
+            "level": 2,
+            "path": [
+              "Security",
+              "scraping"
+            ],
+            "resourceCount": 1,
+            "children": []
+          },
+          {
+            "id": "en:Security:search",
+            "label": "search",
+            "language": "en",
+            "level": 2,
+            "path": [
+              "Security",
+              "search"
+            ],
+            "resourceCount": 1,
+            "children": []
+          }
+        ]
+      }
+    ],
+    "all": [
+      {
+        "id": "all:AI",
+        "label": "AI",
+        "language": "all",
+        "level": 1,
+        "path": [
+          "AI"
+        ],
+        "resourceCount": 109,
+        "children": [
+          {
+            "id": "all:AI:agents",
+            "label": "agents",
+            "language": "all",
+            "level": 2,
+            "path": [
+              "AI",
+              "agents"
+            ],
+            "resourceCount": 43,
+            "children": []
+          },
+          {
+            "id": "all:AI:api",
+            "label": "api",
+            "language": "all",
+            "level": 2,
+            "path": [
+              "AI",
+              "api"
+            ],
+            "resourceCount": 6,
+            "children": []
+          },
+          {
+            "id": "all:AI:automation",
+            "label": "automation",
+            "language": "all",
+            "level": 2,
+            "path": [
+              "AI",
+              "automation"
+            ],
+            "resourceCount": 13,
+            "children": []
+          },
+          {
+            "id": "all:AI:browser-extension",
+            "label": "browser-extension",
+            "language": "all",
+            "level": 2,
+            "path": [
+              "AI",
+              "browser-extension"
+            ],
+            "resourceCount": 2,
+            "children": []
+          },
+          {
+            "id": "all:AI:cli",
+            "label": "cli",
+            "language": "all",
+            "level": 2,
+            "path": [
+              "AI",
+              "cli"
+            ],
+            "resourceCount": 1,
+            "children": []
+          },
+          {
+            "id": "all:AI:coding-assistant",
+            "label": "coding-assistant",
+            "language": "all",
+            "level": 2,
+            "path": [
+              "AI",
+              "coding-assistant"
+            ],
+            "resourceCount": 2,
+            "children": []
+          },
+          {
+            "id": "all:AI:content-creation",
+            "label": "content-creation",
+            "language": "all",
+            "level": 2,
+            "path": [
+              "AI",
+              "content-creation"
+            ],
+            "resourceCount": 9,
+            "children": []
+          },
+          {
+            "id": "all:AI:developer-tooling",
+            "label": "developer-tooling",
+            "language": "all",
+            "level": 2,
+            "path": [
+              "AI",
+              "developer-tooling"
+            ],
+            "resourceCount": 8,
+            "children": []
+          },
+          {
+            "id": "all:AI:knowledge-base",
+            "label": "knowledge-base",
+            "language": "all",
+            "level": 2,
+            "path": [
+              "AI",
+              "knowledge-base"
+            ],
+            "resourceCount": 10,
+            "children": []
+          },
+          {
+            "id": "all:AI:llm",
+            "label": "llm",
+            "language": "all",
+            "level": 2,
+            "path": [
+              "AI",
+              "llm"
+            ],
+            "resourceCount": 7,
+            "children": []
+          },
+          {
+            "id": "all:AI:local-first",
+            "label": "local-first",
+            "language": "all",
+            "level": 2,
+            "path": [
+              "AI",
+              "local-first"
+            ],
+            "resourceCount": 1,
+            "children": []
+          },
+          {
+            "id": "all:AI:ocr",
+            "label": "ocr",
+            "language": "all",
+            "level": 2,
+            "path": [
+              "AI",
+              "ocr"
+            ],
+            "resourceCount": 2,
+            "children": []
+          },
+          {
+            "id": "all:AI:stt",
+            "label": "stt",
+            "language": "all",
+            "level": 2,
+            "path": [
+              "AI",
+              "stt"
+            ],
+            "resourceCount": 3,
+            "children": []
+          }
+        ]
+      },
+      {
+        "id": "all:Automation",
+        "label": "Automation",
+        "language": "all",
+        "level": 1,
+        "path": [
+          "Automation"
+        ],
+        "resourceCount": 12,
+        "children": [
+          {
+            "id": "all:Automation:agents",
+            "label": "agents",
+            "language": "all",
+            "level": 2,
+            "path": [
+              "Automation",
+              "agents"
+            ],
+            "resourceCount": 1,
+            "children": []
+          },
+          {
+            "id": "all:Automation:api",
+            "label": "api",
+            "language": "all",
+            "level": 2,
+            "path": [
+              "Automation",
+              "api"
+            ],
+            "resourceCount": 2,
+            "children": []
+          },
+          {
+            "id": "all:Automation:automation",
+            "label": "automation",
+            "language": "all",
+            "level": 2,
+            "path": [
+              "Automation",
+              "automation"
+            ],
+            "resourceCount": 7,
+            "children": []
+          },
+          {
+            "id": "all:Automation:scraping",
+            "label": "scraping",
+            "language": "all",
+            "level": 2,
+            "path": [
+              "Automation",
+              "scraping"
+            ],
+            "resourceCount": 2,
+            "children": []
+          }
+        ]
+      },
+      {
+        "id": "all:Browser",
+        "label": "Browser",
+        "language": "all",
+        "level": 1,
+        "path": [
+          "Browser"
+        ],
+        "resourceCount": 4,
+        "children": [
+          {
+            "id": "all:Browser:automation",
+            "label": "automation",
+            "language": "all",
+            "level": 2,
+            "path": [
+              "Browser",
+              "automation"
+            ],
+            "resourceCount": 1,
+            "children": []
+          },
+          {
+            "id": "all:Browser:browser-extension",
+            "label": "browser-extension",
+            "language": "all",
+            "level": 2,
+            "path": [
+              "Browser",
+              "browser-extension"
+            ],
+            "resourceCount": 3,
+            "children": []
+          }
+        ]
+      },
+      {
+        "id": "all:Data",
+        "label": "Data",
+        "language": "all",
+        "level": 1,
+        "path": [
+          "Data"
+        ],
+        "resourceCount": 13,
+        "children": [
+          {
+            "id": "all:Data:agents",
+            "label": "agents",
+            "language": "all",
+            "level": 2,
+            "path": [
+              "Data",
+              "agents"
+            ],
+            "resourceCount": 2,
+            "children": []
+          },
+          {
+            "id": "all:Data:api",
+            "label": "api",
+            "language": "all",
+            "level": 2,
+            "path": [
+              "Data",
+              "api"
+            ],
+            "resourceCount": 2,
+            "children": []
+          },
+          {
+            "id": "all:Data:automation",
+            "label": "automation",
+            "language": "all",
+            "level": 2,
+            "path": [
+              "Data",
+              "automation"
+            ],
+            "resourceCount": 5,
+            "children": []
+          },
+          {
+            "id": "all:Data:content-creation",
+            "label": "content-creation",
+            "language": "all",
+            "level": 2,
+            "path": [
+              "Data",
+              "content-creation"
+            ],
+            "resourceCount": 1,
+            "children": []
+          },
+          {
+            "id": "all:Data:developer-tooling",
+            "label": "developer-tooling",
+            "language": "all",
+            "level": 2,
+            "path": [
+              "Data",
+              "developer-tooling"
+            ],
+            "resourceCount": 1,
+            "children": []
+          },
+          {
+            "id": "all:Data:scraping",
+            "label": "scraping",
+            "language": "all",
+            "level": 2,
+            "path": [
+              "Data",
+              "scraping"
+            ],
+            "resourceCount": 1,
+            "children": []
+          }
+        ]
+      },
+      {
+        "id": "all:DevTools",
+        "label": "DevTools",
+        "language": "all",
+        "level": 1,
+        "path": [
+          "DevTools"
+        ],
+        "resourceCount": 27,
+        "children": [
+          {
+            "id": "all:DevTools:agents",
+            "label": "agents",
+            "language": "all",
+            "level": 2,
+            "path": [
+              "DevTools",
+              "agents"
+            ],
+            "resourceCount": 1,
+            "children": []
+          },
+          {
+            "id": "all:DevTools:api",
+            "label": "api",
+            "language": "all",
+            "level": 2,
+            "path": [
+              "DevTools",
+              "api"
+            ],
+            "resourceCount": 6,
+            "children": []
+          },
+          {
+            "id": "all:DevTools:automation",
+            "label": "automation",
+            "language": "all",
+            "level": 2,
+            "path": [
+              "DevTools",
+              "automation"
+            ],
+            "resourceCount": 9,
+            "children": []
+          },
+          {
+            "id": "all:DevTools:cli",
+            "label": "cli",
+            "language": "all",
+            "level": 2,
+            "path": [
+              "DevTools",
+              "cli"
+            ],
+            "resourceCount": 3,
+            "children": []
+          },
+          {
+            "id": "all:DevTools:content-creation",
+            "label": "content-creation",
+            "language": "all",
+            "level": 2,
+            "path": [
+              "DevTools",
+              "content-creation"
+            ],
+            "resourceCount": 2,
+            "children": []
+          },
+          {
+            "id": "all:DevTools:developer-tooling",
+            "label": "developer-tooling",
+            "language": "all",
+            "level": 2,
+            "path": [
+              "DevTools",
+              "developer-tooling"
+            ],
+            "resourceCount": 4,
+            "children": []
+          },
+          {
+            "id": "all:DevTools:knowledge-base",
+            "label": "knowledge-base",
+            "language": "all",
+            "level": 2,
+            "path": [
+              "DevTools",
+              "knowledge-base"
+            ],
+            "resourceCount": 1,
+            "children": []
+          }
+        ]
+      },
+      {
+        "id": "all:Infra",
+        "label": "Infra",
+        "language": "all",
+        "level": 1,
+        "path": [
+          "Infra"
+        ],
+        "resourceCount": 5,
+        "children": [
+          {
+            "id": "all:Infra:automation",
+            "label": "automation",
+            "language": "all",
+            "level": 2,
+            "path": [
+              "Infra",
+              "automation"
+            ],
+            "resourceCount": 1,
+            "children": []
+          },
+          {
+            "id": "all:Infra:developer-tooling",
+            "label": "developer-tooling",
+            "language": "all",
+            "level": 2,
+            "path": [
+              "Infra",
+              "developer-tooling"
+            ],
+            "resourceCount": 1,
+            "children": []
+          },
+          {
+            "id": "all:Infra:knowledge-base",
+            "label": "knowledge-base",
+            "language": "all",
+            "level": 2,
+            "path": [
+              "Infra",
+              "knowledge-base"
+            ],
+            "resourceCount": 2,
+            "children": []
+          }
+        ]
+      },
+      {
+        "id": "all:Media",
+        "label": "Media",
+        "language": "all",
+        "level": 1,
+        "path": [
+          "Media"
+        ],
+        "resourceCount": 8,
+        "children": [
+          {
+            "id": "all:Media:automation",
+            "label": "automation",
+            "language": "all",
+            "level": 2,
+            "path": [
+              "Media",
+              "automation"
+            ],
+            "resourceCount": 5,
+            "children": []
+          },
+          {
+            "id": "all:Media:content-creation",
+            "label": "content-creation",
+            "language": "all",
+            "level": 2,
+            "path": [
+              "Media",
+              "content-creation"
+            ],
+            "resourceCount": 1,
+            "children": []
+          },
+          {
+            "id": "all:Media:developer-tooling",
+            "label": "developer-tooling",
+            "language": "all",
+            "level": 2,
+            "path": [
+              "Media",
+              "developer-tooling"
+            ],
+            "resourceCount": 1,
+            "children": []
+          },
+          {
+            "id": "all:Media:scraping",
+            "label": "scraping",
+            "language": "all",
+            "level": 2,
+            "path": [
+              "Media",
+              "scraping"
+            ],
+            "resourceCount": 1,
+            "children": []
+          }
+        ]
+      },
+      {
+        "id": "all:Other",
+        "label": "Other",
+        "language": "all",
+        "level": 1,
+        "path": [
+          "Other"
+        ],
+        "resourceCount": 6,
+        "children": [
+          {
+            "id": "all:Other:automation",
+            "label": "automation",
+            "language": "all",
+            "level": 2,
+            "path": [
+              "Other",
+              "automation"
+            ],
+            "resourceCount": 1,
+            "children": []
+          },
+          {
+            "id": "all:Other:knowledge-base",
+            "label": "knowledge-base",
+            "language": "all",
+            "level": 2,
+            "path": [
+              "Other",
+              "knowledge-base"
+            ],
+            "resourceCount": 2,
+            "children": []
+          }
+        ]
+      },
+      {
+        "id": "all:Privacy",
+        "label": "Privacy",
+        "language": "all",
+        "level": 1,
+        "path": [
+          "Privacy"
+        ],
+        "resourceCount": 8,
+        "children": [
+          {
+            "id": "all:Privacy:automation",
+            "label": "automation",
+            "language": "all",
+            "level": 2,
+            "path": [
+              "Privacy",
+              "automation"
+            ],
+            "resourceCount": 2,
+            "children": []
+          },
+          {
+            "id": "all:Privacy:content-creation",
+            "label": "content-creation",
+            "language": "all",
+            "level": 2,
+            "path": [
+              "Privacy",
+              "content-creation"
+            ],
+            "resourceCount": 1,
+            "children": []
+          },
+          {
+            "id": "all:Privacy:knowledge-base",
+            "label": "knowledge-base",
+            "language": "all",
+            "level": 2,
+            "path": [
+              "Privacy",
+              "knowledge-base"
+            ],
+            "resourceCount": 2,
+            "children": []
+          }
+        ]
+      },
+      {
+        "id": "all:Productivity",
+        "label": "Productivity",
+        "language": "all",
+        "level": 1,
+        "path": [
+          "Productivity"
+        ],
+        "resourceCount": 19,
+        "children": [
+          {
+            "id": "all:Productivity:api",
+            "label": "api",
+            "language": "all",
+            "level": 2,
+            "path": [
+              "Productivity",
+              "api"
+            ],
+            "resourceCount": 1,
+            "children": []
+          },
+          {
+            "id": "all:Productivity:automation",
+            "label": "automation",
+            "language": "all",
+            "level": 2,
+            "path": [
+              "Productivity",
+              "automation"
+            ],
+            "resourceCount": 7,
+            "children": []
+          },
+          {
+            "id": "all:Productivity:cli",
+            "label": "cli",
+            "language": "all",
+            "level": 2,
+            "path": [
+              "Productivity",
+              "cli"
+            ],
+            "resourceCount": 1,
+            "children": []
+          },
+          {
+            "id": "all:Productivity:content-creation",
+            "label": "content-creation",
+            "language": "all",
+            "level": 2,
+            "path": [
+              "Productivity",
+              "content-creation"
+            ],
+            "resourceCount": 2,
+            "children": []
+          },
+          {
+            "id": "all:Productivity:knowledge-base",
+            "label": "knowledge-base",
+            "language": "all",
+            "level": 2,
+            "path": [
+              "Productivity",
+              "knowledge-base"
+            ],
+            "resourceCount": 2,
+            "children": []
+          },
+          {
+            "id": "all:Productivity:workflow",
+            "label": "workflow",
+            "language": "all",
+            "level": 2,
+            "path": [
+              "Productivity",
+              "workflow"
+            ],
+            "resourceCount": 3,
+            "children": []
+          }
+        ]
+      },
+      {
+        "id": "all:Reading",
+        "label": "Reading",
+        "language": "all",
+        "level": 1,
+        "path": [
+          "Reading"
+        ],
+        "resourceCount": 3,
+        "children": [
+          {
+            "id": "all:Reading:knowledge-base",
+            "label": "knowledge-base",
+            "language": "all",
+            "level": 2,
+            "path": [
+              "Reading",
+              "knowledge-base"
+            ],
+            "resourceCount": 2,
+            "children": []
+          }
+        ]
+      },
+      {
+        "id": "all:Security",
+        "label": "Security",
+        "language": "all",
+        "level": 1,
+        "path": [
+          "Security"
+        ],
+        "resourceCount": 27,
+        "children": [
+          {
+            "id": "all:Security:automation",
+            "label": "automation",
+            "language": "all",
+            "level": 2,
+            "path": [
+              "Security",
+              "automation"
+            ],
+            "resourceCount": 13,
+            "children": []
+          },
+          {
+            "id": "all:Security:browser-extension",
+            "label": "browser-extension",
+            "language": "all",
+            "level": 2,
+            "path": [
+              "Security",
+              "browser-extension"
+            ],
+            "resourceCount": 2,
+            "children": []
+          },
+          {
+            "id": "all:Security:cli",
+            "label": "cli",
+            "language": "all",
+            "level": 2,
+            "path": [
+              "Security",
+              "cli"
+            ],
+            "resourceCount": 5,
+            "children": []
+          },
+          {
+            "id": "all:Security:content-creation",
+            "label": "content-creation",
+            "language": "all",
+            "level": 2,
+            "path": [
+              "Security",
+              "content-creation"
+            ],
+            "resourceCount": 1,
+            "children": []
+          },
+          {
+            "id": "all:Security:developer-tooling",
+            "label": "developer-tooling",
+            "language": "all",
+            "level": 2,
+            "path": [
+              "Security",
+              "developer-tooling"
+            ],
+            "resourceCount": 1,
+            "children": []
+          },
+          {
+            "id": "all:Security:knowledge-base",
+            "label": "knowledge-base",
+            "language": "all",
+            "level": 2,
+            "path": [
+              "Security",
+              "knowledge-base"
+            ],
+            "resourceCount": 1,
+            "children": []
+          },
+          {
+            "id": "all:Security:scraping",
+            "label": "scraping",
+            "language": "all",
+            "level": 2,
+            "path": [
+              "Security",
+              "scraping"
+            ],
+            "resourceCount": 1,
+            "children": []
+          },
+          {
+            "id": "all:Security:search",
+            "label": "search",
+            "language": "all",
+            "level": 2,
+            "path": [
+              "Security",
+              "search"
+            ],
+            "resourceCount": 1,
+            "children": []
+          }
+        ]
+      }
+    ]
   }
 }

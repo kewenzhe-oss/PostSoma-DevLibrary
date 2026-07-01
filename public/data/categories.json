@@ -9,7 +9,7 @@
   },
   {
     "name": "AI",
-    "count": 3
+    "count": 112
   },
   {
     "name": "Algorithms",
@@ -52,6 +52,10 @@
     "count": 5
   },
   {
+    "name": "Automation",
+    "count": 12
+  },
+  {
     "name": "Ballerina",
     "count": 7
   },
@@ -70,6 +74,10 @@
   {
     "name": "Blockchain",
     "count": 21
+  },
+  {
+    "name": "Browser",
+    "count": 4
   },
   {
     "name": "BY PROGRAMMING LANGUAGE",
@@ -152,6 +160,10 @@
     "count": 13
   },
   {
+    "name": "Data",
+    "count": 13
+  },
+  {
     "name": "Data Science",
     "count": 45
   },
@@ -178,6 +190,10 @@
   {
     "name": "DevOps",
     "count": 26
+  },
+  {
+    "name": "DevTools",
+    "count": 27
   },
   {
     "name": "Digital Electronics",
@@ -260,6 +276,10 @@
     "count": 2
   },
   {
+    "name": "Infra",
+    "count": 5
+  },
+  {
     "name": "Ionic",
     "count": 1
   },
@@ -332,6 +352,10 @@
     "count": 16
   },
   {
+    "name": "Media",
+    "count": 8
+  },
+  {
     "name": "Misc",
     "count": 16
   },
@@ -392,6 +416,10 @@
     "count": 2
   },
   {
+    "name": "Other",
+    "count": 6
+  },
+  {
     "name": "Perl",
     "count": 7
   },
@@ -416,8 +444,16 @@
     "count": 3
   },
   {
+    "name": "Privacy",
+    "count": 8
+  },
+  {
     "name": "Processing",
     "count": 2
+  },
+  {
+    "name": "Productivity",
+    "count": 19
   },
   {
     "name": "Puppet",
@@ -442,6 +478,10 @@
   {
     "name": "React",
     "count": 4
+  },
+  {
+    "name": "Reading",
+    "count": 3
   },
   {
     "name": "Redis",
@@ -481,7 +521,7 @@
   },
   {
     "name": "Security",
-    "count": 24
+    "count": 51
   },
   {
     "name": "Selenium",
