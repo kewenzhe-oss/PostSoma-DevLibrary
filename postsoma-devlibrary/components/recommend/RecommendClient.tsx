@@ -134,12 +134,16 @@ ${picksText}
 
 ---
 ## 3. Your Task (AI Assistant Instructions)
-If you have web-browsing capabilities, please:
+If you have web-browsing capabilities (or can parse the JSON endpoint):
 1. **Fetch and read the full database** from the JSON endpoint: https://205022.xyz/data/resources.json
 2. **Re-evaluate and search** within the full database for better items matching my learning goal "${goal || "General Programming"}" with language "${language}", difficulty "${difficulty}", and format "${format}".
 3. **Compare** the rule-filtered picks (listed in Section 2) against any better resources you discover in the full database. Identify if the rule engine missed higher-quality items or got biased by keyword matches.
 4. **Formulate a structured First-Week Study Plan** using ONLY the most suitable resources you select from the database.
-5. **Strict Constraint**: Do not suggest or link to any external learning resources or courses that do not exist inside the 205022.xyz JSON database. All links you recommend must match exact titles and URLs defined in https://205022.xyz/data/resources.json.`;
+
+If you DO NOT have web-browsing capabilities (or fail to fetch the URL):
+1. **Use the Section 2 shortlist picks** as the absolute ground truth recommendations. They are already vetted and matched by the client-side rule engine.
+2. **Formulate a structured First-Week Study Plan** based solely on the picks detailed in Section 2.
+3. **Strict Constraint**: Do not suggest or link to any external learning resources or courses that do not exist inside the 205022.xyz JSON database. All links you recommend must match exact titles and URLs defined in https://205022.xyz/data/resources.json.`;
 
       navigator.clipboard.writeText(promptPayload);
       setCopied(true);
