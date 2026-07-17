@@ -1,0 +1,29 @@
+[
+  {
+    "name": "Zero-basis Python Chinese",
+    "inputs": {
+      "goal": "零基础 Python 中文",
+      "difficulty": "beginner",
+      "language": "zh",
+      "format": "all"
+    }
+  },
+  {
+    "name": "Some JS wants to build websites EN",
+    "inputs": {
+      "goal": "有点 JS 想做网站 EN",
+      "difficulty": "intermediate",
+      "language": "en",
+      "format": "all"
+    }
+  },
+  {
+    "name": "Git cheatsheets only",
+    "inputs": {
+      "goal": "只要 cheatsheet 的 Git",
+      "difficulty": "all",
+      "language": "all",
+      "format": "documentation"
+    }
+  }
+]

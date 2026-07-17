@@ -1,0 +1,215 @@
+[
+  {
+    "fixtureName": "Zero-basis Python Chinese",
+    "inputs": {
+      "goal": "零基础 Python",
+      "difficulty": "beginner",
+      "language": "zh",
+      "format": "all"
+    },
+    "funnel": {
+      "totalRelated": 386,
+      "matched": 18,
+      "compared": 8,
+      "returned": 3
+    },
+    "picks": [
+      {
+        "resourceId": "43befea91f2e420c",
+        "title": "最新Python编程教程19天从入门到精通",
+        "url": "https://www.youtube.com/playlist?list=PLVyDH2ns1F75k1hvD2apA0DwI3XMiSDqp",
+        "type": "tutorial",
+        "language": "zh",
+        "category": "Python",
+        "take": "Quick Start",
+        "explanation": {
+          "whyMatch": "匹配您的学习目标，符合 综合 难度及中文语言偏好。",
+          "relativeAdvantage": "极简入门指南，快速跑通 Setup 和 Demo，缩短从零到第一个运行代码的时间。",
+          "knownLimitations": "可能会跳过深层计算机系统原理或底层边缘情况的讲解。",
+          "suitableFor": "适合希望通过 tutorial 载体来构建 基础 技能的自学者。",
+          "notSuitableFor": "不适合寻找保姆式视频教学或需要实时互动答疑的初学者。",
+          "alternative": "建议搭配查看替代资源：浏览分类下的其他项目",
+          "evidenceStatus": "low"
+        }
+      },
+      {
+        "resourceId": "439fd66b53c6b323",
+        "title": "Python 3 文档(简体中文) 3.2.2 documentation",
+        "url": "https://docspy3zh.readthedocs.org/en/latest/",
+        "type": "documentation",
+        "language": "zh",
+        "category": "语言相关",
+        "take": "Comprehensive",
+        "explanation": {
+          "whyMatch": "匹配您的学习目标，符合 综合 难度及中文语言偏好。",
+          "relativeAdvantage": "官方标准文档，随时保持最新更新，是查阅 API 和核心规范的终极权威参考。",
+          "knownLimitations": "文风较为干瘪冷冽，没有保姆式步骤，不太适合作为绝对新手的入门第一站。",
+          "suitableFor": "适合希望通过 documentation 载体来构建 基础 技能的自学者。",
+          "notSuitableFor": "不适合寻找保姆式视频教学或需要实时互动答疑的初学者。",
+          "alternative": "建议搭配查看替代资源：Android Note(开发过程中积累的知识点)",
+          "evidenceStatus": "low"
+        }
+      },
+      {
+        "resourceId": "f2cbd241fe963f99",
+        "title": "简明 Python 教程",
+        "url": "https://web.archive.org/web/20200822010330/https://bop.mol.uno/",
+        "type": "tutorial",
+        "language": "zh",
+        "category": "语言相关",
+        "take": "Featured Match",
+        "explanation": {
+          "whyMatch": "匹配您的学习目标，符合 beginner 难度及中文语言偏好。",
+          "relativeAdvantage": "极简入门指南，快速跑通 Setup 和 Demo，缩短从零到第一个运行代码的时间。",
+          "knownLimitations": "可能会跳过深层计算机系统原理或底层边缘情况的讲解。",
+          "suitableFor": "适合希望通过 tutorial 载体来构建 beginner 技能的自学者。",
+          "notSuitableFor": "不适合寻找保姆式视频教学或需要实时互动答疑的初学者。",
+          "alternative": "建议搭配查看替代资源：Android Note(开发过程中积累的知识点)",
+          "evidenceStatus": "medium"
+        }
+      }
+    ]
+  },
+  {
+    "fixtureName": "Some JS wants to build websites EN",
+    "inputs": {
+      "goal": "javascript website web development",
+      "difficulty": "intermediate",
+      "language": "en",
+      "format": "all"
+    },
+    "funnel": {
+      "totalRelated": 4693,
+      "matched": 684,
+      "compared": 8,
+      "returned": 3
+    },
+    "picks": [
+      {
+        "resourceId": "f534d8d663816090",
+        "title": "Create a Professional Website with Velo by Wix",
+        "url": "https://www.codecademy.com/learn/create-a-professional-website-with-velo-by-wix",
+        "type": "tutorial",
+        "language": "en",
+        "category": "Web Development",
+        "take": "Quick Start",
+        "explanation": {
+          "whyMatch": "Matches your learning query and fits general difficulty and English language preferences.",
+          "relativeAdvantage": "Highly practical, zero-friction getting started guide. Focuses on quick setup and rapid feedback loops.",
+          "knownLimitations": "May skip deep software architectural principles or edge cases.",
+          "suitableFor": "Self-directed learners wanting a tutorial medium to build basic skills.",
+          "notSuitableFor": "Learners seeking passive video walkthroughs or real-time classroom tutoring.",
+          "alternative": "Consider alternative material: ASP.NET Core Tutorial For Beginners",
+          "evidenceStatus": "low"
+        }
+      },
+      {
+        "resourceId": "61944f6fde54936e",
+        "title": "Introduction to Professional Web Development in JavaScript",
+        "url": "https://education.launchcode.org/intro-to-professional-web-dev/",
+        "type": "book",
+        "language": "en",
+        "category": "Web Development",
+        "take": "Comprehensive",
+        "explanation": {
+          "whyMatch": "Matches your learning query and fits general difficulty and English language preferences.",
+          "relativeAdvantage": "Offers a structured, comprehensive, and theoretically complete curriculum. Ideal for systematically building mental models.",
+          "knownLimitations": "Requires high reading stamina; lacks instant browser-based coding playgrounds.",
+          "suitableFor": "Self-directed learners wanting a book medium to build basic skills.",
+          "notSuitableFor": "Learners seeking passive video walkthroughs or real-time classroom tutoring.",
+          "alternative": "Consider alternative material: ASP.NET Core Tutorial For Beginners",
+          "evidenceStatus": "low"
+        }
+      },
+      {
+        "resourceId": "2170e8ac85acdc63",
+        "title": "CS50’s Web Programming with Python and JavaScript",
+        "url": "https://cs50.harvard.edu/web/",
+        "type": "book",
+        "language": "en",
+        "category": "Web Development",
+        "take": "Featured Match",
+        "explanation": {
+          "whyMatch": "Matches your learning query and fits general difficulty and English language preferences.",
+          "relativeAdvantage": "Offers a structured, comprehensive, and theoretically complete curriculum. Ideal for systematically building mental models.",
+          "knownLimitations": "Requires high reading stamina; lacks instant browser-based coding playgrounds.",
+          "suitableFor": "Self-directed learners wanting a book medium to build basic skills.",
+          "notSuitableFor": "Learners seeking passive video walkthroughs or real-time classroom tutoring.",
+          "alternative": "Consider alternative material: ASP.NET Core Tutorial For Beginners",
+          "evidenceStatus": "low"
+        }
+      }
+    ]
+  },
+  {
+    "fixtureName": "Git cheatsheets only",
+    "inputs": {
+      "goal": "git",
+      "difficulty": "all",
+      "language": "all",
+      "format": "documentation"
+    },
+    "funnel": {
+      "totalRelated": 329,
+      "matched": 4,
+      "compared": 4,
+      "returned": 3
+    },
+    "picks": [
+      {
+        "resourceId": "15f4ad023fcb73f4",
+        "title": "Start using Go",
+        "url": "https://docs.microsoft.com/zh-cn/learn/paths/go-first-steps/",
+        "type": "documentation",
+        "language": "zh",
+        "category": "Git",
+        "take": "Comprehensive",
+        "explanation": {
+          "whyMatch": "匹配您的学习目标，符合 综合 难度及中文语言偏好。",
+          "relativeAdvantage": "官方标准文档，随时保持最新更新，是查阅 API 和核心规范的终极权威参考。",
+          "knownLimitations": "文风较为干瘪冷冽，没有保姆式步骤，不太适合作为绝对新手的入门第一站。",
+          "suitableFor": "适合希望通过 documentation 载体来构建 基础 技能的自学者。",
+          "notSuitableFor": "不适合寻找保姆式视频教学或需要实时互动答疑的初学者。",
+          "alternative": "建议搭配查看替代资源：浏览分类下的其他项目",
+          "evidenceStatus": "low"
+        }
+      },
+      {
+        "resourceId": "fb1e3a8684e9f066",
+        "title": "A Visual Git Reference",
+        "url": "https://marklodato.github.io/visual-git-guide/index-en.html",
+        "type": "documentation",
+        "language": "en",
+        "category": "BY SUBJECT",
+        "take": "Featured Match",
+        "explanation": {
+          "whyMatch": "Matches your learning query and fits general difficulty and English language preferences.",
+          "relativeAdvantage": "Official authority documentation, kept up-to-date. Best for looking up APIs and syntax specifications.",
+          "knownLimitations": "Can be dry and overwhelming for absolute beginners without an introductory guide.",
+          "suitableFor": "Self-directed learners wanting a documentation medium to build basic skills.",
+          "notSuitableFor": "Learners seeking passive video walkthroughs or real-time classroom tutoring.",
+          "alternative": "Consider alternative material: Browse other catalog items",
+          "evidenceStatus": "low"
+        }
+      },
+      {
+        "resourceId": "809d94e8e107f17a",
+        "title": "get-git",
+        "url": "https://get-git.readthedocs.io/en/latest/",
+        "type": "documentation",
+        "language": "en",
+        "category": "BY SUBJECT",
+        "take": "Featured Match",
+        "explanation": {
+          "whyMatch": "Matches your learning query and fits general difficulty and English language preferences.",
+          "relativeAdvantage": "Official authority documentation, kept up-to-date. Best for looking up APIs and syntax specifications.",
+          "knownLimitations": "Can be dry and overwhelming for absolute beginners without an introductory guide.",
+          "suitableFor": "Self-directed learners wanting a documentation medium to build basic skills.",
+          "notSuitableFor": "Learners seeking passive video walkthroughs or real-time classroom tutoring.",
+          "alternative": "Consider alternative material: Browse other catalog items",
+          "evidenceStatus": "low"
+        }
+      }
+    ]
+  }
+]

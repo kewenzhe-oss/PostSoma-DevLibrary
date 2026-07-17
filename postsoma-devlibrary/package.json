@@ -12,21 +12,21 @@
     "pipeline:generate": "tsx scripts/pipeline/generateResources.ts"
   },
   "dependencies": {
+    "@remixicon/react": "^4.9.0",
+    "minisearch": "^7.1.0",
     "next": "14.2.3",
     "react": "^18",
-    "react-dom": "^18",
-    "minisearch": "^7.1.0",
-    "firebase": "^10.12.0"
+    "react-dom": "^18"
   },
   "devDependencies": {
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "autoprefixer": "^10.4.19",
     "eslint": "^8",
     "eslint-config-next": "14.2.3",
     "postcss": "^8",
     "tailwindcss": "^3.4.1",
-    "autoprefixer": "^10.4.19",
     "tsx": "^4.11.0",
     "typescript": "^5",
     "vitest": "^1.6.0"

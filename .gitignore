@@ -34,3 +34,33 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Global/Backup
+*.bak
+*.gho
+*.ori
+*.orig
+*.tmp
+*.idea
+*.patch
+*.diff
+
+# SVN/CVS
+/CVS/*
+**/CVS/*
+.cvsignore
+*/.cvsignore
+.svn/
+
+# IDEs
+.vscode/
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.code-workspace
+.history/
+gruntdb.json
+.fusebox/
+.tern-port
+.vscode-test

@@ -1,0 +1,17 @@
+{
+  "weekOf": "2026-07-20",
+  "headline": "Weekly Featured Programming Tracks and Guides",
+  "headlineZh": "本周精选编程路径与指南",
+  "items": [
+    {
+      "pathId": "python-beginner",
+      "reason": "Perfect start for new programmers looking to master Python.",
+      "reasonZh": "新手程序员学习 Python 的绝佳起点。"
+    },
+    {
+      "resourceId": "f2cbd241fe963f99",
+      "reason": "Highly readable and concise tutorial covering Python basics.",
+      "reasonZh": "极具可读性的极简 Python 基础教程。"
+    }
+  ]
+}

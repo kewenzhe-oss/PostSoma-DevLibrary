@@ -1,9 +1,10 @@
 import crypto from "node:crypto";
-import type { Resource, ResourceLanguage } from "../../lib/types/resource";
+import type { Resource, ResourceLanguage, ResourceCollection } from "../../lib/types/resource";
 
-interface ParseMarkdownInput {
+export interface ParseMarkdownInput {
   markdown: string;
   language: ResourceLanguage;
+  collection: ResourceCollection;
   sourcePath: string;
   updatedAt: string;
 }
@@ -49,30 +50,29 @@ function isResourceLine(line: string): boolean {
   return /^[-*]\s+\[([^\]]+)\]\((https?:\/\/[^)]+)\)/.test(line);
 }
 
+export function normalizeMarkdownHeading(rawHeading: string): string {
+  return rawHeading
+    .replace(/<a\s+id="[^"]+"><\/a>/gi, "")
+    .replace(/<a\s+name="[^"]+"><\/a>/gi, "")
+    .replace(/<[^>]+>/g, "")
+    .replace(/#+\s*$/, "")
+    .trim();
+}
+
 export function parseMarkdownResources(input: ParseMarkdownInput): Resource[] {
   const resources: Resource[] = [];
-  let category = "Uncategorized";
-  let subcategory: string | undefined;
+  let headingStack: string[] = [];
 
   for (const rawLine of input.markdown.split("\n")) {
     const line = rawLine.trim();
 
-    // ## Category heading
-    if (line.startsWith("## ")) {
-      category = line.replace(/^##\s+/, "").trim();
-      subcategory = undefined;
-      continue;
-    }
-
-    // ### Subcategory heading
-    if (line.startsWith("### ")) {
-      subcategory = line.replace(/^###\s+/, "").trim();
-      continue;
-    }
-
-    // #### deeper subcategory — keep current subcategory
-    if (line.startsWith("#### ")) {
-      subcategory = line.replace(/^####\s+/, "").trim();
+    const headingMatch = line.match(/^(#{2,6})\s+(.*)/);
+    if (headingMatch) {
+      const level = headingMatch[1].length;
+      const rawText = headingMatch[2].trim();
+      headingStack[level] = normalizeMarkdownHeading(rawText);
+      // Clear deeper levels
+      headingStack.splice(level + 1);
       continue;
     }
 
@@ -88,6 +88,11 @@ export function parseMarkdownResources(input: ParseMarkdownInput): Resource[] {
 
     if (!cleanTitle || !cleanUrl) continue;
 
+    const activeHeadings = headingStack.filter(Boolean);
+    const root = activeHeadings[0] || "Uncategorized";
+    const section = activeHeadings[1];
+    const subsection = activeHeadings[2];
+
     resources.push({
       id: createResourceId({
         language: input.language,
@@ -97,10 +102,13 @@ export function parseMarkdownResources(input: ParseMarkdownInput): Resource[] {
       title: cleanTitle,
       url: cleanUrl,
       language: input.language,
-      category,
-      subcategory,
+      collection: input.collection,
+      category: root,
+      subcategory: section,
+      taxonomy: { root, section, subsection },
+      tocPath: activeHeadings.slice(0, 3), // max 3 levels deep
       type: inferResourceType(cleanTitle, cleanUrl),
-      tags: [category, subcategory].filter(Boolean) as string[],
+      tags: activeHeadings.slice(0, 2),
       quality: "unchecked",
       source: "free-programming-books",
       sourcePath: input.sourcePath,

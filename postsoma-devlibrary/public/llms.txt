@@ -1,0 +1,19 @@
+# PostSoma DevLibrary (205022.xyz)
+
+PostSoma DevLibrary is a curated guide through the landscape of free programming and software engineering learning resources. It translates a raw index of 5,000+ bilingual items into a comparable choice space of random curations, search archive, and explainable recommendations.
+
+---
+
+## 1. Catalog Access & Data Schema
+
+The entire catalog database is available as a single machine-readable JSON array at [resources.json](https://205022.xyz/data/resources.json).
+For schema definitions, field metadata types, and verification guidelines, check the [CATALOG_CONTRACT.md](https://github.com/kewenzhe-oss/PostSoma-DevLibrary/blob/main/docs/delivery/CATALOG_CONTRACT.md) (or local clone repository file).
+
+---
+
+## 2. Recommendation Engine Policy
+
+Recommendations generated at `/recommend` are derived through strict catalog constraint filtering:
+- Only resources registered inside the catalog database are allowed.
+- Recommended lists present exactly 3 different angles: "Quick Start", "Comprehensive", and "Project-oriented".
+- All AI recommendations compare trade-offs, advantages, and limitations based on static evidence. We uphold a No Single Truth policy, with no claim of a single "correct authority path."

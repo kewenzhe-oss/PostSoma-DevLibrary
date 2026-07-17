@@ -4,7 +4,9 @@ import type { Resource } from "@/lib/types/resource";
 export interface SearchResourcesInput {
   query: string;
   language?: "zh" | "en" | "all";
+  collection?: string;
   category?: string;
+  tocPath?: string[];
   limit?: number;
 }
 
@@ -34,8 +36,9 @@ function buildIndex(resources: Resource[]): MiniSearch<Resource> {
       prefix: true,
     },
     // join array tags for indexing
-    extractField: (document: Record<string, unknown>, fieldName: string) => {
-      const value = document[fieldName];
+    extractField: (document: Resource, fieldName: string) => {
+      const doc = document as unknown as Record<string, unknown>;
+      const value = doc[fieldName];
       if (fieldName === "tags" && Array.isArray(value)) {
         return value.join(" ");
       }
@@ -58,7 +61,7 @@ export function searchResources(
   resources: Resource[],
   input: SearchResourcesInput,
 ): Resource[] {
-  const { query, language = "all", category, limit = 200 } = input;
+  const { query, language = "all", collection, category, tocPath, limit = 200 } = input;
 
   let filtered = resources;
 
@@ -67,9 +70,23 @@ export function searchResources(
     filtered = filtered.filter((r) => r.language === language);
   }
 
+  // Collection filter
+  if (collection && collection !== "all") {
+    filtered = filtered.filter((r) => r.collection === collection);
+  }
+
   // Category filter
   if (category && category !== "all") {
     filtered = filtered.filter((r) => r.category === category);
+  }
+
+  // TOC Path filter (prefix match)
+  if (tocPath && tocPath.length > 0) {
+    filtered = filtered.filter((r) => {
+      if (!r.tocPath) return false;
+      // All segments in the selected tocPath must match the resource's tocPath in order
+      return tocPath.every((segment, i) => r.tocPath![i] === segment);
+    });
   }
 
   // No query — return filtered list sorted by category then title
@@ -81,10 +98,9 @@ export function searchResources(
   const index = getOrBuildIndex(resources);
   const results = index.search(query, {
     filter: (result) => {
-      if (language !== "all" && result.language !== language) return false;
-      if (category && category !== "all" && result.category !== category)
-        return false;
-      return true;
+      // Find the actual resource to check tocPath
+      const res = filtered.find(r => r.id === result.id);
+      return res !== undefined;
     },
   });
 

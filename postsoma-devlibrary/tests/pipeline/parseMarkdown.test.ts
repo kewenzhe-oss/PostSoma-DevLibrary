@@ -21,6 +21,7 @@ describe("parseMarkdownResources", () => {
     const resources = parseMarkdownResources({
       markdown: sample,
       language: "en",
+      collection: "books",
       sourcePath: "books/free-programming-books.md",
       updatedAt: "2026-01-01T00:00:00.000Z",
     });
@@ -51,6 +52,7 @@ describe("parseMarkdownResources", () => {
     const resources = parseMarkdownResources({
       markdown: sample,
       language: "en",
+      collection: "books",
       sourcePath: "books/test.md",
       updatedAt: "2026-01-01T00:00:00.000Z",
     });
@@ -74,6 +76,7 @@ describe("parseMarkdownResources", () => {
     const resources = parseMarkdownResources({
       markdown: zhSample,
       language: "zh",
+      collection: "books",
       sourcePath: "books/free-programming-books-zh.md",
       updatedAt: "2026-01-01T00:00:00.000Z",
     });
@@ -89,6 +92,7 @@ describe("parseMarkdownResources", () => {
     const resources = parseMarkdownResources({
       markdown: "# Just a title\n\nSome text.",
       language: "en",
+      collection: "books",
       sourcePath: "books/test.md",
       updatedAt: "2026-01-01T00:00:00.000Z",
     });

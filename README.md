@@ -28,19 +28,10 @@ npm run dev
 
 ## Static Deployment
 
-This project uses Next.js Static Export (`output: "export"`) and is configured to be deployed as a static site to GitHub Pages.
-
-### Deploying to GitHub Pages
-
-A GitHub Actions workflow is provided (`.github/workflows/deploy-pages.yml`).
-1. Push your code to the `main` branch.
-2. In the GitHub repository settings, go to **Settings → Pages**.
-3. Under **Build and deployment**, change the **Source** to **GitHub Actions**.
-
-*Note: The `next.config.mjs` is currently configured to deploy to a repository project page (e.g. `https://USERNAME.github.io/postsoma-devlibrary/`). If you intend to deploy to a custom domain or a user root page, remove the `basePath` configuration in `next.config.mjs`.*
+This project uses Next.js Static Export (`output: "export"`) and is configured to be deployed as a static site.
 
 ## Credit
 
 Data source: [EbookFoundation/free-programming-books](https://github.com/EbookFoundation/free-programming-books)
-Interface and curation layer: PostSoma DevLibrary
+Interface and Curation Layer: PostSoma DevLibrary
 Signature: `postsoma-2050`

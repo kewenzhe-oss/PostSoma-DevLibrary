@@ -1,13 +1,63 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import AppShell from "@/components/layout/AppShell";
-import ResourceStatusButton from "@/components/resources/ResourceStatusButton";
-import { getResourceById } from "@/lib/data/resources";
+import BookmarkButton from "@/components/resources/BookmarkButton";
+import { getAllResources, getResourceById } from "@/lib/data/resources";
+import JsonLd from "@/components/seo/JsonLd";
+import type { Metadata } from "next";
+import BackLink from "@/components/resources/BackLink";
+import { getProviderLabel } from "@/lib/utils/provider";
+import { generateDescription, TYPE_LABELS, generateEditorialData } from "@/lib/utils/resource";
 
-export async function generateMetadata({ params }: { params: { id: string } }) {
+export async function generateStaticParams() {
+  // getAllResources reads public/data/resources.json which is committed to the repo
+  const resources = await getAllResources();
+
+  // Safety guard: if data is unavailable at build time, log and return empty
+  // (dynamicParams=false below ensures Next.js handles this gracefully)
+  if (!resources || resources.length === 0) {
+    console.warn(
+      "[generateStaticParams] resources.json is empty or missing — " +
+      "no resource detail pages will be pre-rendered."
+    );
+    return [];
+  }
+
+  return resources.map((r) => ({ id: r.id }));
+}
+
+// Required for output: export — disables runtime dynamic routing
+export const dynamicParams = false;
+
+export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
   const resource = await getResourceById(params.id);
   if (!resource) return { title: "Not Found" };
-  return { title: `${resource.title} — PostSoma DevLibrary` };
+
+  const description =
+    resource.language === "zh"
+      ? `收錄於 PostSoma DevLibrary 的免費 ${resource.category}${resource.subcategory ? " / " + resource.subcategory : ""} ${resource.type} 學習資源。`
+      : `Free ${resource.type} resource for learning ${resource.category}${resource.subcategory ? " / " + resource.subcategory : ""}. Curated in PostSoma DevLibrary.`;
+
+  return {
+    title: `${resource.title} — PostSoma DevLibrary`,
+    description,
+    alternates: {
+      canonical: `/resource/${resource.id}`,
+    },
+    openGraph: {
+      title: `${resource.title} — PostSoma DevLibrary`,
+      description,
+      url: `/resource/${resource.id}`,
+      type: "article",
+      siteName: "PostSoma DevLibrary",
+      locale: resource.language === "zh" ? "zh_TW" : "en_US",
+    },
+    twitter: {
+      card: "summary",
+      title: `${resource.title} — PostSoma DevLibrary`,
+      description,
+    },
+  };
 }
 
 export default async function ResourceDetailPage({
@@ -16,22 +66,65 @@ export default async function ResourceDetailPage({
   params: { id: string };
 }) {
   const resource = await getResourceById(params.id);
-
+  
   if (!resource) {
     notFound();
   }
 
+  // Pre-calculate fallback editorial content to ensure every book, course, docs or tutorial has rich review metadata
+  const editorial = generateEditorialData(resource);
+  const displayDetailSummary = resource.detailSummary || resource.summary || editorial.detailSummary;
+  const displayBestFor = (resource.bestFor && resource.bestFor.length > 0) ? resource.bestFor : editorial.bestFor;
+  const displayAccessNote = resource.accessNote || editorial.accessNote;
+
   return (
     <AppShell>
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@graph": [
+            {
+              "@type": "WebPage",
+              "@id": `https://205022.xyz/resource/${resource.id}#webpage`,
+              "url": `https://205022.xyz/resource/${resource.id}`,
+              "name": `${resource.title} — PostSoma DevLibrary`,
+              "description": resource.language === "zh"
+                ? `收錄於 PostSoma DevLibrary 的免費 ${resource.category}${resource.subcategory ? " / " + resource.subcategory : ""} ${resource.type} 學習資源。`
+                : `Free ${resource.type} resource for learning ${resource.category}${resource.subcategory ? " / " + resource.subcategory : ""}. Curated in PostSoma DevLibrary.`,
+              "isPartOf": { "@id": "https://205022.xyz/#website" },
+              "inLanguage": resource.language === "zh" ? "zh-Hant" : "en"
+            },
+            {
+              "@type": "BreadcrumbList",
+              "@id": `https://205022.xyz/resource/${resource.id}#breadcrumb`,
+              "itemListElement": [
+                {
+                  "@type": "ListItem",
+                  "position": 1,
+                  "name": "Home",
+                  "item": "https://205022.xyz/"
+                },
+                {
+                  "@type": "ListItem",
+                  "position": 2,
+                  "name": "Resources",
+                  "item": "https://205022.xyz/resources"
+                },
+                {
+                  "@type": "ListItem",
+                  "position": 3,
+                  "name": resource.title,
+                  "item": `https://205022.xyz/resource/${resource.id}`
+                }
+              ]
+            }
+          ]
+        }}
+      />
       <div className="max-w-3xl mx-auto py-8 animate-slide-up">
-        <Link
-          href="/resources"
-          className="inline-block font-mono text-xs text-archive-subtle hover:text-archive-text transition-colors mb-8"
-        >
-          ← Back to archive
-        </Link>
+        <BackLink />
 
-        <article className="archive-card p-8 md:p-10 relative overflow-hidden">
+        <article className="archive-card p-4 sm:p-8 md:p-10 relative overflow-hidden">
           {/* Subtle background element */}
           <div className="absolute -top-24 -right-24 w-64 h-64 bg-archive-accent opacity-[0.03] rounded-full blur-3xl pointer-events-none" />
 
@@ -44,7 +137,7 @@ export default async function ResourceDetailPage({
             >
               {resource.language === "zh" ? "Chinese" : "English"}
             </span>
-            <span className="type-badge capitalize">{resource.type}</span>
+            <span className="type-badge capitalize">{TYPE_LABELS[resource.type] || resource.type}</span>
             <span className="font-mono text-xs text-archive-subtle ml-auto">
               ID: {resource.id.slice(0, 8)}
             </span>
@@ -53,6 +146,14 @@ export default async function ResourceDetailPage({
           <h1 className="font-display text-3xl md:text-4xl text-archive-text leading-snug mb-6 relative z-10">
             {resource.title}
           </h1>
+
+          {/* Description Block */}
+          <div className="bg-archive-bg/40 p-4 border border-archive-border rounded-sm relative overflow-hidden mb-8 z-10">
+            <div className="absolute top-0 left-0 w-1 h-full bg-archive-accent/40" />
+            <p className="font-sans text-sm text-archive-subtle leading-relaxed">
+              {displayDetailSummary}
+            </p>
+          </div>
 
           <div className="flex items-start flex-col sm:flex-row gap-6 mb-10 relative z-10">
             <div className="flex-1 space-y-4">
@@ -63,6 +164,15 @@ export default async function ResourceDetailPage({
                 <p className="font-sans text-sm text-archive-text">
                   {resource.category}
                   {resource.subcategory && ` / ${resource.subcategory}`}
+                </p>
+              </div>
+
+              <div>
+                <h3 className="font-mono text-[10px] uppercase tracking-widest text-archive-subtle mb-1">
+                  Provider
+                </h3>
+                <p className="font-sans text-sm text-archive-text">
+                  {getProviderLabel(resource.url)}
                 </p>
               </div>
 
@@ -82,11 +192,64 @@ export default async function ResourceDetailPage({
             </div>
 
             <div className="w-full sm:w-auto p-4 bg-archive-bg/50 border border-archive-border rounded-sm">
-              <ResourceStatusButton resourceId={resource.id} />
+              <BookmarkButton resourceId={resource.id} variant="full" />
             </div>
           </div>
 
-          <div className="archive-divider pt-6 flex justify-between items-center relative z-10">
+          {/* Editorial Decision Panel (Best For & Access Note) */}
+          {(displayBestFor.length > 0 || displayAccessNote) && (
+            <div className="bg-archive-surface border border-archive-border rounded-sm p-4 sm:p-5 mb-8 relative z-10 space-y-4">
+              <h3 className="font-mono text-[10px] uppercase tracking-widest text-teal-400 mb-1">
+                Editorial Review & Decision Guide
+              </h3>
+              {displayBestFor.length > 0 && (
+                <div className="space-y-1.5">
+                  <p className="font-sans text-xs text-archive-text font-semibold">
+                    Best For:
+                  </p>
+                  <ul className="list-disc pl-4 space-y-1 text-xs text-archive-subtle font-sans">
+                    {displayBestFor.map((item, idx) => (
+                      <li key={idx}>{item}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+              {displayAccessNote && (
+                <p className="font-sans text-xs text-archive-subtle leading-relaxed pt-1 border-t border-archive-border/30">
+                  <strong className="text-archive-text font-semibold">Access Recommendation: </strong> 
+                  {displayAccessNote}
+                </p>
+              )}
+            </div>
+          )}
+
+          {/* Low-Emphasis AI Meta Box */}
+          {(resource.keyTakeaway || resource.priority || resource.action) && (
+            <div className="bg-archive-surface border border-archive-border rounded-sm p-4 sm:p-5 mb-8 relative z-10 space-y-3">
+              <h3 className="font-mono text-[10px] uppercase tracking-widest text-archive-subtle mb-1">
+                AI Workflow Audit Data
+              </h3>
+              {resource.keyTakeaway && (
+                <p className="font-sans text-xs sm:text-sm text-archive-subtle leading-relaxed">
+                  <strong className="text-archive-text font-medium">Key Takeaway:</strong> {resource.keyTakeaway}
+                </p>
+              )}
+              <div className="flex gap-4 flex-wrap text-xs font-mono text-archive-subtle/80 pt-1">
+                {resource.priority && (
+                  <span>
+                    Priority: <span className="text-archive-text font-medium">{resource.priority}</span>
+                  </span>
+                )}
+                {resource.action && (
+                  <span>
+                    Suggested Action: <span className="text-archive-text font-medium">{resource.action}</span>
+                  </span>
+                )}
+              </div>
+            </div>
+          )}
+
+          <div className="archive-divider pt-6 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 relative z-10">
             <div className="flex gap-2 flex-wrap">
               {resource.tags.map((tag) => (
                 <span
@@ -101,7 +264,7 @@ export default async function ResourceDetailPage({
               href={resource.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="btn-accent"
+              className="btn-accent w-full sm:w-auto h-11 md:h-auto flex items-center justify-center"
             >
               Open Resource ↗
             </a>

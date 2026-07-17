@@ -1,95 +1,154 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
+import Icon from "@/components/ui/Icon";
 
 const navLinks = [
-  { href: "/resources", label: "Archive" },
-  { href: "/library", label: "My Library" },
+  { href: "/recommend", label: "Recommend", icon: "shortlist" as const, activeIcon: "shortlistActive" as const },
+  { href: "/resources", label: "Archive", icon: "archive" as const, activeIcon: "archiveActive" as const },
+  { href: "/library", label: "My Library", icon: "library" as const, activeIcon: "libraryActive" as const },
 ];
 
 export default function AppHeader() {
   const pathname = usePathname();
+  const [manifest, setManifest] = useState<any>(null);
+
+  useEffect(() => {
+    fetch("/data/manifest.json")
+      .then((res) => res.json())
+      .then((data) => setManifest(data))
+      .catch((err) => console.error("Failed to load header manifest:", err));
+  }, []);
 
   return (
-    <header className="sticky top-0 z-50 border-b border-archive-border bg-archive-bg/90 backdrop-blur-sm">
-      <div className="max-w-7xl mx-auto px-6 h-14 flex items-center justify-between">
-        {/* Wordmark */}
-        <Link href="/" className="flex items-center gap-3 group">
-          {/* Diamond icon */}
-          <span className="relative flex items-center justify-center w-7 h-7">
-            <svg
-              width="22"
-              height="22"
-              viewBox="0 0 22 22"
-              fill="none"
-              className="transition-transform duration-300 group-hover:rotate-45"
-            >
-              <rect
-                x="11"
-                y="1.5"
-                width="13"
-                height="13"
-                rx="1"
-                transform="rotate(45 11 1.5)"
-                stroke="#c8a96e"
-                strokeWidth="1.25"
-                fill="none"
-              />
-              <rect
-                x="11"
-                y="5"
-                width="8.5"
-                height="8.5"
-                rx="0.5"
-                transform="rotate(45 11 5)"
-                fill="rgba(200,169,110,0.12)"
-              />
-            </svg>
-          </span>
-          <div className="flex flex-col leading-none">
-            <span className="font-display text-sm text-archive-text tracking-wide">
-              PostSoma
-            </span>
-            <span className="font-mono text-[10px] text-archive-subtle tracking-widest uppercase">
-              DevLibrary
-            </span>
+    <>
+      <header className="sticky top-0 z-50 border-b border-archive-border bg-archive-bg/90 backdrop-blur-sm">
+        <div className="max-w-7xl mx-auto px-6 h-14 flex items-center justify-between">
+          
+          {/* Logo and branding hierarchy */}
+          <div className="flex items-center gap-4">
+            <Link href="/" className="flex items-center gap-3 group">
+              <span className="relative flex items-center justify-center w-7 h-7">
+                <Image
+                  src="/logo-mark.png"
+                  alt="PostSoma DevLibrary"
+                  width={28}
+                  height={28}
+                  className="transition-transform duration-300 group-hover:scale-105"
+                />
+              </span>
+              <div className="flex flex-col leading-none pt-0.5">
+                <div className="flex items-baseline gap-1">
+                  <span className="font-mono text-[9px] text-archive-subtle uppercase tracking-wider">
+                    POSTSOMA
+                  </span>
+                  <span className="font-display text-sm text-archive-text tracking-wide font-bold">
+                    DEVLIBRARY
+                  </span>
+                </div>
+                <span className="font-mono text-[8px] text-archive-accent tracking-widest uppercase mt-0.5">
+                  ARCHIVE NODE // PORT.2050
+                </span>
+              </div>
+            </Link>
+
+            {/* System Status Strip */}
+            {manifest && (
+              <div className="hidden lg:flex items-center gap-3 font-mono text-[9px] text-archive-subtle/60 border-l border-archive-border/40 pl-4 h-5 mt-0.5">
+                <span>INDEX: {manifest.total?.toLocaleString() ?? "—"}</span>
+                <span>/</span>
+                <span>UPDATED: {manifest.generatedAt ? new Date(manifest.generatedAt).toLocaleDateString("en-US", { month: "short", day: "numeric" }).toUpperCase() : "—"}</span>
+              </div>
+            )}
           </div>
-        </Link>
 
-        {/* Navigation */}
-        <nav className="flex items-center gap-1">
-          {navLinks.map((link) => {
-            const isActive =
-              pathname === link.href || pathname.startsWith(link.href + "/");
-            return (
-              <Link
-                key={link.href}
-                href={link.href}
-                className={`px-3 py-1.5 text-sm font-sans rounded-sm transition-all duration-150 ${
-                  isActive
-                    ? "text-archive-accent bg-archive-surface border border-archive-border"
-                    : "text-archive-subtle hover:text-archive-text"
-                }`}
-              >
-                {link.label}
-              </Link>
-            );
-          })}
+          {/* Navigation Links and Portals */}
+          <div className="hidden md:flex items-center gap-3">
+            <nav className="flex items-center gap-1.5 mr-2">
+              {navLinks.map((link) => {
+                const isActive = pathname === link.href || pathname.startsWith(link.href + "/");
+                return (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    className={`px-3 py-1.5 text-xs font-mono rounded-sm transition-all duration-150 flex items-center gap-1.5 border border-transparent ${
+                      isActive
+                        ? "text-archive-accent bg-archive-surface border-archive-border"
+                        : "text-archive-subtle hover:text-archive-text"
+                    }`}
+                  >
+                    <Icon name={isActive ? link.activeIcon : link.icon} size={14} />
+                    {link.label}
+                  </Link>
+                );
+              })}
+            </nav>
 
-          {/* Divider */}
-          <span className="mx-2 h-4 w-px bg-archive-border" />
+            <a
+              href="https://postsoma-2050.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-1 px-3 py-1.5 text-[10px] font-mono text-archive-subtle hover:text-archive-accent border border-archive-border/40 rounded-sm hover:border-archive-accent/40 transition-colors"
+            >
+              postsoma-2050 <Icon name="external" size={12} className="opacity-70" />
+            </a>
+          </div>
+        </div>
+      </header>
 
-          {/* Auth placeholder */}
-          <button
-            id="header-sign-in-btn"
-            className="btn-ghost text-xs"
-            onClick={() => {}}
-          >
-            Sign in
-          </button>
-        </nav>
-      </div>
-    </header>
+      {/* Mobile Bottom Tab Bar */}
+      <nav className="fixed bottom-0 left-0 right-0 z-50 bg-archive-surface/95 backdrop-blur-md border-t border-archive-border min-h-16 pt-2 flex items-center justify-around md:hidden pb-safe">
+        {mobileNavLinks.map((link) => {
+          const isActive =
+            link.href === "/"
+              ? pathname === "/"
+              : pathname === link.href || pathname.startsWith(link.href + "/");
+          return (
+            <Link
+              key={link.href}
+              href={link.href}
+              className={`flex flex-col items-center justify-center flex-1 h-full py-1.5 transition-all duration-150 active:scale-95 ${
+                isActive
+                  ? "text-archive-accent"
+                  : "text-archive-subtle hover:text-archive-text"
+              }`}
+            >
+              <Icon name={isActive ? link.activeIcon : link.icon} size={18} />
+              <span className="text-[9px] font-mono mt-1 font-medium">{link.label}</span>
+            </Link>
+          );
+        })}
+      </nav>
+    </>
   );
 }
+
+const mobileNavLinks = [
+  {
+    href: "/",
+    label: "Home",
+    icon: "home" as const,
+    activeIcon: "homeActive" as const,
+  },
+  {
+    href: "/recommend",
+    label: "Recommend",
+    icon: "shortlist" as const,
+    activeIcon: "shortlistActive" as const,
+  },
+  {
+    href: "/resources",
+    label: "Archive",
+    icon: "archive" as const,
+    activeIcon: "archiveActive" as const,
+  },
+  {
+    href: "/library",
+    label: "My Library",
+    icon: "library" as const,
+    activeIcon: "libraryActive" as const,
+  },
+];

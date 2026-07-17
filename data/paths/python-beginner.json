@@ -1,0 +1,37 @@
+{
+  "id": "python-beginner",
+  "slug": "python-beginner",
+  "title": "Python Beginner Path",
+  "titleZh": "Python 新手入门路径",
+  "summary": "Start learning Python from scratch with these selected hand-on resources.",
+  "summaryZh": "从零开始掌握 Python 核心语法，包含精选实战与基础教程。",
+  "language": "both",
+  "difficulty": "beginner",
+  "tags": ["Python", "Programming"],
+  "audience": ["Beginners", "Students"],
+  "estimatedTotal": "20 hours",
+  "steps": [
+    {
+      "id": "python-basics",
+      "title": "Python Basics",
+      "titleZh": "Python 基础知识",
+      "description": "Learn basic syntax, variables, conditionals, and loops.",
+      "descriptionZh": "掌握 Python 基础语法、变量、条件判断和循环控制。",
+      "estimatedTime": "10 hours",
+      "difficulty": "beginner",
+      "resourceIds": ["f2cbd241fe963f99"]
+    },
+    {
+      "id": "dive-into-python",
+      "title": "Dive into Python 3",
+      "titleZh": "深入 Python 3",
+      "description": "Deepen your understanding of Python features, functions, and data structures.",
+      "descriptionZh": "深入学习 Python 的高级特性、函数与核心数据结构。",
+      "estimatedTime": "10 hours",
+      "difficulty": "intermediate",
+      "resourceIds": ["6c07915b5403d08f"],
+      "optional": true
+    }
+  ],
+  "updatedAt": "2026-07-16T20:00:00Z"
+}

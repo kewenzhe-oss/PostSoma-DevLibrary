@@ -1,0 +1,29 @@
+# PostSoma DevLibrary — Full AI Catalog Index & Reference Map
+
+This file provides a comprehensive structure of the catalog and topic nodes compiled in the PostSoma DevLibrary.
+
+---
+
+## 1. Product Context & Architecture
+
+DevLibrary is designed as a three-layer trust stack:
+1.  **L1 (Curations)**: Random Curations (homepage grid sampling) and Search Archive (`/resources`).
+2.  **L2 (Search & Filtering)**: Fuzzy searches and explainable recommended shortlists (`/recommend`).
+3.  **L3 (Resource Catalog)**: The raw corpus index of 5,080 programming books, courses, tutorials, and repos.
+
+---
+
+## 2. Dynamic Collections and Topic Tree
+
+The index is grouped into five main collections:
+-   **books**: Textbooks and guides.
+-   **courses**: Free MOOCs and structured video lists.
+-   **cheat_sheets**: Cheat sheets and syntax reference indexes.
+-   **interactive**: Online playgrounds, gamified tutorials, and REPLs.
+-   **github**: Curated open-source projects and developer templates.
+
+Key catalog categories include:
+-   **Programming Languages**: Python, JavaScript, TypeScript, Go, Rust, Java, C++, APL.
+-   **Computer Science Subjects**: Algorithms & Data Structures, DBMS & Databases, Operating Systems.
+-   **Software Engineering**: DevOps, Git, Docker, DevOps, CI/CD, Kubernetes.
+-   **Artificial Intelligence**: AI, Deep Learning, Machine Learning.

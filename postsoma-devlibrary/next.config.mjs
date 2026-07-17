@@ -1,0 +1,12 @@
+/** @type {import('next').NextConfig} */
+
+const nextConfig = {
+  output: process.env.NODE_ENV === "production" ? "export" : undefined,
+  images: {
+    unoptimized: true,
+  },
+  optimizeFonts: false,
+  experimental: {},
+};
+
+export default nextConfig;
