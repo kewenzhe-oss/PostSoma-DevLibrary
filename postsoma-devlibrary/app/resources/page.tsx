@@ -2,6 +2,7 @@ import { Suspense } from "react";
 import AppShell from "@/components/layout/AppShell";
 import ResourceExplorer from "@/components/resources/ResourceExplorer";
 import { getAllResources, getAllCategories, getToc, getCollections } from "@/lib/data/resources";
+import { getGitHubFavoritesForUi } from "@/lib/data/github-favorite-ui";
 import JsonLd from "@/components/seo/JsonLd";
 import type { Metadata } from "next";
 
@@ -13,11 +14,12 @@ export const metadata: Metadata = {
 };
 
 export default async function ResourcesPage() {
-  const [resources, categories, tocNodes, collections] = await Promise.all([
+  const [resources, categories, tocNodes, collections, githubFavorites] = await Promise.all([
     getAllResources(),
     getAllCategories(),
     getToc(),
     getCollections(),
+    getGitHubFavoritesForUi(),
   ]);
 
   return (
@@ -70,6 +72,7 @@ export default async function ResourcesPage() {
           categories={categories} 
           tocNodes={tocNodes} 
           collections={collections} 
+          githubFavorites={githubFavorites}
         />
       </Suspense>
     </AppShell>

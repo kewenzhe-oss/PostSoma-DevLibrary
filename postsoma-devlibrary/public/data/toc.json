@@ -15098,7 +15098,7 @@
         "path": [
           "AI"
         ],
-        "resourceCount": 109,
+        "resourceCount": 108,
         "children": [
           {
             "id": "en:AI:agents",
@@ -15121,7 +15121,7 @@
               "AI",
               "api"
             ],
-            "resourceCount": 6,
+            "resourceCount": 5,
             "children": []
           },
           {
@@ -15842,7 +15842,7 @@
         "path": [
           "Security"
         ],
-        "resourceCount": 27,
+        "resourceCount": 26,
         "children": [
           {
             "id": "en:Security:automation",
@@ -15853,7 +15853,7 @@
               "Security",
               "automation"
             ],
-            "resourceCount": 13,
+            "resourceCount": 12,
             "children": []
           },
           {
@@ -15952,7 +15952,7 @@
         "path": [
           "AI"
         ],
-        "resourceCount": 109,
+        "resourceCount": 108,
         "children": [
           {
             "id": "all:AI:agents",
@@ -15975,7 +15975,7 @@
               "AI",
               "api"
             ],
-            "resourceCount": 6,
+            "resourceCount": 5,
             "children": []
           },
           {
@@ -16696,7 +16696,7 @@
         "path": [
           "Security"
         ],
-        "resourceCount": 27,
+        "resourceCount": 26,
         "children": [
           {
             "id": "all:Security:automation",
@@ -16707,7 +16707,7 @@
               "Security",
               "automation"
             ],
-            "resourceCount": 13,
+            "resourceCount": 12,
             "children": []
           },
           {

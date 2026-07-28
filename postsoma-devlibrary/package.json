@@ -4,12 +4,22 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "prebuild": "npm run github:validate-curation",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
     "test": "vitest run",
     "test:watch": "vitest",
-    "pipeline:generate": "tsx scripts/pipeline/generateResources.ts"
+    "prepipeline:generate": "npm run github:validate-curation -- --allow-canonical-favorites-missing-from-resources",
+    "pipeline:generate": "tsx scripts/pipeline/generateResources.ts",
+    "postpipeline:generate": "npm run github:validate-curation",
+    "github:migrate": "tsx scripts/github/migrateGithubFavorites.ts",
+    "postgithub:migrate": "npm run github:validate-curation",
+    "github:add": "tsx scripts/github/manageGithubFavorites.ts add",
+    "github:review": "tsx scripts/github/manageGithubFavorites.ts review",
+    "github:health": "tsx scripts/github/checkGithubHealth.ts",
+    "github:health:dry-run": "node --env-file-if-exists=.env.github-health.local --import tsx scripts/github/checkGithubHealth.ts --dry-run",
+    "github:validate-curation": "tsx scripts/github/validateGithubCuration.ts"
   },
   "dependencies": {
     "@remixicon/react": "^4.9.0",

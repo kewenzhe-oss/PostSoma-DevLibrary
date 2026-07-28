@@ -3,14 +3,26 @@ import { useSearchParams, useRouter } from "next/navigation";
 import type { Resource } from "@/lib/types/resource";
 import BookmarkButton from "@/components/resources/BookmarkButton";
 import { generateDescription, TYPE_LABELS } from "@/lib/utils/resource";
+import type { GitHubFavorite } from "@/lib/types/github-favorite";
+import {
+  getCompactGitHubSummary,
+  GitHubCapabilityTags,
+  GitHubHealthBadge,
+} from "./GitHubFavoriteMeta";
 
 interface ResourceCardProps {
   resource: Resource;
   language?: "all" | "zh" | "en";
   onPreview?: (resource: Resource) => void;
+  githubFavorite?: GitHubFavorite;
 }
 
-export default function ResourceCard({ resource, language = "all", onPreview }: ResourceCardProps) {
+export default function ResourceCard({
+  resource,
+  language = "all",
+  onPreview,
+  githubFavorite,
+}: ResourceCardProps) {
   const searchParams = useSearchParams();
   const router = useRouter();
 
@@ -54,6 +66,64 @@ export default function ResourceCard({ resource, language = "all", onPreview }: 
       router.push(detailUrl);
     }
   };
+
+  if (githubFavorite) {
+    return (
+      <article
+        id={`resource-card-${resource.id}`}
+        onClick={handleCardBodyClick}
+        className="archive-card px-3.5 py-3 md:px-4 group animate-fade-in transition-all duration-200 cursor-pointer active:bg-white/[0.01]"
+      >
+        <div className="flex items-start gap-3">
+          <div className="min-w-0 flex-1">
+            <div className="flex items-start gap-3">
+              <Link
+                href={detailUrl}
+                onClick={handleTitleClick}
+                className="min-w-0 flex-1"
+              >
+                <h2 className="font-display text-[15px] md:text-base text-archive-text leading-snug group-hover:text-archive-accent-glow transition-colors duration-150 line-clamp-1">
+                  {resource.title}
+                </h2>
+              </Link>
+              <div className="shrink-0 pt-0.5">
+                <GitHubHealthBadge favorite={githubFavorite} />
+              </div>
+            </div>
+
+            <p className="font-sans text-[11px] md:text-xs text-archive-subtle/80 line-clamp-2 leading-relaxed mt-1.5 max-w-4xl">
+              {getCompactGitHubSummary(githubFavorite.shortSummary)}
+            </p>
+
+            <div className="flex items-end justify-between gap-3 mt-2.5">
+              <GitHubCapabilityTags
+                capabilities={githubFavorite.capabilities}
+                maxVisible={4}
+              />
+              <span className="hidden sm:inline font-mono text-[9px] text-archive-subtle/45 shrink-0">
+                Details →
+              </span>
+            </div>
+          </div>
+
+          <div className="flex flex-col items-center gap-1.5 shrink-0 -mt-1">
+            <BookmarkButton resourceId={resource.id} variant="icon" />
+            <a
+              href={resource.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              id={`resource-open-${resource.id}`}
+              className="w-8 h-8 flex items-center justify-center rounded-sm border border-transparent text-archive-accent-dim hover:text-archive-accent hover:border-archive-border transition-colors font-mono text-xs"
+              title={`Open ${resource.title} on GitHub`}
+              aria-label={`Open ${resource.title} on GitHub`}
+            >
+              ↗
+            </a>
+          </div>
+        </div>
+      </article>
+    );
+  }
 
   return (
     <article
@@ -131,4 +201,3 @@ export default function ResourceCard({ resource, language = "all", onPreview }: 
     </article>
   );
 }
-

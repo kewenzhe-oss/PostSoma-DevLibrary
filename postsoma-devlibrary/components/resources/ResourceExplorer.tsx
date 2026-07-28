@@ -5,14 +5,30 @@ import { createPortal } from "react-dom";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import Link from "next/link";
 import type { Resource, ResourceTocNode } from "@/lib/types/resource";
+import type {
+  GitHubFavorite,
+  GitHubFavoriteHealth,
+} from "@/lib/types/github-favorite";
 import ResourceSearch from "@/components/resources/ResourceSearch";
 import ResourceGrid from "@/components/resources/ResourceGrid";
 import ResourceToc from "@/components/resources/ResourceToc";
+import GitHubBrowseControls from "@/components/resources/GitHubBrowseControls";
 import EmptyState from "@/components/ui/EmptyState";
 import BookmarkButton from "./BookmarkButton";
 import { generateDescription, TYPE_LABELS } from "@/lib/utils/resource";
 import { getProviderLabel } from "@/lib/utils/provider";
 import { searchResources } from "@/lib/data/search";
+import {
+  buildGitHubFacetOptions,
+  formatGitHubFacetLabel,
+  searchGitHubFavorites,
+} from "@/lib/data/github-search";
+import type { GitHubBrowseMode } from "@/lib/data/github-search";
+import {
+  GitHubCapabilityTags,
+  GitHubHealthBadge,
+  GitHubResearchDetails,
+} from "./GitHubFavoriteMeta";
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -32,6 +48,7 @@ interface ResourceExplorerProps {
   categories: string[];
   tocNodes: Record<string, Record<string, ResourceTocNode[]>>;
   collections: { id: string; label: string; count: number }[];
+  githubFavorites: GitHubFavorite[];
 }
 
 // ─── Path Breadcrumb Pill ─────────────────────────────────────────────────────
@@ -53,6 +70,33 @@ function PathPill({
         onClick={onClear}
         className="text-archive-subtle hover:text-teal-300 transition-colors font-mono font-bold text-xs ml-0.5 shrink-0"
         title="Clear directory filter"
+      >
+        ×
+      </button>
+    </div>
+  );
+}
+
+function GitHubFilterPill({
+  label,
+  value,
+  onClear,
+}: {
+  label: string;
+  value: string;
+  onClear: () => void;
+}) {
+  return (
+    <div className="inline-flex items-center gap-1.5 rounded-full border border-teal-500/20 bg-teal-500/8 px-3 py-1 text-xs animate-fade-in">
+      <span className="font-mono text-[10px] text-archive-subtle">
+        {label}:
+      </span>
+      <span className="font-sans font-medium text-teal-300">{value}</span>
+      <button
+        type="button"
+        onClick={onClear}
+        className="ml-0.5 shrink-0 font-mono text-xs font-bold text-archive-subtle transition-colors hover:text-teal-300"
+        aria-label={`Clear ${label} filter`}
       >
         ×
       </button>
@@ -95,6 +139,7 @@ export default function ResourceExplorer({
   categories,
   tocNodes,
   collections,
+  githubFavorites,
 }: ResourceExplorerProps) {
   const router = useRouter();
   const pathname = usePathname();
@@ -108,14 +153,54 @@ export default function ResourceExplorer({
   const [previewResource, setPreviewResource] = useState<Resource | null>(null);
   const [previewTopic, setPreviewTopic] = useState<{ topicName: string; category: string; subcategory?: string; resources: Resource[] } | null>(null);
   const [viewMode, setViewMode] = useState<"topics" | "resources">("topics");
+  const [githubBrowseMode, setGithubBrowseMode] =
+    useState<GitHubBrowseMode>("topic");
+  const [githubCapability, setGithubCapability] = useState("");
+  const [githubTechStack, setGithubTechStack] = useState("");
+  const [githubHealth, setGithubHealth] =
+    useState<GitHubFavoriteHealth | "">("");
   const [isFilterDrawerOpen, setIsFilterDrawerOpen] = useState(false);
   const [, startTransition] = useTransition();
+  const showGlobalTopicGroups = selectedCollection !== "github";
 
+  const githubFavoritesById = useMemo(
+    () =>
+      new Map(
+        githubFavorites.map((favorite) => [favorite.id, favorite] as const),
+      ),
+    [githubFavorites],
+  );
+  const githubCapabilityOptions = useMemo(
+    () => buildGitHubFacetOptions(githubFavorites, "capabilities"),
+    [githubFavorites],
+  );
+  const githubTechStackOptions = useMemo(
+    () => buildGitHubFacetOptions(githubFavorites, "techStack"),
+    [githubFavorites],
+  );
+  const githubHealthCounts = useMemo(() => {
+    const counts = new Map<GitHubFavoriteHealth, number>();
+    for (const favorite of githubFavorites) {
+      if (!favorite.lastCheckedAt) continue;
+      counts.set(favorite.health, (counts.get(favorite.health) ?? 0) + 1);
+    }
+    return counts;
+  }, [githubFavorites]);
+  const githubTimelineCounts = useMemo(
+    () => ({
+      localEntries: githubFavorites.filter(
+        (favorite) => favorite.discoveredAtSource === "local-entry",
+      ).length,
+      manualReviews: githubFavorites.filter(
+        (favorite) => favorite.lastReviewedAtSource === "manual-review",
+      ).length,
+    }),
+    [githubFavorites],
+  );
 
-
-  // Sync viewMode default state to collection type (topics for books/courses/github, resources for cheat sheets/interactive)
+  // GitHub is an item-first research list; books and courses remain topic-first.
   useEffect(() => {
-    if (selectedCollection === "books" || selectedCollection === "courses" || selectedCollection === "github") {
+    if (selectedCollection === "books" || selectedCollection === "courses") {
       setViewMode("topics");
     } else {
       setViewMode("resources");
@@ -131,7 +216,18 @@ export default function ResourceExplorer({
     const col = searchParams.get("col") || "books";
     const pathVal = searchParams.get("path");
     const path = pathVal ? pathVal.split(":") : null;
-
+    const githubMode =
+      searchParams.get("ghmode") === "recall" ? "recall" : "topic";
+    const capability = searchParams.get("cap") || "";
+    const techStack = searchParams.get("stack") || "";
+    const healthParam = searchParams.get("health");
+    const health: GitHubFavoriteHealth | "" =
+      healthParam === "active" ||
+      healthParam === "quiet" ||
+      healthParam === "archived" ||
+      healthParam === "unavailable"
+        ? healthParam
+        : "";
     setQuery((current) => (current !== q ? q : current));
     setLanguage((current) => (current !== lang ? lang : current));
     setSelectedCollection((current) => (current !== col ? col : current));
@@ -140,26 +236,82 @@ export default function ResourceExplorer({
       const newStr = pathVal || "";
       return currentStr !== newStr ? path : current;
     });
+    setGithubBrowseMode((current) =>
+      current !== githubMode ? githubMode : current,
+    );
+    setGithubCapability((current) =>
+      current !== capability ? capability : current,
+    );
+    setGithubTechStack((current) =>
+      current !== techStack ? techStack : current,
+    );
+    setGithubHealth((current) => (current !== health ? health : current));
   }, [searchParams]);
 
   // Keep stateRef in sync for debounced query sync to URL
-  const stateRef = useRef({ query, language, selectedCollection, selectedTocPath });
+  const stateRef = useRef({
+    query,
+    language,
+    selectedCollection,
+    selectedTocPath,
+    githubBrowseMode,
+    githubCapability,
+    githubTechStack,
+    githubHealth,
+  });
   useEffect(() => {
-    stateRef.current = { query, language, selectedCollection, selectedTocPath };
-  }, [query, language, selectedCollection, selectedTocPath]);
+    stateRef.current = {
+      query,
+      language,
+      selectedCollection,
+      selectedTocPath,
+      githubBrowseMode,
+      githubCapability,
+      githubTechStack,
+      githubHealth,
+    };
+  }, [
+    query,
+    language,
+    selectedCollection,
+    selectedTocPath,
+    githubBrowseMode,
+    githubCapability,
+    githubTechStack,
+    githubHealth,
+  ]);
 
   // Helper to synchronize active state parameters to browser URL
   const syncToUrl = (
     q: string,
     lang: string,
     col: string,
-    path: string[] | null
+    path: string[] | null,
+    githubOverrides: Partial<{
+      mode: GitHubBrowseMode;
+      capability: string;
+      techStack: string;
+      health: GitHubFavoriteHealth | "";
+    }> = {},
   ) => {
     const params = new URLSearchParams();
     if (q.trim()) params.set("q", q);
     if (lang !== "all") params.set("lang", lang);
     if (col !== "books") params.set("col", col);
     if (path && path.length > 0) params.set("path", path.join(":"));
+    if (col === "github") {
+      const mode = githubOverrides.mode ?? stateRef.current.githubBrowseMode;
+      const capability =
+        githubOverrides.capability ?? stateRef.current.githubCapability;
+      const techStack =
+        githubOverrides.techStack ?? stateRef.current.githubTechStack;
+      const health = githubOverrides.health ?? stateRef.current.githubHealth;
+
+      if (mode === "recall") params.set("ghmode", mode);
+      if (capability) params.set("cap", capability);
+      if (techStack) params.set("stack", techStack);
+      if (health) params.set("health", health);
+    }
 
     const qs = params.toString();
     const target = `${pathname}${qs ? "?" + qs : ""}`;
@@ -206,16 +358,51 @@ export default function ResourceExplorer({
   }, [flatActiveNodes, selectedTocPath]);
 
   // ── Multi-dimension search/filter results ─────────────────────────────────
-  const results = useMemo(() => {
-    return searchResources(resources, {
-      query,
+  const searchOutcome = useMemo(() => {
+    const baseInput = {
       language,
       category: "all",
       collection: selectedCollection,
       tocPath: selectedTocPath ?? undefined,
       limit: 300,
-    });
-  }, [resources, query, language, selectedCollection, selectedTocPath]);
+    } as const;
+
+    if (selectedCollection === "github") {
+      const githubResources = searchResources(resources, {
+        ...baseInput,
+        query: "",
+      });
+      return searchGitHubFavorites(githubResources, githubFavoritesById, {
+        query,
+        capability: githubCapability,
+        techStack: githubTechStack,
+        health: githubHealth,
+        mode: githubBrowseMode,
+        limit: 300,
+      });
+    }
+
+    return {
+      resources: searchResources(resources, {
+        ...baseInput,
+        query,
+      }),
+      matchReasonsById: new Map(),
+    };
+  }, [
+    resources,
+    query,
+    language,
+    selectedCollection,
+    selectedTocPath,
+    githubFavoritesById,
+    githubCapability,
+    githubTechStack,
+    githubHealth,
+    githubBrowseMode,
+  ]);
+  const results = searchOutcome.resources;
+  const githubMatchReasonsById = searchOutcome.matchReasonsById;
 
   // Lazy loading / pagination state for scroll performance
   const [visibleCount, setVisibleCount] = useState(24);
@@ -246,7 +433,16 @@ export default function ResourceExplorer({
   // Reset pagination count on search/filter changes
   useEffect(() => {
     setVisibleCount(24);
-  }, [query, language, selectedCollection, selectedTocPath]);
+  }, [
+    query,
+    language,
+    selectedCollection,
+    selectedTocPath,
+    githubCapability,
+    githubTechStack,
+    githubHealth,
+    githubBrowseMode,
+  ]);
 
   const displayedResults = useMemo(() => {
     return results.slice(0, visibleCount);
@@ -292,10 +488,21 @@ export default function ResourceExplorer({
     return () => clearTimeout(timer);
   }, [results]);
 
+  const hasGitHubStructuredFilters =
+    selectedCollection === "github" &&
+    Boolean(githubCapability || githubTechStack || githubHealth);
   const hasActiveFilters =
-    query !== "" || language !== "all" || selectedTocPath !== null;
+    query !== "" ||
+    language !== "all" ||
+    selectedTocPath !== null ||
+    hasGitHubStructuredFilters;
 
-  const activeFilterCount = (language !== "all" ? 1 : 0) + (selectedTocPath ? 1 : 0);
+  const activeFilterCount =
+    (language !== "all" ? 1 : 0) +
+    (selectedTocPath ? 1 : 0) +
+    (selectedCollection === "github" && githubCapability ? 1 : 0) +
+    (selectedCollection === "github" && githubTechStack ? 1 : 0) +
+    (selectedCollection === "github" && githubHealth ? 1 : 0);
 
   // ── Handlers ──────────────────────────────────────────────────────────────
 
@@ -304,7 +511,16 @@ export default function ResourceExplorer({
       setQuery("");
       setLanguage("all");
       setSelectedTocPath(null);
-      syncToUrl("", "all", selectedCollection, null);
+      if (selectedCollection === "github") {
+        setGithubCapability("");
+        setGithubTechStack("");
+        setGithubHealth("");
+      }
+      syncToUrl("", "all", selectedCollection, null, {
+        capability: "",
+        techStack: "",
+        health: "",
+      });
     });
   }
 
@@ -346,6 +562,42 @@ export default function ResourceExplorer({
     });
   }
 
+  function handleGitHubModeChange(mode: GitHubBrowseMode) {
+    startTransition(() => {
+      setGithubBrowseMode(mode);
+      syncToUrl(query, language, selectedCollection, selectedTocPath, {
+        mode,
+      });
+    });
+  }
+
+  function handleGitHubCapabilityChange(capability: string) {
+    startTransition(() => {
+      setGithubCapability(capability);
+      syncToUrl(query, language, selectedCollection, selectedTocPath, {
+        capability,
+      });
+    });
+  }
+
+  function handleGitHubTechStackChange(techStack: string) {
+    startTransition(() => {
+      setGithubTechStack(techStack);
+      syncToUrl(query, language, selectedCollection, selectedTocPath, {
+        techStack,
+      });
+    });
+  }
+
+  function handleGitHubHealthChange(health: GitHubFavoriteHealth | "") {
+    startTransition(() => {
+      setGithubHealth(health);
+      syncToUrl(query, language, selectedCollection, selectedTocPath, {
+        health,
+      });
+    });
+  }
+
   // ─────────────────────────────────────────────────────────────────────────
 
   return (
@@ -361,21 +613,23 @@ export default function ResourceExplorer({
               resultCount={results.length}
             />
           </div>
-          <button
-            onClick={() => setIsFilterDrawerOpen(true)}
-            className="lg:hidden h-[38px] px-3.5 border border-archive-border bg-archive-surface rounded-sm text-archive-subtle hover:text-archive-text flex items-center justify-center gap-1.5 active:scale-95 active:bg-archive-muted/40 transition-all shrink-0"
-            title="Open Directory & Filters"
-          >
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} className="w-5 h-5">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 11-3 0m3 0a1.5 1.5 0 10-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-9.75 0h9.75" />
-            </svg>
-            <span className="text-xs font-mono hidden sm:inline">Filters</span>
-            {activeFilterCount > 0 && (
-              <span className="min-w-4 h-4 px-1 rounded-full bg-archive-accent text-archive-bg font-mono text-[9px] font-bold flex items-center justify-center">
-                {activeFilterCount}
-              </span>
-            )}
-          </button>
+          {showGlobalTopicGroups && (
+            <button
+              onClick={() => setIsFilterDrawerOpen(true)}
+              className="lg:hidden h-[38px] px-3.5 border border-archive-border bg-archive-surface rounded-sm text-archive-subtle hover:text-archive-text flex items-center justify-center gap-1.5 active:scale-95 active:bg-archive-muted/40 transition-all shrink-0"
+              title="Open Directory & Filters"
+            >
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} className="w-5 h-5">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 11-3 0m3 0a1.5 1.5 0 10-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-9.75 0h9.75" />
+              </svg>
+              <span className="text-xs font-mono hidden sm:inline">Filters</span>
+              {activeFilterCount > 0 && (
+                <span className="min-w-4 h-4 px-1 rounded-full bg-archive-accent text-archive-bg font-mono text-[9px] font-bold flex items-center justify-center">
+                  {activeFilterCount}
+                </span>
+              )}
+            </button>
+          )}
         </div>
 
         {/* Collection Tabs */}
@@ -392,35 +646,57 @@ export default function ResourceExplorer({
           </div>
         )}
 
+        {selectedCollection === "github" && (
+          <GitHubBrowseControls
+            mode={githubBrowseMode}
+            onModeChange={handleGitHubModeChange}
+            capabilityOptions={githubCapabilityOptions}
+            techStackOptions={githubTechStackOptions}
+            healthCounts={githubHealthCounts}
+            selectedCapability={githubCapability}
+            selectedTechStack={githubTechStack}
+            selectedHealth={githubHealth}
+            localEntryCount={githubTimelineCounts.localEntries}
+            manualReviewCount={githubTimelineCounts.manualReviews}
+            onCapabilityChange={handleGitHubCapabilityChange}
+            onTechStackChange={handleGitHubTechStackChange}
+            onHealthChange={handleGitHubHealthChange}
+          />
+        )}
+
         {/* Popular Topics Pill Bar — hidden on extra-small screens to save space */}
-        <div className="hidden sm:flex items-center gap-2 flex-wrap">
-          <span className="font-mono text-[10px] text-archive-subtle opacity-60">
-            Popular:
-          </span>
-          {["React", "Python", "TypeScript", "Docker", "SQL", "AI"].map((pill) => (
-            <button
-              key={pill}
-              onClick={() => handlePopularPillClick(pill)}
-              className={`px-2 py-0.5 rounded-full text-[10px] font-mono border transition-all ${
-                query.toLowerCase() === pill.toLowerCase()
-                  ? "border-archive-accent text-archive-accent bg-archive-accent/5"
-                  : "border-archive-border text-archive-subtle hover:border-archive-muted hover:text-archive-text bg-transparent"
-              }`}
-            >
-              #{pill.toLowerCase()}
-            </button>
-          ))}
-        </div>
+        {selectedCollection !== "github" && (
+          <div className="hidden sm:flex items-center gap-2 flex-wrap">
+            <span className="font-mono text-[10px] text-archive-subtle opacity-60">
+              Popular:
+            </span>
+            {["React", "Python", "TypeScript", "Docker", "SQL", "AI"].map((pill) => (
+              <button
+                key={pill}
+                onClick={() => handlePopularPillClick(pill)}
+                className={`px-2 py-0.5 rounded-full text-[10px] font-mono border transition-all ${
+                  query.toLowerCase() === pill.toLowerCase()
+                    ? "border-archive-accent text-archive-accent bg-archive-accent/5"
+                    : "border-archive-border text-archive-subtle hover:border-archive-muted hover:text-archive-text bg-transparent"
+                }`}
+              >
+                #{pill.toLowerCase()}
+              </button>
+            ))}
+          </div>
+        )}
 
         {/* Active Filter Chips */}
         <div className="flex items-center gap-3 flex-wrap min-h-[20px] empty:hidden">
           {/* Path breadcrumb pill */}
-          {selectedTocPath && selectedTocPath.length > 0 && (
-            <PathPill
-              path={selectedTocPath}
-              onClear={() => handleSelectTocPath(null)}
-            />
-          )}
+          {showGlobalTopicGroups &&
+            selectedTocPath &&
+            selectedTocPath.length > 0 && (
+              <PathPill
+                path={selectedTocPath}
+                onClear={() => handleSelectTocPath(null)}
+              />
+            )}
 
           {/* Language pill (shown when not "all") */}
           {language !== "all" && (
@@ -436,6 +712,30 @@ export default function ResourceExplorer({
                 ×
               </button>
             </div>
+          )}
+
+          {selectedCollection === "github" && githubCapability && (
+            <GitHubFilterPill
+              label="capability"
+              value={formatGitHubFacetLabel(githubCapability)}
+              onClear={() => handleGitHubCapabilityChange("")}
+            />
+          )}
+
+          {selectedCollection === "github" && githubTechStack && (
+            <GitHubFilterPill
+              label="stack"
+              value={formatGitHubFacetLabel(githubTechStack)}
+              onClear={() => handleGitHubTechStackChange("")}
+            />
+          )}
+
+          {selectedCollection === "github" && githubHealth && (
+            <GitHubFilterPill
+              label="health"
+              value={formatGitHubFacetLabel(githubHealth)}
+              onClear={() => handleGitHubHealthChange("")}
+            />
           )}
 
           {/* Clear all */}
@@ -468,45 +768,49 @@ export default function ResourceExplorer({
         </span>
 
         {/* Dynamic View Mode Layout Toggle */}
-        <div className="ml-auto flex items-center bg-archive-surface border border-archive-border rounded p-0.5 select-none animate-fade-in shrink-0">
-          <button
-            onClick={() => setViewMode("topics")}
-            className={`px-2.5 py-1 rounded text-[10px] font-mono font-medium transition-all ${
-              viewMode === "topics"
-                ? "bg-archive-border text-archive-accent shadow-sm"
-                : "text-archive-subtle hover:text-archive-text"
-            }`}
-            title="Browse curated topic clusters"
-          >
-            Topics
-          </button>
-          <button
-            onClick={() => setViewMode("resources")}
-            className={`px-2.5 py-1 rounded text-[10px] font-mono font-medium transition-all ${
-              viewMode === "resources"
-                ? "bg-archive-border text-archive-accent shadow-sm"
-                : "text-archive-subtle hover:text-archive-text"
-            }`}
-            title="Browse all individual resources in raw data"
-          >
-            Raw Data
-          </button>
-        </div>
+        {selectedCollection !== "github" && (
+          <div className="ml-auto flex items-center bg-archive-surface border border-archive-border rounded p-0.5 select-none animate-fade-in shrink-0">
+            <button
+              onClick={() => setViewMode("topics")}
+              className={`px-2.5 py-1 rounded text-[10px] font-mono font-medium transition-all ${
+                viewMode === "topics"
+                  ? "bg-archive-border text-archive-accent shadow-sm"
+                  : "text-archive-subtle hover:text-archive-text"
+              }`}
+              title="Browse curated topic clusters"
+            >
+              Topics
+            </button>
+            <button
+              onClick={() => setViewMode("resources")}
+              className={`px-2.5 py-1 rounded text-[10px] font-mono font-medium transition-all ${
+                viewMode === "resources"
+                  ? "bg-archive-border text-archive-accent shadow-sm"
+                  : "text-archive-subtle hover:text-archive-text"
+              }`}
+              title="Browse all individual resources in raw data"
+            >
+              Raw Data
+            </button>
+          </div>
+        )}
       </div>
 
       {/* ── Dual Layout: Mini Rail + Card Grid ──────────────────────────── */}
       <div className="flex gap-0 w-full items-start">
         {/* Sticky Mini Rail — desktop only */}
-        <div className="hidden lg:block sticky top-6 shrink-0 self-start z-40">
-          <ResourceToc
-            tocAllLangs={tocAllLangs}
-            selectedCollection={selectedCollection}
-            language={language}
-            onLanguageChange={handleLanguageChange}
-            selectedPath={selectedTocPath}
-            onSelectPath={handleSelectTocPath}
-          />
-        </div>
+        {showGlobalTopicGroups && (
+          <div className="hidden lg:block sticky top-6 shrink-0 self-start z-40">
+            <ResourceToc
+              tocAllLangs={tocAllLangs}
+              selectedCollection={selectedCollection}
+              language={language}
+              onLanguageChange={handleLanguageChange}
+              selectedPath={selectedTocPath}
+              onSelectPath={handleSelectTocPath}
+            />
+          </div>
+        )}
 
 
 
@@ -521,6 +825,9 @@ export default function ResourceExplorer({
                 onPreview={setPreviewResource}
                 onPreviewTopic={setPreviewTopic}
                 onToggleViewMode={setViewMode}
+                githubFavoritesById={githubFavoritesById}
+                githubBrowseMode={githubBrowseMode}
+                githubMatchReasonsById={githubMatchReasonsById}
               />
               {results.length > visibleCount && (
                 <div ref={sentinelRef} className="py-8 flex justify-center w-full">
@@ -551,6 +858,7 @@ export default function ResourceExplorer({
       {previewResource && (
         <ResourceDrawer
           resource={previewResource}
+          githubFavorite={githubFavoritesById.get(previewResource.id)}
           language={language}
           onClose={() => setPreviewResource(null)}
         />
@@ -562,21 +870,24 @@ export default function ResourceExplorer({
           category={previewTopic.category}
           subcategory={previewTopic.subcategory}
           resources={previewTopic.resources}
+          githubFavoritesById={githubFavoritesById}
           language={language}
           onClose={() => setPreviewTopic(null)}
         />
       )}
 
-      <FilterDrawer
-        isOpen={isFilterDrawerOpen}
-        onClose={() => setIsFilterDrawerOpen(false)}
-        language={language}
-        onLanguageChange={handleLanguageChange}
-        flatActiveNodes={flatActiveNodes}
-        selectedTocPath={selectedTocPath}
-        onSelectTocPath={handleSelectTocPath}
-        resultCount={results.length}
-      />
+      {showGlobalTopicGroups && (
+        <FilterDrawer
+          isOpen={isFilterDrawerOpen}
+          onClose={() => setIsFilterDrawerOpen(false)}
+          language={language}
+          onLanguageChange={handleLanguageChange}
+          flatActiveNodes={flatActiveNodes}
+          selectedTocPath={selectedTocPath}
+          onSelectTocPath={handleSelectTocPath}
+          resultCount={results.length}
+        />
+      )}
     </div>
   );
 }
@@ -797,11 +1108,17 @@ function FilterDrawer({
 
 interface ResourceDrawerProps {
   resource: Resource;
+  githubFavorite?: GitHubFavorite;
   language: "all" | "zh" | "en";
   onClose: () => void;
 }
 
-function ResourceDrawer({ resource, language, onClose }: ResourceDrawerProps) {
+function ResourceDrawer({
+  resource,
+  githubFavorite,
+  language,
+  onClose,
+}: ResourceDrawerProps) {
   const [mounted, setMounted] = useState(false);
   const searchParams = useSearchParams();
   const drawerRef = useRef<HTMLDivElement>(null);
@@ -918,6 +1235,9 @@ function ResourceDrawer({ resource, language, onClose }: ResourceDrawerProps) {
               {resource.language === "zh" ? "中文" : "English"}
             </span>
             <span className="type-badge capitalize">{TYPE_LABELS[resource.type] || resource.type}</span>
+            {githubFavorite && (
+              <GitHubHealthBadge favorite={githubFavorite} />
+            )}
             <span className="font-mono text-[10px] text-archive-subtle ml-auto">
               ID: {resource.id.slice(0, 8)}
             </span>
@@ -930,13 +1250,24 @@ function ResourceDrawer({ resource, language, onClose }: ResourceDrawerProps) {
             </h2>
           </div>
 
+          {githubFavorite && (
+            <GitHubCapabilityTags
+              capabilities={githubFavorite.capabilities}
+              maxVisible={8}
+            />
+          )}
+
           {/* Description Block */}
-          <div className="bg-archive-bg/40 p-4 border border-archive-border rounded-sm relative overflow-hidden">
-            <div className="absolute top-0 left-0 w-1 h-full bg-archive-accent/40" />
-            <p className="font-sans text-xs text-archive-subtle leading-relaxed">
-              {generateDescription(resource, language)}
-            </p>
-          </div>
+          {githubFavorite ? (
+            <GitHubResearchDetails favorite={githubFavorite} />
+          ) : (
+            <div className="bg-archive-bg/40 p-4 border border-archive-border rounded-sm relative overflow-hidden">
+              <div className="absolute top-0 left-0 w-1 h-full bg-archive-accent/40" />
+              <p className="font-sans text-xs text-archive-subtle leading-relaxed">
+                {generateDescription(resource, language)}
+              </p>
+            </div>
+          )}
 
           {/* Metadata Fields */}
           <div className="space-y-4 pt-2">
@@ -983,18 +1314,25 @@ function ResourceDrawer({ resource, language, onClose }: ResourceDrawerProps) {
           {/* Tags */}
           <div className="pt-2 border-t border-archive-border/40">
             <h4 className="font-mono text-[10px] uppercase tracking-widest text-archive-subtle mb-2">
-              Tags
+              {githubFavorite ? "Capabilities" : "Tags"}
             </h4>
-            <div className="flex gap-1.5 flex-wrap">
-              {resource.tags.map((tag) => (
-                <span
-                  key={tag}
-                  className="font-mono text-[10px] px-2.5 py-1 bg-archive-bg border border-archive-border rounded-sm text-archive-subtle hover:text-archive-text transition-colors"
-                >
-                  #{tag}
-                </span>
-              ))}
-            </div>
+            {githubFavorite ? (
+              <GitHubCapabilityTags
+                capabilities={githubFavorite.capabilities}
+                maxVisible={12}
+              />
+            ) : (
+              <div className="flex gap-1.5 flex-wrap">
+                {resource.tags.map((tag) => (
+                  <span
+                    key={tag}
+                    className="font-mono text-[10px] px-2.5 py-1 bg-archive-bg border border-archive-border rounded-sm text-archive-subtle hover:text-archive-text transition-colors"
+                  >
+                    #{tag}
+                  </span>
+                ))}
+              </div>
+            )}
           </div>
         </div>
 
@@ -1091,6 +1429,7 @@ interface TopicDrawerProps {
   category: string;
   subcategory?: string;
   resources: Resource[];
+  githubFavoritesById: ReadonlyMap<string, GitHubFavorite>;
   language: "all" | "zh" | "en";
   onClose: () => void;
 }
@@ -1100,6 +1439,7 @@ function TopicDrawer({
   category,
   subcategory,
   resources,
+  githubFavoritesById,
   language,
   onClose,
 }: TopicDrawerProps) {
@@ -1237,6 +1577,10 @@ function TopicDrawer({
       : `${cnt} platform${cnt > 1 ? "s" : ""}`;
   }, [uniqueProviders, isZh]);
 
+  const selectedGitHubFavorite = selectedResource
+    ? githubFavoritesById.get(selectedResource.id)
+    : undefined;
+
   if (typeof document === "undefined") return null;
 
   return createPortal(
@@ -1295,6 +1639,9 @@ function TopicDrawer({
                   {selectedResource.language === "zh" ? "中文" : "English"}
                 </span>
                 <span className="type-badge capitalize">{TYPE_LABELS[selectedResource.type] || selectedResource.type}</span>
+                {selectedGitHubFavorite && (
+                  <GitHubHealthBadge favorite={selectedGitHubFavorite} />
+                )}
                 <span className="font-mono text-[10px] text-archive-subtle ml-auto">
                   ID: {selectedResource.id.slice(0, 8)}
                 </span>
@@ -1306,12 +1653,23 @@ function TopicDrawer({
                 </h2>
               </div>
 
-              <div className="bg-archive-bg/40 p-4 border border-archive-border rounded-sm relative overflow-hidden">
-                <div className="absolute top-0 left-0 w-1 h-full bg-archive-accent/40" />
-                <p className="font-sans text-xs text-archive-subtle leading-relaxed">
-                  {generateDescription(selectedResource, language)}
-                </p>
-              </div>
+              {selectedGitHubFavorite && (
+                <GitHubCapabilityTags
+                  capabilities={selectedGitHubFavorite.capabilities}
+                  maxVisible={8}
+                />
+              )}
+
+              {selectedGitHubFavorite ? (
+                <GitHubResearchDetails favorite={selectedGitHubFavorite} />
+              ) : (
+                <div className="bg-archive-bg/40 p-4 border border-archive-border rounded-sm relative overflow-hidden">
+                  <div className="absolute top-0 left-0 w-1 h-full bg-archive-accent/40" />
+                  <p className="font-sans text-xs text-archive-subtle leading-relaxed">
+                    {generateDescription(selectedResource, language)}
+                  </p>
+                </div>
+              )}
 
               <div className="space-y-4 pt-2">
                 <div>
@@ -1356,18 +1714,25 @@ function TopicDrawer({
 
               <div className="pt-2 border-t border-archive-border/40">
                 <h4 className="font-mono text-[10px] uppercase tracking-widest text-archive-subtle mb-2">
-                  Tags
+                  {selectedGitHubFavorite ? "Capabilities" : "Tags"}
                 </h4>
-                <div className="flex gap-1.5 flex-wrap">
-                  {selectedResource.tags.map((tag) => (
-                    <span
-                      key={tag}
-                      className="font-mono text-[10px] px-2.5 py-1 bg-archive-bg border border-archive-border rounded-sm text-archive-subtle hover:text-archive-text transition-colors"
-                    >
-                      #{tag}
-                    </span>
-                  ))}
-                </div>
+                {selectedGitHubFavorite ? (
+                  <GitHubCapabilityTags
+                    capabilities={selectedGitHubFavorite.capabilities}
+                    maxVisible={12}
+                  />
+                ) : (
+                  <div className="flex gap-1.5 flex-wrap">
+                    {selectedResource.tags.map((tag) => (
+                      <span
+                        key={tag}
+                        className="font-mono text-[10px] px-2.5 py-1 bg-archive-bg border border-archive-border rounded-sm text-archive-subtle hover:text-archive-text transition-colors"
+                      >
+                        #{tag}
+                      </span>
+                    ))}
+                  </div>
+                )}
               </div>
             </div>
           ) : (
@@ -1495,6 +1860,7 @@ function TopicDrawer({
                 <div className="space-y-2 max-h-[30vh] overflow-y-auto drawer-scroll pr-1">
                   {resources.map((res) => {
                     const prov = getProviderLabel(res.url);
+                    const githubFavorite = githubFavoritesById.get(res.id);
                     return (
                       <div
                         key={res.id}
@@ -1508,6 +1874,12 @@ function TopicDrawer({
                           <span className="font-mono text-[8px] text-archive-accent-dim">
                             {prov}
                           </span>
+                          {githubFavorite && (
+                            <GitHubHealthBadge
+                              favorite={githubFavorite}
+                              showLabel={false}
+                            />
+                          )}
                         </div>
                         <h5 className="font-sans text-xs text-archive-subtle group-hover:text-archive-text transition-colors leading-tight line-clamp-1">
                           {res.title}

@@ -8,7 +8,11 @@ import { validateResources } from "./validateResources";
 import { buildResourceToc } from "./buildToc";
 import type { Resource, Difficulty } from "../../lib/types/resource";
 import type { LearningPath, WeeklyPick } from "../../lib/types/learning-path";
-import { loadAndTransformGitHubCsv } from "./transformCsv";
+import type { GitHubFavoritesCollection } from "../../lib/types/github-favorite";
+import {
+  githubFavoriteToResource,
+  loadGitHubFavoritesCollection,
+} from "../../lib/data/github-favorites";
 
 // Resolve paths relative to the postsoma-devlibrary app directory
 const APP_DIR = path.resolve(__dirname, "../../");
@@ -60,14 +64,23 @@ async function main() {
     }
   }
 
-  console.log(`\n📂 Loading GitHub Content Library CSV...`);
+  let githubFavorites!: GitHubFavoritesCollection;
+  console.log(`\n📂 Loading independent GitHub favorites collection...`);
   try {
-    const csvPath = path.join(PIPELINE_CONFIG.sourceDir, "github-content-library.csv");
-    const githubResources = await loadAndTransformGitHubCsv(csvPath);
+    const collectionPath = path.join(
+      APP_DIR,
+      PIPELINE_CONFIG.githubFavoritesFile,
+    );
+    githubFavorites = await loadGitHubFavoritesCollection(collectionPath);
+    const githubResources = githubFavorites.records.map((favorite) =>
+      githubFavoriteToResource(favorite, githubFavorites.migratedAt),
+    );
     totalRead += githubResources.length;
     parsed.push(...githubResources);
+    console.log(`   → ${githubResources.length} GitHub favorites loaded`);
   } catch (err) {
-    console.error("❌ Failed to parse GitHub CSV:", err);
+    console.error("❌ Failed to load GitHub favorites collection:", err);
+    throw err;
   }
 
   console.log(`\n📊 Pipeline stages:`);
@@ -213,6 +226,14 @@ async function main() {
 
   await writeJson(PIPELINE_CONFIG.outputFiles.weekly, weeklyPickObj);
   console.log(`   ✓ weekly.json (weekly picks)`);
+
+  await writeJson(
+    PIPELINE_CONFIG.outputFiles.githubFavorites,
+    githubFavorites,
+  );
+  console.log(
+    `   ✓ github-favorites.json (${githubFavorites.records.length} favorites)`,
+  );
 
   const manifest = {
     generatedAt: updatedAt,

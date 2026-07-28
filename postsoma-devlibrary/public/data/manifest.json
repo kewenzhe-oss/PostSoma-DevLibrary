@@ -1,25 +1,25 @@
 {
-  "generatedAt": "2026-07-17T00:45:39.151Z",
+  "generatedAt": "2026-07-28T15:33:25.664Z",
   "sourceRepo": "https://github.com/EbookFoundation/free-programming-books.git",
-  "total": 5080,
-  "valid": 5080,
+  "total": 5078,
+  "valid": 5078,
   "invalid": 0,
   "duplicatesRemoved": 95,
   "languages": {
     "zh": 387,
-    "en": 4693
+    "en": 4691
   },
   "collections": {
     "books": 2805,
     "cheat_sheets": 308,
     "courses": 1342,
     "interactive": 384,
-    "github": 241
+    "github": 239
   },
   "categories": {
     ".NET": 1,
     "0 - MOOC": 20,
-    "AI": 112,
+    "AI": 111,
     "Algorithms": 3,
     "Algorithms & Data Structures": 56,
     "Android": 31,
@@ -147,7 +147,7 @@
     "RxJS": 1,
     "Scala": 9,
     "Scratch": 1,
-    "Security": 51,
+    "Security": 50,
     "Selenium": 1,
     "Shell Scripting": 4,
     "Software Engineering": 5,
@@ -205,7 +205,7 @@
     },
     {
       "name": "AI",
-      "count": 112
+      "count": 111
     },
     {
       "name": "HTML and CSS",
@@ -224,7 +224,7 @@
     "beginner": 1,
     "intermediate": 1,
     "advanced": 0,
-    "unrated": 5078
+    "unrated": 5076
   },
   "paths": 1,
   "weeklyPick": {

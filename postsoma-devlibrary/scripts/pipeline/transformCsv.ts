@@ -179,7 +179,8 @@ export async function loadAndTransformGitHubCsv(csvFilePath: string): Promise<Re
       return [];
     }
 
-    const headers = parsed[0].map((h) => h.trim());
+    // Some spreadsheet exports prefix the first header with a UTF-8 BOM.
+    const headers = parsed[0].map((h) => h.replace(/^\uFEFF/, "").trim());
     
     const getColIndex = (name: string): number => headers.indexOf(name);
     

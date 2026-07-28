@@ -8,6 +8,7 @@ import type { ResourceLanguage, ResourceCollection } from "../../lib/types/resou
 export const PIPELINE_CONFIG = {
   sourceRepo: "https://github.com/EbookFoundation/free-programming-books.git",
   sourceDir: REPO_ROOT,
+  githubFavoritesFile: "data/github-favorites.json",
   targetLanguages: ["zh", "en"] as ResourceLanguage[],
   inputFiles: [
     {
@@ -71,5 +72,6 @@ export const PIPELINE_CONFIG = {
     toc: "public/data/toc.json",
     paths: "public/data/paths.json",
     weekly: "public/data/weekly.json",
+    githubFavorites: "public/data/github-favorites.json",
   },
 };

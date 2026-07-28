@@ -1,0 +1,53 @@
+name: Refresh GitHub favorite health
+
+on:
+  schedule:
+    - cron: "17 8 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: github-favorite-health
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./postsoma-devlibrary
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: ./postsoma-devlibrary/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Refresh repository health
+        run: npm run github:health
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Commit health changes
+        working-directory: .
+        run: |
+          git add \
+            postsoma-devlibrary/data/github-favorites.json \
+            postsoma-devlibrary/public/data/github-favorites.json
+          if git diff --cached --quiet; then
+            echo "No GitHub health changes to commit."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "chore: refresh GitHub favorite health"
+          git push

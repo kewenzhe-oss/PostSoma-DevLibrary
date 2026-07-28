@@ -7,7 +7,16 @@ import JsonLd from "@/components/seo/JsonLd";
 import type { Metadata } from "next";
 import BackLink from "@/components/resources/BackLink";
 import { getProviderLabel } from "@/lib/utils/provider";
-import { generateDescription, TYPE_LABELS, generateEditorialData } from "@/lib/utils/resource";
+import { TYPE_LABELS, generateEditorialData } from "@/lib/utils/resource";
+import { getGitHubFavoriteForUi } from "@/lib/data/github-favorite-ui";
+import { getGitHubFavoriteCurationForUi } from "@/lib/data/github-curation-ui";
+import {
+  GitHubCapabilityTags,
+  GitHubHealthBadge,
+  GitHubResearchDetails,
+} from "@/components/resources/GitHubFavoriteMeta";
+import RelatedResourceSection from "@/components/resources/RelatedResourceSection";
+import type { RelatedResourceItem } from "@/components/resources/RelatedResourceSection";
 
 export async function generateStaticParams() {
   // getAllResources reads public/data/resources.json which is committed to the repo
@@ -69,6 +78,53 @@ export default async function ResourceDetailPage({
   
   if (!resource) {
     notFound();
+  }
+
+  const githubFavorite =
+    resource.collection === "github"
+      ? await getGitHubFavoriteForUi(resource.id)
+      : undefined;
+  const allResources = await getAllResources();
+  const resourcesById = new Map(
+    allResources.map((item) => [item.id, item] as const),
+  );
+  const githubCuration = await getGitHubFavoriteCurationForUi();
+  let relatedOpenSourceReferences: RelatedResourceItem[] = [];
+  let relatedLearningPrerequisites: RelatedResourceItem[] = [];
+
+  if (
+    resource.collection === "books" ||
+    resource.collection === "courses"
+  ) {
+    relatedOpenSourceReferences = githubCuration.records.flatMap(
+      (curation) => {
+        if (
+          curation.belongsTo !== "devlibrary" ||
+          !curation.relatedLearningResourceIds.includes(resource.id)
+        ) {
+          return [];
+        }
+        const relatedResource = resourcesById.get(curation.favoriteId);
+        return relatedResource && curation.relationNote
+          ? [{ resource: relatedResource, note: curation.relationNote }]
+          : [];
+      },
+    );
+  } else if (resource.collection === "github") {
+    const curation = githubCuration.records.find(
+      (record) =>
+        record.favoriteId === resource.id &&
+        record.belongsTo === "devlibrary",
+    );
+    if (curation?.relationNote) {
+      relatedLearningPrerequisites =
+        curation.relatedLearningResourceIds.flatMap((resourceId) => {
+          const relatedResource = resourcesById.get(resourceId);
+          return relatedResource
+            ? [{ resource: relatedResource, note: curation.relationNote! }]
+            : [];
+        });
+    }
   }
 
   // Pre-calculate fallback editorial content to ensure every book, course, docs or tutorial has rich review metadata
@@ -138,6 +194,7 @@ export default async function ResourceDetailPage({
               {resource.language === "zh" ? "Chinese" : "English"}
             </span>
             <span className="type-badge capitalize">{TYPE_LABELS[resource.type] || resource.type}</span>
+            {githubFavorite && <GitHubHealthBadge favorite={githubFavorite} />}
             <span className="font-mono text-xs text-archive-subtle ml-auto">
               ID: {resource.id.slice(0, 8)}
             </span>
@@ -147,12 +204,27 @@ export default async function ResourceDetailPage({
             {resource.title}
           </h1>
 
-          {/* Description Block */}
-          <div className="bg-archive-bg/40 p-4 border border-archive-border rounded-sm relative overflow-hidden mb-8 z-10">
-            <div className="absolute top-0 left-0 w-1 h-full bg-archive-accent/40" />
-            <p className="font-sans text-sm text-archive-subtle leading-relaxed">
-              {displayDetailSummary}
-            </p>
+          {githubFavorite && (
+            <div className="relative z-10 mb-5">
+              <GitHubCapabilityTags
+                capabilities={githubFavorite.capabilities}
+                maxVisible={8}
+              />
+            </div>
+          )}
+
+          {/* Description and research notes */}
+          <div className="mb-8 relative z-10">
+            {githubFavorite ? (
+              <GitHubResearchDetails favorite={githubFavorite} />
+            ) : (
+              <div className="bg-archive-bg/40 p-4 border border-archive-border rounded-sm relative overflow-hidden">
+                <div className="absolute top-0 left-0 w-1 h-full bg-archive-accent/40" />
+                <p className="font-sans text-sm text-archive-subtle leading-relaxed">
+                  {displayDetailSummary}
+                </p>
+              </div>
+            )}
           </div>
 
           <div className="flex items-start flex-col sm:flex-row gap-6 mb-10 relative z-10">
@@ -223,8 +295,18 @@ export default async function ResourceDetailPage({
             </div>
           )}
 
+          <RelatedResourceSection
+            variant="open-source-references"
+            items={relatedOpenSourceReferences}
+          />
+
+          <RelatedResourceSection
+            variant="learning-prerequisites"
+            items={relatedLearningPrerequisites}
+          />
+
           {/* Low-Emphasis AI Meta Box */}
-          {(resource.keyTakeaway || resource.priority || resource.action) && (
+          {!githubFavorite && (resource.keyTakeaway || resource.priority || resource.action) && (
             <div className="bg-archive-surface border border-archive-border rounded-sm p-4 sm:p-5 mb-8 relative z-10 space-y-3">
               <h3 className="font-mono text-[10px] uppercase tracking-widest text-archive-subtle mb-1">
                 AI Workflow Audit Data
@@ -250,16 +332,23 @@ export default async function ResourceDetailPage({
           )}
 
           <div className="archive-divider pt-6 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 relative z-10">
-            <div className="flex gap-2 flex-wrap">
-              {resource.tags.map((tag) => (
-                <span
-                  key={tag}
-                  className="font-mono text-[10px] px-2 py-1 bg-archive-bg border border-archive-border rounded-sm text-archive-subtle"
-                >
-                  {tag}
-                </span>
-              ))}
-            </div>
+            {githubFavorite ? (
+              <GitHubCapabilityTags
+                capabilities={githubFavorite.capabilities}
+                maxVisible={12}
+              />
+            ) : (
+              <div className="flex gap-2 flex-wrap">
+                {resource.tags.map((tag) => (
+                  <span
+                    key={tag}
+                    className="font-mono text-[10px] px-2 py-1 bg-archive-bg border border-archive-border rounded-sm text-archive-subtle"
+                  >
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            )}
             <a
               href={resource.url}
               target="_blank"

@@ -1,0 +1,194 @@
+{
+  "schemaVersion": 1,
+  "updatedAt": "2026-07-28T15:00:00.000Z",
+  "source": "manual-curation",
+  "records": [
+    {
+      "favoriteId": "f9a9223e24cff6a6",
+      "belongsTo": "devlibrary",
+      "relatedLearningResourceIds": [
+        "0f5c6b065d059102"
+      ],
+      "relationNote": "Review after learning RAG fundamentals to study how retrieval can turn an unfamiliar codebase into navigable documentation."
+    },
+    {
+      "favoriteId": "965fc61ede103703",
+      "belongsTo": "devlibrary",
+      "relatedLearningResourceIds": [
+        "0f5c6b065d059102"
+      ],
+      "relationNote": "Use as a document-ingestion reference after learning the retrieval pipeline that consumes parsed PDF content."
+    },
+    {
+      "favoriteId": "76a267c59bdc6676",
+      "belongsTo": "devlibrary",
+      "relatedLearningResourceIds": [
+        "f66c1f6875d9b50d"
+      ],
+      "relationNote": "Compare its resilient scraping architecture with the crawling fundamentals from the Python web-scraping course."
+    },
+    {
+      "favoriteId": "a4d564640c0295c0",
+      "belongsTo": "devlibrary",
+      "relatedLearningResourceIds": [
+        "8c3241bab2863e1f"
+      ],
+      "relationNote": "Explore this player after learning the Web Audio API to see those browser media primitives used in a complete application."
+    },
+    {
+      "favoriteId": "b8ee9711025d53d6",
+      "belongsTo": "devlibrary",
+      "relatedLearningResourceIds": [
+        "0f5c6b065d059102"
+      ],
+      "relationNote": "Review after RAG fundamentals as an automation example that moves source material into a retrieval-oriented study workflow."
+    },
+    {
+      "favoriteId": "9e5dead0baaebaae",
+      "belongsTo": "devlibrary",
+      "relatedLearningResourceIds": [
+        "1d1203f8562ba8e9"
+      ],
+      "relationNote": "Use after speech-processing fundamentals to inspect a practical, local inference implementation."
+    },
+    {
+      "favoriteId": "a6f6ce8cf66ece76",
+      "belongsTo": "devlibrary",
+      "relatedLearningResourceIds": [
+        "1d1203f8562ba8e9"
+      ],
+      "relationNote": "Read after the speech and language processing text to connect model concepts with the reference implementation."
+    },
+    {
+      "favoriteId": "f9dbe72b85b963b1",
+      "belongsTo": "devlibrary",
+      "relatedLearningResourceIds": [
+        "aa2efaaa3723035d"
+      ],
+      "relationNote": "Treat this as a multi-agent build case study after completing the introductory AI agents course.",
+      "boundaryReason": "Retained as a research implementation tied to a learning path, not as a reusable agent skill or MCP package."
+    },
+    {
+      "favoriteId": "c2f4cce08f408ce8",
+      "belongsTo": "devlibrary",
+      "relatedLearningResourceIds": [
+        "aa2efaaa3723035d"
+      ],
+      "relationNote": "Review after the introductory agents course to compare its multimodal framework design with the concepts learned."
+    },
+    {
+      "favoriteId": "b52360368a2360b8",
+      "belongsTo": "agent-skills-hub",
+      "relatedLearningResourceIds": [],
+      "boundaryReason": "A packaged scientific skill collection for AI agents belongs in Agent Skills Hub."
+    },
+    {
+      "favoriteId": "6550a91066fcd80a",
+      "belongsTo": "agent-skills-hub",
+      "relatedLearningResourceIds": [],
+      "boundaryReason": "A reusable agent-skills library belongs in Agent Skills Hub."
+    },
+    {
+      "favoriteId": "18c21d14d25eafe5",
+      "belongsTo": "agent-skills-hub",
+      "relatedLearningResourceIds": [],
+      "boundaryReason": "An MCP server/tool belongs in Agent Skills Hub."
+    },
+    {
+      "favoriteId": "0c0e81cc6db54315",
+      "belongsTo": "agent-skills-hub",
+      "relatedLearningResourceIds": [],
+      "boundaryReason": "A reusable skills repository belongs in Agent Skills Hub."
+    },
+    {
+      "favoriteId": "3dbd56bd494a6fa1",
+      "belongsTo": "agent-skills-hub",
+      "relatedLearningResourceIds": [],
+      "boundaryReason": "An individual packaged agent skill belongs in Agent Skills Hub."
+    },
+    {
+      "favoriteId": "af93c32a31e65a63",
+      "belongsTo": "agent-skills-hub",
+      "relatedLearningResourceIds": [],
+      "boundaryReason": "An AI skill collection belongs in Agent Skills Hub."
+    },
+    {
+      "favoriteId": "c9930492c22b4335",
+      "belongsTo": "agent-skills-hub",
+      "relatedLearningResourceIds": [],
+      "boundaryReason": "A research-oriented AI skill collection belongs in Agent Skills Hub."
+    },
+    {
+      "favoriteId": "79dc479a76da69ad",
+      "belongsTo": "agent-skills-hub",
+      "relatedLearningResourceIds": [],
+      "boundaryReason": "A directory of packaged agent skills belongs in Agent Skills Hub."
+    },
+    {
+      "favoriteId": "820705a432729dc1",
+      "belongsTo": "agent-skills-hub",
+      "relatedLearningResourceIds": [],
+      "boundaryReason": "An agent-skills aggregation repository belongs in Agent Skills Hub."
+    },
+    {
+      "favoriteId": "11793d2a436e8b6f",
+      "belongsTo": "agent-skills-hub",
+      "relatedLearningResourceIds": [],
+      "boundaryReason": "A standalone SKILL.md package belongs in Agent Skills Hub."
+    },
+    {
+      "favoriteId": "ec80d71bb50f6b19",
+      "belongsTo": "agent-skills-hub",
+      "relatedLearningResourceIds": [],
+      "boundaryReason": "A packaged academic-research skills repository belongs in Agent Skills Hub."
+    },
+    {
+      "favoriteId": "b984e95e98c18ed8",
+      "belongsTo": "agent-skills-hub",
+      "relatedLearningResourceIds": [],
+      "boundaryReason": "A standalone humanizer SKILL.md package belongs in Agent Skills Hub."
+    },
+    {
+      "favoriteId": "5b4b2c44a26f5867",
+      "belongsTo": "agent-skills-hub",
+      "relatedLearningResourceIds": [],
+      "boundaryReason": "An agent-skills discovery collection belongs in Agent Skills Hub."
+    },
+    {
+      "favoriteId": "7634ab012b3dcc8f",
+      "belongsTo": "agent-skills-hub",
+      "relatedLearningResourceIds": [],
+      "boundaryReason": "A reusable skills repository belongs in Agent Skills Hub."
+    },
+    {
+      "favoriteId": "9027d8fb2aab13ec",
+      "belongsTo": "agent-skills-hub",
+      "relatedLearningResourceIds": [],
+      "boundaryReason": "A packaged collection of coding agents belongs in Agent Skills Hub."
+    },
+    {
+      "favoriteId": "5dfe15d5980db3b9",
+      "belongsTo": "agent-skills-hub",
+      "relatedLearningResourceIds": [],
+      "boundaryReason": "A reusable agent collection belongs in Agent Skills Hub."
+    },
+    {
+      "favoriteId": "e97598775052c276",
+      "belongsTo": "agent-skills-hub",
+      "relatedLearningResourceIds": [],
+      "boundaryReason": "A packaged plugin agent definition belongs in Agent Skills Hub."
+    },
+    {
+      "favoriteId": "0b5559dbc33a7d31",
+      "belongsTo": "agent-skills-hub",
+      "relatedLearningResourceIds": [],
+      "boundaryReason": "A portable agent pack belongs in Agent Skills Hub."
+    },
+    {
+      "favoriteId": "55207ee54eceab99",
+      "belongsTo": "agent-skills-hub",
+      "relatedLearningResourceIds": [],
+      "boundaryReason": "A purpose-built social-media agent tool belongs in Agent Skills Hub."
+    }
+  ]
+}
