@@ -99,7 +99,29 @@ export function inferTechStack(record: CsvRecord): string[] {
 
 export function parseLegacyDate(value: string | undefined): string | null {
   if (!value?.trim()) return null;
-  const timestamp = Date.parse(value);
+
+  let sanitized = value.trim();
+  const tzMap: Record<string, string> = {
+    "\\(EDT\\)|EDT": "-04:00",
+    "\\(EST\\)|EST": "-05:00",
+    "\\(CDT\\)|CDT": "-05:00",
+    "\\(CST\\)|CST": "-06:00",
+    "\\(MDT\\)|MDT": "-06:00",
+    "\\(MST\\)|MST": "-07:00",
+    "\\(PDT\\)|PDT": "-07:00",
+    "\\(PST\\)|PST": "-08:00",
+    "\\(UTC\\)|UTC|\\(GMT\\)|GMT": "Z",
+  };
+
+  for (const [pattern, offset] of Object.entries(tzMap)) {
+    const regex = new RegExp(`\\s+${pattern}\\b`, "i");
+    if (regex.test(sanitized)) {
+      sanitized = sanitized.replace(regex, ` ${offset}`);
+      break;
+    }
+  }
+
+  const timestamp = Date.parse(sanitized);
   return Number.isFinite(timestamp) ? new Date(timestamp).toISOString() : null;
 }
 
