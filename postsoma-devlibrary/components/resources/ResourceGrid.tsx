@@ -21,6 +21,8 @@ interface ResourceGridProps {
   }) => void;
   onToggleViewMode?: (mode: "topics" | "resources") => void;
   githubFavoritesById?: ReadonlyMap<string, GitHubFavorite>;
+  githubFavoritesByResourceId?: ReadonlyMap<string, GitHubFavorite>;
+  isGitHubCollection?: boolean;
   githubBrowseMode?: GitHubBrowseMode;
   githubMatchReasonsById?: ReadonlyMap<string, GitHubMatchReason[]>;
 }
@@ -135,6 +137,8 @@ export default function ResourceGrid({
   onPreviewTopic,
   onToggleViewMode,
   githubFavoritesById,
+  githubFavoritesByResourceId,
+  isGitHubCollection = false,
   githubBrowseMode = "topic",
   githubMatchReasonsById,
 }: ResourceGridProps) {
@@ -237,7 +241,7 @@ export default function ResourceGrid({
     );
   }
 
-  const isGitHubList = resources.some(
+  const isGitHubList = isGitHubCollection || resources.some(
     (resource) => resource.collection === "github",
   );
 
@@ -257,7 +261,9 @@ export default function ResourceGrid({
       }
     >
       {resources.map((resource) => {
-        const githubFavorite = githubFavoritesById?.get(resource.id);
+        const githubFavorite = (isGitHubList
+          ? githubFavoritesByResourceId
+          : githubFavoritesById)?.get(resource.id);
 
         if (!isGitHubList) {
           return (

@@ -23,6 +23,7 @@ import {
   formatGitHubFacetLabel,
   searchGitHubFavorites,
 } from "@/lib/data/github-search";
+import { linkGitHubFavoritesToResources } from "@/lib/data/github-favorite-linking";
 import type { GitHubBrowseMode } from "@/lib/data/github-search";
 import {
   GitHubCapabilityTags,
@@ -169,6 +170,22 @@ export default function ResourceExplorer({
         githubFavorites.map((favorite) => [favorite.id, favorite] as const),
       ),
     [githubFavorites],
+  );
+  const githubFavoriteLinks = useMemo(
+    () => linkGitHubFavoritesToResources(resources, githubFavorites),
+    [resources, githubFavorites],
+  );
+  // The public resource index de-duplicates external URLs. The GitHub view is
+  // intentionally backed by the canonical favorites collection, so its tab
+  // count must include a favorite that shares an upstream Book/Course URL.
+  const displayCollections = useMemo(
+    () =>
+      collections.map((collection) =>
+        collection.id === "github"
+          ? { ...collection, count: githubFavorites.length }
+          : collection,
+      ),
+    [collections, githubFavorites.length],
   );
   const githubCapabilityOptions = useMemo(
     () => buildGitHubFacetOptions(githubFavorites, "capabilities"),
@@ -368,11 +385,7 @@ export default function ResourceExplorer({
     } as const;
 
     if (selectedCollection === "github") {
-      const githubResources = searchResources(resources, {
-        ...baseInput,
-        query: "",
-      });
-      return searchGitHubFavorites(githubResources, githubFavoritesById, {
+      return searchGitHubFavorites(githubFavoriteLinks.resources, githubFavoriteLinks.favoritesByResourceId, {
         query,
         capability: githubCapability,
         techStack: githubTechStack,
@@ -395,7 +408,7 @@ export default function ResourceExplorer({
     language,
     selectedCollection,
     selectedTocPath,
-    githubFavoritesById,
+    githubFavoriteLinks,
     githubCapability,
     githubTechStack,
     githubHealth,
@@ -635,7 +648,7 @@ export default function ResourceExplorer({
         {/* Collection Tabs */}
         {collections && collections.length > 0 && (
           <div className="flex items-center gap-1.5 overflow-x-auto pb-1 border-b border-archive-border/30 no-scrollbar">
-            {collections.map((col) => (
+          {displayCollections.map((col) => (
               <CollectionTab
                 key={col.id}
                 collection={col}
@@ -764,7 +777,7 @@ export default function ResourceExplorer({
         </span>
         {/* Active collection badge */}
         <span className="font-mono text-[10px] text-archive-subtle opacity-50 border border-archive-border/40 px-2 py-0.5 rounded-full">
-          {collections.find((c) => c.id === selectedCollection)?.label ?? selectedCollection}
+          {displayCollections.find((c) => c.id === selectedCollection)?.label ?? selectedCollection}
         </span>
 
         {/* Dynamic View Mode Layout Toggle */}
@@ -826,6 +839,8 @@ export default function ResourceExplorer({
                 onPreviewTopic={setPreviewTopic}
                 onToggleViewMode={setViewMode}
                 githubFavoritesById={githubFavoritesById}
+                githubFavoritesByResourceId={githubFavoriteLinks.favoritesByResourceId}
+                isGitHubCollection={selectedCollection === "github"}
                 githubBrowseMode={githubBrowseMode}
                 githubMatchReasonsById={githubMatchReasonsById}
               />
@@ -858,7 +873,11 @@ export default function ResourceExplorer({
       {previewResource && (
         <ResourceDrawer
           resource={previewResource}
-          githubFavorite={githubFavoritesById.get(previewResource.id)}
+          githubFavorite={
+            selectedCollection === "github"
+              ? githubFavoriteLinks.favoritesByResourceId.get(previewResource.id)
+              : githubFavoritesById.get(previewResource.id)
+          }
           language={language}
           onClose={() => setPreviewResource(null)}
         />

@@ -1,9 +1,12 @@
 import path from "node:path";
 import { loadGitHubFavoritesCollection } from "./github-favorites";
 import type { GitHubFavorite } from "../types/github-favorite";
+import type { Resource } from "../types/resource";
+import { githubRepositoryIdentity } from "./github-favorite-linking";
 
 let cachedFavorites: GitHubFavorite[] | null = null;
 let cachedFavoritesById: Map<string, GitHubFavorite> | null = null;
+let cachedFavoritesByRepository: Map<string, GitHubFavorite> | null = null;
 
 /**
  * Read-only UI access to the canonical GitHub collection.
@@ -31,4 +34,28 @@ export async function getGitHubFavoriteForUi(
     );
   }
   return cachedFavoritesById.get(id);
+}
+
+/**
+ * Resolves GitHub research context for a normal resource ID and for the rare
+ * upstream/GitHub URL collision that intentionally shares one detail page.
+ */
+export async function getGitHubFavoriteForResourceUi(
+  resource: Pick<Resource, "id" | "url">,
+): Promise<GitHubFavorite | undefined> {
+  const direct = await getGitHubFavoriteForUi(resource.id);
+  if (direct) return direct;
+
+  if (!cachedFavoritesByRepository) {
+    const favorites = await getGitHubFavoritesForUi();
+    cachedFavoritesByRepository = new Map(
+      favorites.flatMap((favorite) => {
+        const identity = githubRepositoryIdentity(favorite.githubUrl);
+        return identity ? [[identity, favorite] as const] : [];
+      }),
+    );
+  }
+
+  const identity = githubRepositoryIdentity(resource.url);
+  return identity ? cachedFavoritesByRepository.get(identity) : undefined;
 }

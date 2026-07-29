@@ -1,6 +1,8 @@
 import fs from "node:fs";
 import path from "node:path";
 import { matchAndRecommend } from "../../lib/data/recommend";
+import { SITE_URL } from "../../lib/config/site";
+import { buildLlmsFiles } from "../../lib/seo/llms";
 
 const APP_DIR = path.resolve(__dirname, "../../");
 const REPO_ROOT = path.resolve(__dirname, "../../../");
@@ -10,6 +12,8 @@ async function verifyThreeLayers() {
   let failed = false;
 
   const catalogPath = path.join(APP_DIR, "public/data/resources.json");
+  const manifestPath = path.join(APP_DIR, "public/data/manifest.json");
+  const collectionsPath = path.join(APP_DIR, "public/data/collections.json");
   const sitemapTsPath = path.join(APP_DIR, "app/sitemap.ts");
   const sitemapXmlPath = path.join(APP_DIR, "out/sitemap.xml");
   const robotsPath = path.join(APP_DIR, "out/robots.txt");
@@ -19,6 +23,7 @@ async function verifyThreeLayers() {
 
   // 1. Verify Catalog (Layer 1)
   console.log("\n--- Layer 1: Catalog Check ---");
+  let catalogResources: any[] = [];
   if (!fs.existsSync(catalogPath)) {
     console.error("❌ Catalog not found at public/data/resources.json!");
     failed = true;
@@ -28,7 +33,24 @@ async function verifyThreeLayers() {
       console.error("❌ Catalog resources array is empty or invalid JSON!");
       failed = true;
     } else {
+      catalogResources = raw;
       console.log(`   ✓ Catalog parsed successfully. Loaded ${raw.length} resources.`);
+    }
+  }
+
+  let manifest: any = null;
+  let collections: any[] = [];
+  if (!fs.existsSync(manifestPath) || !fs.existsSync(collectionsPath)) {
+    console.error("❌ Manifest or collections output is missing. Run npm run pipeline:generate first.");
+    failed = true;
+  } else {
+    manifest = JSON.parse(fs.readFileSync(manifestPath, "utf8"));
+    collections = JSON.parse(fs.readFileSync(collectionsPath, "utf8"));
+    if (manifest.total !== catalogResources.length) {
+      console.error(`❌ Manifest total (${manifest.total}) does not match catalog size (${catalogResources.length}).`);
+      failed = true;
+    } else {
+      console.log("   ✓ Manifest and catalog totals agree.");
     }
   }
 
@@ -39,7 +61,6 @@ async function verifyThreeLayers() {
     failed = true;
   } else {
     const fixtures = JSON.parse(fs.readFileSync(fixturesPath, "utf8"));
-    const catalogResources = JSON.parse(fs.readFileSync(catalogPath, "utf8"));
     const catalogIdsSet = new Set(catalogResources.map((r: any) => r.id));
 
     // Load actual output results file to verify E2 compliance
@@ -155,7 +176,7 @@ async function verifyThreeLayers() {
     failed = true;
   } else {
     const sitemapContent = fs.readFileSync(sitemapXmlPath, "utf8");
-    if (!sitemapContent.includes("https://205022.xyz")) {
+    if (!sitemapContent.includes(SITE_URL) || sitemapContent.includes("https://205022.xyz")) {
       console.error("❌ sitemap.xml contains wrong domain hosts!");
       failed = true;
     } else {
@@ -163,17 +184,19 @@ async function verifyThreeLayers() {
     }
   }
 
-  // LLMs.txt links pointing checks
-  if (!fs.existsSync(llmsPath)) {
-    console.error("❌ llms.txt not found in public/llms.txt!");
+  // LLMs entry points must match the current pipeline facts exactly.
+  if (!fs.existsSync(llmsPath) || !fs.existsSync(llmsFullPath) || !manifest) {
+    console.error("❌ Generated llms entry points or manifest are missing!");
     failed = true;
   } else {
-    const content = fs.readFileSync(llmsPath, "utf8");
-    if (content.includes("EbookFoundation/free-programming-books")) {
-      console.error("❌ llms.txt contains wrong upstream GitHub repository links!");
+    const expected = buildLlmsFiles(manifest, collections);
+    const summary = fs.readFileSync(llmsPath, "utf8");
+    const full = fs.readFileSync(llmsFullPath, "utf8");
+    if (summary !== expected.summary || full !== expected.full) {
+      console.error("❌ llms files are stale. Run npm run pipeline:generate before building.");
       failed = true;
     } else {
-      console.log("   ✓ llms.txt repository links verification: PASS.");
+      console.log("   ✓ llms entry points match manifest-derived output.");
     }
   }
 
@@ -204,7 +227,7 @@ async function verifyThreeLayers() {
     }
 
     // Canonical link tag assertion
-    if (!/<link[^>]*rel=["']canonical["'][^>]*>/i.test(html) && !/href="https:\/\/205022\.xyz/i.test(html)) {
+    if (!/<link[^>]*rel=["']canonical["'][^>]*>/i.test(html) || html.includes("https://205022.xyz")) {
       console.error(`     ❌ Canonical indicator or base URL link missing on ${page.name}!`);
       failed = true;
     } else {

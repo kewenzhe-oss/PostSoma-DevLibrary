@@ -8,7 +8,7 @@ import type { Metadata } from "next";
 import BackLink from "@/components/resources/BackLink";
 import { getProviderLabel } from "@/lib/utils/provider";
 import { TYPE_LABELS, generateEditorialData } from "@/lib/utils/resource";
-import { getGitHubFavoriteForUi } from "@/lib/data/github-favorite-ui";
+import { getGitHubFavoriteForResourceUi } from "@/lib/data/github-favorite-ui";
 import { getGitHubFavoriteCurationForUi } from "@/lib/data/github-curation-ui";
 import {
   GitHubCapabilityTags,
@@ -17,6 +17,8 @@ import {
 } from "@/components/resources/GitHubFavoriteMeta";
 import RelatedResourceSection from "@/components/resources/RelatedResourceSection";
 import type { RelatedResourceItem } from "@/components/resources/RelatedResourceSection";
+import { absoluteSiteUrl } from "@/lib/config/site";
+import { getResourceMetadataDescription } from "@/lib/seo/resource-metadata";
 
 export async function generateStaticParams() {
   // getAllResources reads public/data/resources.json which is committed to the repo
@@ -41,11 +43,8 @@ export const dynamicParams = false;
 export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
   const resource = await getResourceById(params.id);
   if (!resource) return { title: "Not Found" };
-
-  const description =
-    resource.language === "zh"
-      ? `收錄於 PostSoma DevLibrary 的免費 ${resource.category}${resource.subcategory ? " / " + resource.subcategory : ""} ${resource.type} 學習資源。`
-      : `Free ${resource.type} resource for learning ${resource.category}${resource.subcategory ? " / " + resource.subcategory : ""}. Curated in PostSoma DevLibrary.`;
+  const githubFavorite = await getGitHubFavoriteForResourceUi(resource);
+  const description = getResourceMetadataDescription(resource, githubFavorite);
 
   return {
     title: `${resource.title} — PostSoma DevLibrary`,
@@ -80,10 +79,7 @@ export default async function ResourceDetailPage({
     notFound();
   }
 
-  const githubFavorite =
-    resource.collection === "github"
-      ? await getGitHubFavoriteForUi(resource.id)
-      : undefined;
+  const githubFavorite = await getGitHubFavoriteForResourceUi(resource);
   const allResources = await getAllResources();
   const resourcesById = new Map(
     allResources.map((item) => [item.id, item] as const),
@@ -141,36 +137,34 @@ export default async function ResourceDetailPage({
           "@graph": [
             {
               "@type": "WebPage",
-              "@id": `https://205022.xyz/resource/${resource.id}#webpage`,
-              "url": `https://205022.xyz/resource/${resource.id}`,
+              "@id": absoluteSiteUrl(`/resource/${resource.id}#webpage`),
+              "url": absoluteSiteUrl(`/resource/${resource.id}`),
               "name": `${resource.title} — PostSoma DevLibrary`,
-              "description": resource.language === "zh"
-                ? `收錄於 PostSoma DevLibrary 的免費 ${resource.category}${resource.subcategory ? " / " + resource.subcategory : ""} ${resource.type} 學習資源。`
-                : `Free ${resource.type} resource for learning ${resource.category}${resource.subcategory ? " / " + resource.subcategory : ""}. Curated in PostSoma DevLibrary.`,
-              "isPartOf": { "@id": "https://205022.xyz/#website" },
+              "description": getResourceMetadataDescription(resource, githubFavorite),
+              "isPartOf": { "@id": absoluteSiteUrl("/#website") },
               "inLanguage": resource.language === "zh" ? "zh-Hant" : "en"
             },
             {
               "@type": "BreadcrumbList",
-              "@id": `https://205022.xyz/resource/${resource.id}#breadcrumb`,
+              "@id": absoluteSiteUrl(`/resource/${resource.id}#breadcrumb`),
               "itemListElement": [
                 {
                   "@type": "ListItem",
                   "position": 1,
                   "name": "Home",
-                  "item": "https://205022.xyz/"
+                  "item": absoluteSiteUrl("/")
                 },
                 {
                   "@type": "ListItem",
                   "position": 2,
                   "name": "Resources",
-                  "item": "https://205022.xyz/resources"
+                  "item": absoluteSiteUrl("/resources")
                 },
                 {
                   "@type": "ListItem",
                   "position": 3,
                   "name": resource.title,
-                  "item": `https://205022.xyz/resource/${resource.id}`
+                  "item": absoluteSiteUrl(`/resource/${resource.id}`)
                 }
               ]
             }
@@ -215,15 +209,25 @@ export default async function ResourceDetailPage({
 
           {/* Description and research notes */}
           <div className="mb-8 relative z-10">
-            {githubFavorite ? (
+            {githubFavorite && resource.collection === "github" ? (
               <GitHubResearchDetails favorite={githubFavorite} />
             ) : (
-              <div className="bg-archive-bg/40 p-4 border border-archive-border rounded-sm relative overflow-hidden">
-                <div className="absolute top-0 left-0 w-1 h-full bg-archive-accent/40" />
-                <p className="font-sans text-sm text-archive-subtle leading-relaxed">
-                  {displayDetailSummary}
-                </p>
-              </div>
+              <>
+                <div className="bg-archive-bg/40 p-4 border border-archive-border rounded-sm relative overflow-hidden">
+                  <div className="absolute top-0 left-0 w-1 h-full bg-archive-accent/40" />
+                  <p className="font-sans text-sm text-archive-subtle leading-relaxed">
+                    {displayDetailSummary}
+                  </p>
+                </div>
+                {githubFavorite && (
+                  <div className="mt-4">
+                    <p className="mb-2 font-mono text-[10px] uppercase tracking-widest text-teal-400">
+                      GitHub research context
+                    </p>
+                    <GitHubResearchDetails favorite={githubFavorite} />
+                  </div>
+                )}
+              </>
             )}
           </div>
 

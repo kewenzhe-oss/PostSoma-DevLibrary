@@ -10,6 +10,8 @@
     "lint": "next lint",
     "test": "vitest run",
     "test:watch": "vitest",
+    "seo:audit": "tsx scripts/seo-audit-build-output.ts",
+    "verify:three-layers": "tsx scripts/pipeline/verify-three-layers.ts",
     "prepipeline:generate": "npm run github:validate-curation -- --allow-canonical-favorites-missing-from-resources",
     "pipeline:generate": "tsx scripts/pipeline/generateResources.ts",
     "postpipeline:generate": "npm run github:validate-curation",

@@ -4,6 +4,7 @@ import { getManifest, getAllResources } from "@/lib/data/resources";
 import RandomCurations from "@/components/recommend/RandomCurations";
 import JsonLd from "@/components/seo/JsonLd";
 import Icon, { IconName } from "@/components/ui/Icon";
+import { absoluteSiteUrl, SITE_HOSTNAME } from "@/lib/config/site";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -35,7 +36,7 @@ function getSourceDomain(url: string): string {
   try {
     const cleanUrl = url.trim();
     if (cleanUrl.startsWith("/") || !cleanUrl.includes("://")) {
-      return "205022.xyz";
+      return SITE_HOSTNAME;
     }
     const parsed = new URL(cleanUrl);
     return parsed.hostname.replace(/^www\./, "");
@@ -126,18 +127,18 @@ export default async function HomePage() {
           "@graph": [
             {
               "@type": "WebSite",
-              "@id": "https://205022.xyz/#website",
-              "url": "https://205022.xyz/",
+              "@id": absoluteSiteUrl("/#website"),
+              "url": absoluteSiteUrl("/"),
               "name": "PostSoma DevLibrary",
               "description": "A curated bilingual archive of free programming books, courses, cheat sheets, interactive tutorials, and GitHub open-source projects.",
               "inLanguage": ["en", "zh"]
             },
             {
               "@type": "WebPage",
-              "@id": "https://205022.xyz/#webpage",
-              "url": "https://205022.xyz/",
+              "@id": absoluteSiteUrl("/#webpage"),
+              "url": absoluteSiteUrl("/"),
               "name": "PostSoma DevLibrary — Curated Programming Guide",
-              "isPartOf": { "@id": "https://205022.xyz/#website" },
+              "isPartOf": { "@id": absoluteSiteUrl("/#website") },
               "description": "A curated bilingual guide to free programming books, courses, cheat sheets, and tutorials.",
               "inLanguage": ["en", "zh"]
             }

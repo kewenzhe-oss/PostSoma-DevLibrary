@@ -1,34 +1,36 @@
 import type { MetadataRoute } from "next";
 import { getAllResources } from "@/lib/data/resources";
+import { absoluteSiteUrl } from "@/lib/config/site";
+import { getSitemapIndexability } from "@/lib/seo/sitemap-quality";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = "https://205022.xyz";
-
   // Static routes
   const staticRoutes: MetadataRoute.Sitemap = [
     {
-      url: `${baseUrl}`,
+      url: absoluteSiteUrl("/"),
       lastModified: new Date(),
       changeFrequency: "daily",
       priority: 1.0,
     },
     {
-      url: `${baseUrl}/resources`,
+      url: absoluteSiteUrl("/resources"),
       lastModified: new Date(),
       changeFrequency: "daily",
       priority: 0.9,
     },
     {
-      url: `${baseUrl}/recommend`,
+      url: absoluteSiteUrl("/recommend"),
       lastModified: new Date(),
       changeFrequency: "daily",
       priority: 0.9,
     },
   ];
 
-  // Restrained sitemap: Only index resources marked as "featured" (curated) to avoid indexing thin pages.
+  // Index only standalone, featured resource pages with enough real editorial context.
   const resources = await getAllResources();
-  const featuredResources = resources.filter((r) => r.quality === "featured");
+  const featuredResources = resources.filter(
+    (resource) => getSitemapIndexability(resource).indexable,
+  );
 
   const resourceRoutes = featuredResources.map((resource) => {
     let lastModified = new Date();
@@ -40,7 +42,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }
 
     return {
-      url: `${baseUrl}/resource/${resource.id}`,
+      url: absoluteSiteUrl(`/resource/${resource.id}`),
       lastModified,
       changeFrequency: "weekly" as const,
       priority: 0.7,

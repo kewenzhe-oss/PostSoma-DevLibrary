@@ -4,12 +4,30 @@ import { matchAndRecommend } from "@/lib/data/recommend";
 import type { Resource } from "@/lib/types/resource";
 import RecommendClient from "@/components/recommend/RecommendClient";
 import AppShell from "@/components/layout/AppShell";
+import JsonLd from "@/components/seo/JsonLd";
+import { absoluteSiteUrl } from "@/lib/config/site";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Shortlist Recommendations — PostSoma DevLibrary",
+  description:
+    "Create an explainable three-resource programming learning shortlist from the published PostSoma DevLibrary catalog.",
   alternates: {
     canonical: "/recommend",
+  },
+  openGraph: {
+    title: "Shortlist Recommendations — PostSoma DevLibrary",
+    description:
+      "Create an explainable three-resource programming learning shortlist from the published PostSoma DevLibrary catalog.",
+    url: "/recommend",
+    siteName: "PostSoma DevLibrary",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Shortlist Recommendations — PostSoma DevLibrary",
+    description:
+      "Create an explainable three-resource programming learning shortlist from the published PostSoma DevLibrary catalog.",
   },
 };
 
@@ -93,6 +111,40 @@ export default async function RecommendPage() {
 
   return (
     <AppShell>
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@graph": [
+            {
+              "@type": "WebPage",
+              "@id": absoluteSiteUrl("/recommend#webpage"),
+              "url": absoluteSiteUrl("/recommend"),
+              "name": "Shortlist Recommendations — PostSoma DevLibrary",
+              "description": "Create an explainable three-resource programming learning shortlist from the published PostSoma DevLibrary catalog.",
+              "isPartOf": { "@id": absoluteSiteUrl("/#website") },
+              "inLanguage": ["en", "zh"],
+            },
+            {
+              "@type": "BreadcrumbList",
+              "@id": absoluteSiteUrl("/recommend#breadcrumb"),
+              "itemListElement": [
+                {
+                  "@type": "ListItem",
+                  "position": 1,
+                  "name": "Home",
+                  "item": absoluteSiteUrl("/"),
+                },
+                {
+                  "@type": "ListItem",
+                  "position": 2,
+                  "name": "Recommendations",
+                  "item": absoluteSiteUrl("/recommend"),
+                },
+              ],
+            },
+          ],
+        }}
+      />
       {/* 
         This hidden block guarantees search crawlers and AI bots can find and parse 
         all preset recommendation shortlists directly in the initial statically exported HTML, 

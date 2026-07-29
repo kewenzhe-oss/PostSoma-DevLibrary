@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
+import { SITE_URL } from "@/lib/config/site";
 import "./globals.css";
 
 const dmSerifDisplay = localFont({
@@ -9,7 +10,7 @@ const dmSerifDisplay = localFont({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://205022.xyz"),
+  metadataBase: new URL(SITE_URL),
   title: "PostSoma DevLibrary — Bilingual Programming Archive",
   description:
     "A curated bilingual (EN/ZH) archive of free programming books, courses, tutorials, and documentation. Search-first, dark mode, no noise.",

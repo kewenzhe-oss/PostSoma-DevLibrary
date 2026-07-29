@@ -13,6 +13,7 @@ import {
   githubFavoriteToResource,
   loadGitHubFavoritesCollection,
 } from "../../lib/data/github-favorites";
+import { buildLlmsFiles } from "../../lib/seo/llms";
 
 // Resolve paths relative to the postsoma-devlibrary app directory
 const APP_DIR = path.resolve(__dirname, "../../");
@@ -26,6 +27,12 @@ async function writeJson(relPath: string, data: unknown): Promise<void> {
   const fullPath = path.join(APP_DIR, relPath);
   await fs.mkdir(path.dirname(fullPath), { recursive: true });
   await fs.writeFile(fullPath, `${JSON.stringify(data, null, 2)}\n`, "utf8");
+}
+
+async function writeText(relPath: string, content: string): Promise<void> {
+  const fullPath = path.join(APP_DIR, relPath);
+  await fs.mkdir(path.dirname(fullPath), { recursive: true });
+  await fs.writeFile(fullPath, content, "utf8");
 }
 
 function buildCategories(resources: Resource[]) {
@@ -260,6 +267,11 @@ async function main() {
 
   await writeJson(PIPELINE_CONFIG.outputFiles.manifest, manifest);
   console.log(`   ✓ manifest.json`);
+
+  const llms = buildLlmsFiles(manifest, collectionsData);
+  await writeText("public/llms.txt", llms.summary);
+  await writeText("public/llms-full.txt", llms.full);
+  console.log(`   ✓ llms.txt and llms-full.txt (derived from manifest)`);
 
   console.log(`\n✅ Pipeline complete!`);
   console.log(`   Total resources: ${valid.length}`);
