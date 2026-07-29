@@ -9,7 +9,7 @@
         "path": [
           "语言无关"
         ],
-        "resourceCount": 123,
+        "resourceCount": 125,
         "children": [
           {
             "id": "zh:语言无关:IDE and editors",
@@ -56,7 +56,7 @@
               "语言无关",
               "人工智能"
             ],
-            "resourceCount": 7,
+            "resourceCount": 9,
             "children": []
           },
           {
@@ -273,7 +273,7 @@
         "path": [
           "语言相关"
         ],
-        "resourceCount": 250,
+        "resourceCount": 249,
         "children": [
           {
             "id": "zh:语言相关:Android",
@@ -500,7 +500,7 @@
               "语言相关",
               "JavaScript"
             ],
-            "resourceCount": 47,
+            "resourceCount": 46,
             "children": [
               {
                 "id": "zh:语言相关:JavaScript:AngularJS",
@@ -991,7 +991,7 @@
         "path": [
           "BY PROGRAMMING LANGUAGE"
         ],
-        "resourceCount": 1631,
+        "resourceCount": 1636,
         "children": [
           {
             "id": "en:BY PROGRAMMING LANGUAGE:.NET Core",
@@ -2023,7 +2023,7 @@
               "BY PROGRAMMING LANGUAGE",
               "JavaScript"
             ],
-            "resourceCount": 181,
+            "resourceCount": 185,
             "children": [
               {
                 "id": "en:BY PROGRAMMING LANGUAGE:JavaScript:AngularJS",
@@ -2269,7 +2269,7 @@
                   "JavaScript",
                   "React"
                 ],
-                "resourceCount": 25,
+                "resourceCount": 26,
                 "children": []
               },
               {
@@ -2321,7 +2321,7 @@
                   "JavaScript",
                   "Vue.js"
                 ],
-                "resourceCount": 3,
+                "resourceCount": 4,
                 "children": []
               }
             ]
@@ -2939,7 +2939,7 @@
               "BY PROGRAMMING LANGUAGE",
               "Python"
             ],
-            "resourceCount": 181,
+            "resourceCount": 182,
             "children": [
               {
                 "id": "en:BY PROGRAMMING LANGUAGE:Python:Django",
@@ -3744,7 +3744,7 @@
         "path": [
           "BY SUBJECT"
         ],
-        "resourceCount": 801,
+        "resourceCount": 807,
         "children": [
           {
             "id": "en:BY SUBJECT:0 - Meta-Lists",
@@ -3767,7 +3767,7 @@
               "BY SUBJECT",
               "Algorithms & Data Structures"
             ],
-            "resourceCount": 43,
+            "resourceCount": 44,
             "children": []
           },
           {
@@ -3779,7 +3779,7 @@
               "BY SUBJECT",
               "Artificial Intelligence"
             ],
-            "resourceCount": 22,
+            "resourceCount": 24,
             "children": []
           },
           {
@@ -3935,7 +3935,7 @@
               "BY SUBJECT",
               "Game Development"
             ],
-            "resourceCount": 8,
+            "resourceCount": 9,
             "children": []
           },
           {
@@ -3971,7 +3971,7 @@
               "BY SUBJECT",
               "IDE and editors"
             ],
-            "resourceCount": 16,
+            "resourceCount": 17,
             "children": []
           },
           {
@@ -4263,7 +4263,7 @@
               "BY SUBJECT",
               "Software Architecture"
             ],
-            "resourceCount": 46,
+            "resourceCount": 47,
             "children": []
           },
           {
@@ -4326,7 +4326,7 @@
         "path": [
           "BY PROGRAMMING LANGUAGE"
         ],
-        "resourceCount": 1631,
+        "resourceCount": 1636,
         "children": [
           {
             "id": "all:BY PROGRAMMING LANGUAGE:.NET Core",
@@ -5358,7 +5358,7 @@
               "BY PROGRAMMING LANGUAGE",
               "JavaScript"
             ],
-            "resourceCount": 181,
+            "resourceCount": 185,
             "children": [
               {
                 "id": "all:BY PROGRAMMING LANGUAGE:JavaScript:AngularJS",
@@ -5604,7 +5604,7 @@
                   "JavaScript",
                   "React"
                 ],
-                "resourceCount": 25,
+                "resourceCount": 26,
                 "children": []
               },
               {
@@ -5656,7 +5656,7 @@
                   "JavaScript",
                   "Vue.js"
                 ],
-                "resourceCount": 3,
+                "resourceCount": 4,
                 "children": []
               }
             ]
@@ -6274,7 +6274,7 @@
               "BY PROGRAMMING LANGUAGE",
               "Python"
             ],
-            "resourceCount": 181,
+            "resourceCount": 182,
             "children": [
               {
                 "id": "all:BY PROGRAMMING LANGUAGE:Python:Django",
@@ -7079,7 +7079,7 @@
         "path": [
           "BY SUBJECT"
         ],
-        "resourceCount": 801,
+        "resourceCount": 807,
         "children": [
           {
             "id": "all:BY SUBJECT:0 - Meta-Lists",
@@ -7102,7 +7102,7 @@
               "BY SUBJECT",
               "Algorithms & Data Structures"
             ],
-            "resourceCount": 43,
+            "resourceCount": 44,
             "children": []
           },
           {
@@ -7114,7 +7114,7 @@
               "BY SUBJECT",
               "Artificial Intelligence"
             ],
-            "resourceCount": 22,
+            "resourceCount": 24,
             "children": []
           },
           {
@@ -7270,7 +7270,7 @@
               "BY SUBJECT",
               "Game Development"
             ],
-            "resourceCount": 8,
+            "resourceCount": 9,
             "children": []
           },
           {
@@ -7306,7 +7306,7 @@
               "BY SUBJECT",
               "IDE and editors"
             ],
-            "resourceCount": 16,
+            "resourceCount": 17,
             "children": []
           },
           {
@@ -7598,7 +7598,7 @@
               "BY SUBJECT",
               "Software Architecture"
             ],
-            "resourceCount": 46,
+            "resourceCount": 47,
             "children": []
           },
           {
@@ -7659,7 +7659,7 @@
         "path": [
           "语言无关"
         ],
-        "resourceCount": 123,
+        "resourceCount": 125,
         "children": [
           {
             "id": "all:语言无关:IDE and editors",
@@ -7706,7 +7706,7 @@
               "语言无关",
               "人工智能"
             ],
-            "resourceCount": 7,
+            "resourceCount": 9,
             "children": []
           },
           {
@@ -7923,7 +7923,7 @@
         "path": [
           "语言相关"
         ],
-        "resourceCount": 250,
+        "resourceCount": 249,
         "children": [
           {
             "id": "all:语言相关:Android",
@@ -8150,7 +8150,7 @@
               "语言相关",
               "JavaScript"
             ],
-            "resourceCount": 47,
+            "resourceCount": 46,
             "children": [
               {
                 "id": "all:语言相关:JavaScript:AngularJS",
@@ -8787,7 +8787,7 @@
         "path": [
           "Data Science"
         ],
-        "resourceCount": 1,
+        "resourceCount": 2,
         "children": []
       },
       {
@@ -8820,7 +8820,7 @@
         "path": [
           "Docker"
         ],
-        "resourceCount": 21,
+        "resourceCount": 22,
         "children": []
       },
       {
@@ -8933,7 +8933,7 @@
         "path": [
           "JavaScript"
         ],
-        "resourceCount": 33,
+        "resourceCount": 34,
         "children": [
           {
             "id": "en:JavaScript:jQuery",
@@ -9004,7 +9004,7 @@
               "JavaScript",
               "React.js"
             ],
-            "resourceCount": 6,
+            "resourceCount": 7,
             "children": []
           },
           {
@@ -9183,7 +9183,7 @@
         "path": [
           "Python"
         ],
-        "resourceCount": 43,
+        "resourceCount": 44,
         "children": [
           {
             "id": "en:Python:Django",
@@ -9379,7 +9379,7 @@
         "path": [
           "SQL"
         ],
-        "resourceCount": 6,
+        "resourceCount": 7,
         "children": []
       },
       {
@@ -9412,7 +9412,7 @@
         "path": [
           "TypeScript"
         ],
-        "resourceCount": 3,
+        "resourceCount": 4,
         "children": []
       },
       {
@@ -9612,7 +9612,7 @@
         "path": [
           "Data Science"
         ],
-        "resourceCount": 1,
+        "resourceCount": 2,
         "children": []
       },
       {
@@ -9645,7 +9645,7 @@
         "path": [
           "Docker"
         ],
-        "resourceCount": 21,
+        "resourceCount": 22,
         "children": []
       },
       {
@@ -9758,7 +9758,7 @@
         "path": [
           "JavaScript"
         ],
-        "resourceCount": 33,
+        "resourceCount": 34,
         "children": [
           {
             "id": "all:JavaScript:jQuery",
@@ -9829,7 +9829,7 @@
               "JavaScript",
               "React.js"
             ],
-            "resourceCount": 6,
+            "resourceCount": 7,
             "children": []
           },
           {
@@ -10008,7 +10008,7 @@
         "path": [
           "Python"
         ],
-        "resourceCount": 43,
+        "resourceCount": 44,
         "children": [
           {
             "id": "all:Python:Django",
@@ -10204,7 +10204,7 @@
         "path": [
           "SQL"
         ],
-        "resourceCount": 6,
+        "resourceCount": 7,
         "children": []
       },
       {
@@ -10237,7 +10237,7 @@
         "path": [
           "TypeScript"
         ],
-        "resourceCount": 3,
+        "resourceCount": 4,
         "children": []
       },
       {
@@ -10364,7 +10364,7 @@
         "path": [
           "0 - MOOC"
         ],
-        "resourceCount": 19,
+        "resourceCount": 20,
         "children": []
       },
       {
@@ -10811,7 +10811,7 @@
         "path": [
           "DevOps"
         ],
-        "resourceCount": 24,
+        "resourceCount": 25,
         "children": [
           {
             "id": "en:DevOps:Ansible",
@@ -11176,7 +11176,7 @@
         "path": [
           "Nest.js"
         ],
-        "resourceCount": 91,
+        "resourceCount": 90,
         "children": [
           {
             "id": "en:Nest.js:Next.js",
@@ -11211,7 +11211,7 @@
               "Nest.js",
               "React"
             ],
-            "resourceCount": 35,
+            "resourceCount": 34,
             "children": []
           },
           {
@@ -11284,7 +11284,7 @@
         "path": [
           "Networking"
         ],
-        "resourceCount": 5,
+        "resourceCount": 6,
         "children": []
       },
       {
@@ -11531,7 +11531,7 @@
         "path": [
           "Software Engineering"
         ],
-        "resourceCount": 5,
+        "resourceCount": 6,
         "children": []
       },
       {
@@ -11679,7 +11679,7 @@
         "path": [
           "Web Development"
         ],
-        "resourceCount": 29,
+        "resourceCount": 28,
         "children": []
       },
       {
@@ -11736,7 +11736,7 @@
         "path": [
           "0 - MOOC"
         ],
-        "resourceCount": 20,
+        "resourceCount": 21,
         "children": []
       },
       {
@@ -12194,7 +12194,7 @@
         "path": [
           "DevOps"
         ],
-        "resourceCount": 24,
+        "resourceCount": 25,
         "children": [
           {
             "id": "all:DevOps:Ansible",
@@ -12559,7 +12559,7 @@
         "path": [
           "Nest.js"
         ],
-        "resourceCount": 91,
+        "resourceCount": 90,
         "children": [
           {
             "id": "all:Nest.js:Next.js",
@@ -12594,7 +12594,7 @@
               "Nest.js",
               "React"
             ],
-            "resourceCount": 35,
+            "resourceCount": 34,
             "children": []
           },
           {
@@ -12667,7 +12667,7 @@
         "path": [
           "Networking"
         ],
-        "resourceCount": 5,
+        "resourceCount": 6,
         "children": []
       },
       {
@@ -12925,7 +12925,7 @@
         "path": [
           "Software Engineering"
         ],
-        "resourceCount": 5,
+        "resourceCount": 6,
         "children": []
       },
       {
@@ -13073,7 +13073,7 @@
         "path": [
           "Web Development"
         ],
-        "resourceCount": 29,
+        "resourceCount": 28,
         "children": []
       },
       {
@@ -13367,7 +13367,7 @@
         "path": [
           "Data Science"
         ],
-        "resourceCount": 8,
+        "resourceCount": 9,
         "children": []
       },
       {
@@ -13477,7 +13477,7 @@
         "path": [
           "Go"
         ],
-        "resourceCount": 9,
+        "resourceCount": 10,
         "children": []
       },
       {
@@ -13683,7 +13683,7 @@
         "path": [
           "Language Agnostic"
         ],
-        "resourceCount": 10,
+        "resourceCount": 11,
         "children": [
           {
             "id": "en:Language Agnostic:Operating systems",
@@ -13962,7 +13962,7 @@
         "path": [
           "Ruby"
         ],
-        "resourceCount": 6,
+        "resourceCount": 7,
         "children": []
       },
       {
@@ -14318,7 +14318,7 @@
         "path": [
           "Data Science"
         ],
-        "resourceCount": 8,
+        "resourceCount": 9,
         "children": []
       },
       {
@@ -14441,7 +14441,7 @@
         "path": [
           "Go"
         ],
-        "resourceCount": 9,
+        "resourceCount": 10,
         "children": []
       },
       {
@@ -14647,7 +14647,7 @@
         "path": [
           "Language Agnostic"
         ],
-        "resourceCount": 10,
+        "resourceCount": 11,
         "children": [
           {
             "id": "all:Language Agnostic:Operating systems",
@@ -14926,7 +14926,7 @@
         "path": [
           "Ruby"
         ],
-        "resourceCount": 6,
+        "resourceCount": 7,
         "children": []
       },
       {
@@ -15098,7 +15098,7 @@
         "path": [
           "AI"
         ],
-        "resourceCount": 108,
+        "resourceCount": 112,
         "children": [
           {
             "id": "en:AI:agents",
@@ -15266,7 +15266,7 @@
         "path": [
           "Automation"
         ],
-        "resourceCount": 12,
+        "resourceCount": 14,
         "children": [
           {
             "id": "en:Automation:agents",
@@ -15362,7 +15362,7 @@
         "path": [
           "Data"
         ],
-        "resourceCount": 13,
+        "resourceCount": 18,
         "children": [
           {
             "id": "en:Data:agents",
@@ -15437,6 +15437,17 @@
             "children": []
           }
         ]
+      },
+      {
+        "id": "en:Developer Tools",
+        "label": "Developer Tools",
+        "language": "en",
+        "level": 1,
+        "path": [
+          "Developer Tools"
+        ],
+        "resourceCount": 2,
+        "children": []
       },
       {
         "id": "en:DevTools",
@@ -15734,7 +15745,7 @@
         "path": [
           "Productivity"
         ],
-        "resourceCount": 19,
+        "resourceCount": 24,
         "children": [
           {
             "id": "en:Productivity:api",
@@ -15842,7 +15853,7 @@
         "path": [
           "Security"
         ],
-        "resourceCount": 26,
+        "resourceCount": 27,
         "children": [
           {
             "id": "en:Security:automation",
@@ -15952,7 +15963,7 @@
         "path": [
           "AI"
         ],
-        "resourceCount": 108,
+        "resourceCount": 112,
         "children": [
           {
             "id": "all:AI:agents",
@@ -16120,7 +16131,7 @@
         "path": [
           "Automation"
         ],
-        "resourceCount": 12,
+        "resourceCount": 14,
         "children": [
           {
             "id": "all:Automation:agents",
@@ -16216,7 +16227,7 @@
         "path": [
           "Data"
         ],
-        "resourceCount": 13,
+        "resourceCount": 18,
         "children": [
           {
             "id": "all:Data:agents",
@@ -16291,6 +16302,17 @@
             "children": []
           }
         ]
+      },
+      {
+        "id": "all:Developer Tools",
+        "label": "Developer Tools",
+        "language": "all",
+        "level": 1,
+        "path": [
+          "Developer Tools"
+        ],
+        "resourceCount": 2,
+        "children": []
       },
       {
         "id": "all:DevTools",
@@ -16588,7 +16610,7 @@
         "path": [
           "Productivity"
         ],
-        "resourceCount": 19,
+        "resourceCount": 24,
         "children": [
           {
             "id": "all:Productivity:api",
@@ -16696,7 +16718,7 @@
         "path": [
           "Security"
         ],
-        "resourceCount": 26,
+        "resourceCount": 27,
         "children": [
           {
             "id": "all:Security:automation",
