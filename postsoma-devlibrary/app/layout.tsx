@@ -1,6 +1,11 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
+import Script from "next/script";
 import { SITE_URL } from "@/lib/config/site";
+import {
+  GA_MEASUREMENT_ID,
+  isGoogleAnalyticsEnabled,
+} from "@/lib/config/analytics";
 import "./globals.css";
 
 const dmSerifDisplay = localFont({
@@ -58,6 +63,20 @@ export default function RootLayout({
       }}
     >
       <body className="bg-archive-bg text-archive-text font-sans antialiased min-h-screen">
+        {isGoogleAnalyticsEnabled && (
+          <>
+            <Script
+              src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
+              strategy="afterInteractive"
+            />
+            <Script id="google-analytics" strategy="afterInteractive">
+              {`window.dataLayer = window.dataLayer || [];
+function gtag(){window.dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', '${GA_MEASUREMENT_ID}');`}
+            </Script>
+          </>
+        )}
         {children}
       </body>
     </html>
