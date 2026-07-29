@@ -8792,6 +8792,618 @@
         ],
         "accessNote": "This project has been archived in our content workflow. You can directly open the repository link to view code assets."
       }
+    },
+    {
+      "id": "bb504e2bb8d5d21f",
+      "githubUrl": "https://github.com/termux/termux-app",
+      "title": "Termux",
+      "shortSummary": "Android 上可扩展的终端与 Linux 开发环境，支持通过包系统在移动设备上运行开发工具。",
+      "capabilities": [
+        "Terminal",
+        "Linux",
+        "Mobile Development"
+      ],
+      "techStack": [
+        "Java",
+        "Android"
+      ],
+      "personalNote": "",
+      "whySaved": "作为未来研究移动端 Linux 开发环境、Android 终端产品与包管理体验的开源参考。",
+      "discoveredAt": "2026-07-29T09:09:43.927Z",
+      "discoveredAtSource": "local-entry",
+      "lastReviewedAt": null,
+      "health": "active",
+      "lastCheckedAt": null,
+      "lastPushedAt": null,
+      "githubArchived": null,
+      "githubDisabled": null,
+      "editorial": {
+        "topic": "Developer Tools",
+        "resourceType": "app",
+        "quality": "unchecked",
+        "fullSummary": "Android 上可扩展的终端与 Linux 开发环境，支持通过包系统在移动设备上运行开发工具。"
+      }
+    },
+    {
+      "id": "68b198836eeccaf1",
+      "githubUrl": "https://github.com/n4ze3m/page-assist",
+      "title": "Page Assist",
+      "shortSummary": "使用本地运行的 AI 模型辅助网页阅读、问答与浏览器内工作流的扩展。",
+      "capabilities": [
+        "Local LLM",
+        "Browser Assistant",
+        "Web Automation"
+      ],
+      "techStack": [
+        "TypeScript",
+        "Chrome Extension",
+        "Ollama"
+      ],
+      "personalNote": "",
+      "whySaved": "作为未来研究本地 LLM 与浏览器辅助工作流结合方式的开源参考。",
+      "discoveredAt": "2026-07-29T09:09:44.750Z",
+      "discoveredAtSource": "local-entry",
+      "lastReviewedAt": null,
+      "health": "active",
+      "lastCheckedAt": null,
+      "lastPushedAt": null,
+      "githubArchived": null,
+      "githubDisabled": null,
+      "editorial": {
+        "topic": "AI",
+        "resourceType": "extension",
+        "quality": "unchecked",
+        "fullSummary": "使用本地运行的 AI 模型辅助网页阅读、问答与浏览器内工作流的扩展。"
+      }
+    },
+    {
+      "id": "98dcfd1cedbdcc9c",
+      "githubUrl": "https://github.com/lyu0805/OpenBrowser",
+      "title": "OpenBrowser",
+      "shortSummary": "本地多环境隔离浏览器，提供代理、指纹同步与 RPA 自动化能力。",
+      "capabilities": [
+        "Browser Automation",
+        "RPA",
+        "Proxy Management"
+      ],
+      "techStack": [
+        "JavaScript",
+        "Electron",
+        "Chromium"
+      ],
+      "personalNote": "",
+      "whySaved": "作为未来研究本地浏览器自动化、多环境隔离与 RPA 产品设计的开源参考。",
+      "discoveredAt": "2026-07-29T09:09:45.471Z",
+      "discoveredAtSource": "local-entry",
+      "lastReviewedAt": null,
+      "health": "active",
+      "lastCheckedAt": null,
+      "lastPushedAt": null,
+      "githubArchived": null,
+      "githubDisabled": null,
+      "editorial": {
+        "topic": "Automation",
+        "resourceType": "app",
+        "quality": "unchecked",
+        "fullSummary": "本地多环境隔离浏览器，提供代理、指纹同步与 RPA 自动化能力。"
+      }
+    },
+    {
+      "id": "3f8ea5f0d2e19254",
+      "githubUrl": "https://github.com/MeiGen-AI/InfiniteTalk",
+      "title": "InfiniteTalk",
+      "shortSummary": "支持 image-to-video 与 video-to-video 的长时长 talking-video 生成项目。",
+      "capabilities": [
+        "Video Generation",
+        "Talking Avatar",
+        "Multimodal AI"
+      ],
+      "techStack": [
+        "Python"
+      ],
+      "personalNote": "",
+      "whySaved": "作为未来研究长时长视频生成与数字人语音视频原型的开源参考。",
+      "discoveredAt": "2026-07-29T09:09:46.054Z",
+      "discoveredAtSource": "local-entry",
+      "lastReviewedAt": null,
+      "health": "active",
+      "lastCheckedAt": null,
+      "lastPushedAt": null,
+      "githubArchived": null,
+      "githubDisabled": null,
+      "editorial": {
+        "topic": "AI",
+        "resourceType": "framework",
+        "quality": "unchecked",
+        "fullSummary": "支持 image-to-video 与 video-to-video 的长时长 talking-video 生成项目。"
+      }
+    },
+    {
+      "id": "f9995e1195e63176",
+      "githubUrl": "https://github.com/vnpy/vnpy",
+      "title": "vn.py",
+      "shortSummary": "基于 Python 的开源量化交易开发框架，覆盖交易接入、策略开发与回测。",
+      "capabilities": [
+        "Quant Trading",
+        "Backtesting",
+        "Trading Automation"
+      ],
+      "techStack": [
+        "Python"
+      ],
+      "personalNote": "",
+      "whySaved": "作为未来研究量化交易框架、回测与交易自动化架构的开源参考。",
+      "discoveredAt": "2026-07-29T09:09:46.558Z",
+      "discoveredAtSource": "local-entry",
+      "lastReviewedAt": null,
+      "health": "active",
+      "lastCheckedAt": null,
+      "lastPushedAt": null,
+      "githubArchived": null,
+      "githubDisabled": null,
+      "editorial": {
+        "topic": "Data",
+        "resourceType": "framework",
+        "quality": "unchecked",
+        "fullSummary": "基于 Python 的开源量化交易开发框架，覆盖交易接入、策略开发与回测。"
+      }
+    },
+    {
+      "id": "f67656219aced14d",
+      "githubUrl": "https://github.com/plausible/analytics",
+      "title": "Plausible Analytics",
+      "shortSummary": "隐私优先、轻量且可自托管的网站分析平台，是 Google Analytics 的开源替代。",
+      "capabilities": [
+        "Web Analytics",
+        "Privacy",
+        "Monitoring"
+      ],
+      "techStack": [
+        "Elixir",
+        "ClickHouse",
+        "PostgreSQL"
+      ],
+      "personalNote": "",
+      "whySaved": "作为未来研究隐私优先、自托管网站分析与产品指标系统的开源参考。",
+      "discoveredAt": "2026-07-29T09:09:47.055Z",
+      "discoveredAtSource": "local-entry",
+      "lastReviewedAt": null,
+      "health": "active",
+      "lastCheckedAt": null,
+      "lastPushedAt": null,
+      "githubArchived": null,
+      "githubDisabled": null,
+      "editorial": {
+        "topic": "Data",
+        "resourceType": "app",
+        "quality": "unchecked",
+        "fullSummary": "隐私优先、轻量且可自托管的网站分析平台，是 Google Analytics 的开源替代。"
+      }
+    },
+    {
+      "id": "6bf20bedea38ea7d",
+      "githubUrl": "https://github.com/NanmiCoder/MediaCrawler",
+      "title": "MediaCrawler",
+      "shortSummary": "面向多个内容平台的公开笔记、视频和评论采集工具。",
+      "capabilities": [
+        "Data Collection",
+        "Web Scraping",
+        "Automation"
+      ],
+      "techStack": [
+        "Python"
+      ],
+      "personalNote": "",
+      "whySaved": "作为研究公开内容数据采集工作流及其合规边界的开源参考。",
+      "discoveredAt": "2026-07-29T09:09:47.552Z",
+      "discoveredAtSource": "local-entry",
+      "lastReviewedAt": null,
+      "health": "active",
+      "lastCheckedAt": null,
+      "lastPushedAt": null,
+      "githubArchived": null,
+      "githubDisabled": null,
+      "editorial": {
+        "topic": "Data",
+        "resourceType": "cli",
+        "quality": "unchecked",
+        "fullSummary": "面向多个内容平台的公开笔记、视频和评论采集工具。"
+      }
+    },
+    {
+      "id": "ab4890579a9c0d4e",
+      "githubUrl": "https://github.com/akfamily/akshare",
+      "title": "AKShare",
+      "shortSummary": "为 Python 提供财经市场与经济数据接口的开源数据工具库。",
+      "capabilities": [
+        "Financial Data",
+        "API",
+        "Quant Research"
+      ],
+      "techStack": [
+        "Python"
+      ],
+      "personalNote": "",
+      "whySaved": "作为未来构建金融数据分析、量化研究与市场信息工具的开源参考。",
+      "discoveredAt": "2026-07-29T09:09:48.078Z",
+      "discoveredAtSource": "local-entry",
+      "lastReviewedAt": null,
+      "health": "active",
+      "lastCheckedAt": null,
+      "lastPushedAt": null,
+      "githubArchived": null,
+      "githubDisabled": null,
+      "editorial": {
+        "topic": "Data",
+        "resourceType": "library",
+        "quality": "unchecked",
+        "fullSummary": "为 Python 提供财经市场与经济数据接口的开源数据工具库。"
+      }
+    },
+    {
+      "id": "b78ae651a933fd23",
+      "githubUrl": "https://github.com/Fincept-Corporation/FinceptTerminal",
+      "title": "FinceptTerminal",
+      "shortSummary": "提供市场分析、投资研究与经济数据交互探索能力的现代金融终端。",
+      "capabilities": [
+        "Investment Research",
+        "Market Analytics",
+        "Financial Data"
+      ],
+      "techStack": [
+        "C++",
+        "Python",
+        "Qt"
+      ],
+      "personalNote": "",
+      "whySaved": "作为未来研究金融终端、投资研究工作台与市场数据交互设计的开源参考。",
+      "discoveredAt": "2026-07-29T09:09:48.601Z",
+      "discoveredAtSource": "local-entry",
+      "lastReviewedAt": null,
+      "health": "active",
+      "lastCheckedAt": null,
+      "lastPushedAt": null,
+      "githubArchived": null,
+      "githubDisabled": null,
+      "editorial": {
+        "topic": "Data",
+        "resourceType": "app",
+        "quality": "unchecked",
+        "fullSummary": "提供市场分析、投资研究与经济数据交互探索能力的现代金融终端。"
+      }
+    },
+    {
+      "id": "be490188feb3a8f7",
+      "githubUrl": "https://github.com/sherlock-project/sherlock",
+      "title": "Sherlock",
+      "shortSummary": "跨社交网络查询用户名公开痕迹的 OSINT 命令行工具。",
+      "capabilities": [
+        "OSINT",
+        "Security Research",
+        "CLI"
+      ],
+      "techStack": [
+        "Python"
+      ],
+      "personalNote": "",
+      "whySaved": "作为研究公开信息检索、OSINT 工具设计及合规边界的开源参考。",
+      "discoveredAt": "2026-07-29T09:09:49.115Z",
+      "discoveredAtSource": "local-entry",
+      "lastReviewedAt": null,
+      "health": "active",
+      "lastCheckedAt": null,
+      "lastPushedAt": null,
+      "githubArchived": null,
+      "githubDisabled": null,
+      "editorial": {
+        "topic": "Security",
+        "resourceType": "cli",
+        "quality": "unchecked",
+        "fullSummary": "跨社交网络查询用户名公开痕迹的 OSINT 命令行工具。"
+      }
+    },
+    {
+      "id": "fd2d2be60994d582",
+      "githubUrl": "https://github.com/plait-board/drawnix",
+      "title": "Drawnix",
+      "shortSummary": "本地优先的开源白板，支持思维导图、流程图、自由绘制与协作。",
+      "capabilities": [
+        "Whiteboard",
+        "Mind Map",
+        "Visual Collaboration"
+      ],
+      "techStack": [
+        "TypeScript"
+      ],
+      "personalNote": "",
+      "whySaved": "作为未来构建本地优先白板、流程图和协作编辑产品的开源参考。",
+      "discoveredAt": "2026-07-29T09:09:49.661Z",
+      "discoveredAtSource": "local-entry",
+      "lastReviewedAt": null,
+      "health": "active",
+      "lastCheckedAt": null,
+      "lastPushedAt": null,
+      "githubArchived": null,
+      "githubDisabled": null,
+      "editorial": {
+        "topic": "Productivity",
+        "resourceType": "app",
+        "quality": "unchecked",
+        "fullSummary": "本地优先的开源白板，支持思维导图、流程图、自由绘制与协作。"
+      }
+    },
+    {
+      "id": "446a661e73277eac",
+      "githubUrl": "https://github.com/subhashchy/The-Accidental-CTO",
+      "title": "The Accidental CTO",
+      "shortSummary": "围绕系统设计、扩展与创业技术决策的开源实践手册。",
+      "capabilities": [
+        "System Design",
+        "Architecture",
+        "Scaling"
+      ],
+      "techStack": [
+        "TypeScript"
+      ],
+      "personalNote": "",
+      "whySaved": "作为未来学习系统设计、规模化架构与技术负责人决策的开源参考。",
+      "discoveredAt": "2026-07-29T09:09:50.205Z",
+      "discoveredAtSource": "local-entry",
+      "lastReviewedAt": null,
+      "health": "active",
+      "lastCheckedAt": null,
+      "lastPushedAt": null,
+      "githubArchived": null,
+      "githubDisabled": null,
+      "editorial": {
+        "topic": "Software Engineering",
+        "resourceType": "book",
+        "quality": "unchecked",
+        "fullSummary": "围绕系统设计、扩展与创业技术决策的开源实践手册。"
+      }
+    },
+    {
+      "id": "b1a0e927036c7f27",
+      "githubUrl": "https://github.com/ellite/Wallos",
+      "title": "Wallos",
+      "shortSummary": "可自托管的个人订阅、预算和周期性支出管理应用。",
+      "capabilities": [
+        "Personal Finance",
+        "Self-hosting",
+        "Budgeting"
+      ],
+      "techStack": [
+        "PHP",
+        "Docker"
+      ],
+      "personalNote": "",
+      "whySaved": "作为未来研究自托管个人财务、订阅管理与预算产品的开源参考。",
+      "discoveredAt": "2026-07-29T09:09:50.738Z",
+      "discoveredAtSource": "local-entry",
+      "lastReviewedAt": null,
+      "health": "active",
+      "lastCheckedAt": null,
+      "lastPushedAt": null,
+      "githubArchived": null,
+      "githubDisabled": null,
+      "editorial": {
+        "topic": "Productivity",
+        "resourceType": "app",
+        "quality": "unchecked",
+        "fullSummary": "可自托管的个人订阅、预算和周期性支出管理应用。"
+      }
+    },
+    {
+      "id": "d8e08725e6e62762",
+      "githubUrl": "https://github.com/scriptscat/scriptcat",
+      "title": "ScriptCat",
+      "shortSummary": "可执行和管理 userscript 的浏览器扩展，支持用户脚本自动化。",
+      "capabilities": [
+        "Browser Extension",
+        "Userscript",
+        "Automation"
+      ],
+      "techStack": [
+        "TypeScript"
+      ],
+      "personalNote": "",
+      "whySaved": "作为未来研究浏览器用户脚本生态与轻量自动化扩展设计的开源参考。",
+      "discoveredAt": "2026-07-29T09:09:51.245Z",
+      "discoveredAtSource": "local-entry",
+      "lastReviewedAt": null,
+      "health": "active",
+      "lastCheckedAt": null,
+      "lastPushedAt": null,
+      "githubArchived": null,
+      "githubDisabled": null,
+      "editorial": {
+        "topic": "Automation",
+        "resourceType": "extension",
+        "quality": "unchecked",
+        "fullSummary": "可执行和管理 userscript 的浏览器扩展，支持用户脚本自动化。"
+      }
+    },
+    {
+      "id": "9d5e4bda559ee777",
+      "githubUrl": "https://github.com/SSShooter/ebook-to-mindmap",
+      "title": "ebook-to-mindmap",
+      "shortSummary": "从 EPUB 与 PDF 提取内容并生成 AI 总结和思维导图的工具。",
+      "capabilities": [
+        "Document AI",
+        "Summarization",
+        "Mind Map"
+      ],
+      "techStack": [
+        "TypeScript"
+      ],
+      "personalNote": "",
+      "whySaved": "作为未来研究文档解析、AI 总结与知识可视化工作流的开源参考。",
+      "discoveredAt": "2026-07-29T09:09:51.799Z",
+      "discoveredAtSource": "local-entry",
+      "lastReviewedAt": null,
+      "health": "active",
+      "lastCheckedAt": null,
+      "lastPushedAt": null,
+      "githubArchived": null,
+      "githubDisabled": null,
+      "editorial": {
+        "topic": "AI",
+        "resourceType": "app",
+        "quality": "unchecked",
+        "fullSummary": "从 EPUB 与 PDF 提取内容并生成 AI 总结和思维导图的工具。"
+      }
+    },
+    {
+      "id": "2381008e2c894c88",
+      "githubUrl": "https://github.com/tw93/Kami",
+      "title": "Kami",
+      "shortSummary": "面向内容呈现与纸质化阅读体验的开源网页工具。",
+      "capabilities": [
+        "Content Publishing",
+        "Typography",
+        "Reading Experience"
+      ],
+      "techStack": [
+        "HTML"
+      ],
+      "personalNote": "",
+      "whySaved": "作为未来研究内容排版、阅读体验与网页纸质化呈现的开源参考。",
+      "discoveredAt": "2026-07-29T09:09:52.321Z",
+      "discoveredAtSource": "local-entry",
+      "lastReviewedAt": null,
+      "health": "active",
+      "lastCheckedAt": null,
+      "lastPushedAt": null,
+      "githubArchived": null,
+      "githubDisabled": null,
+      "editorial": {
+        "topic": "Productivity",
+        "resourceType": "app",
+        "quality": "unchecked",
+        "fullSummary": "面向内容呈现与纸质化阅读体验的开源网页工具。"
+      }
+    },
+    {
+      "id": "104b57e9a4316877",
+      "githubUrl": "https://github.com/microsoft/VibeVoice",
+      "title": "VibeVoice",
+      "shortSummary": "Microsoft 发布的开源前沿语音 AI 项目。",
+      "capabilities": [
+        "Speech",
+        "Voice AI",
+        "Audio Generation"
+      ],
+      "techStack": [
+        "Python"
+      ],
+      "personalNote": "",
+      "whySaved": "作为未来研究开源语音生成、语音交互与音频 AI 系统的开源参考。",
+      "discoveredAt": "2026-07-29T09:09:52.844Z",
+      "discoveredAtSource": "local-entry",
+      "lastReviewedAt": null,
+      "health": "active",
+      "lastCheckedAt": null,
+      "lastPushedAt": null,
+      "githubArchived": null,
+      "githubDisabled": null,
+      "editorial": {
+        "topic": "AI",
+        "resourceType": "framework",
+        "quality": "unchecked",
+        "fullSummary": "Microsoft 发布的开源前沿语音 AI 项目。"
+      }
+    },
+    {
+      "id": "e6a9de686f1f5cc0",
+      "githubUrl": "https://github.com/navidrome/navidrome",
+      "title": "Navidrome",
+      "shortSummary": "可自托管的个人音乐流媒体服务，兼容 Subsonic 生态。",
+      "capabilities": [
+        "Media Server",
+        "Self-hosting",
+        "Streaming"
+      ],
+      "techStack": [
+        "Go"
+      ],
+      "personalNote": "",
+      "whySaved": "作为未来研究自托管媒体服务、个人流媒体与开源产品运维的参考。",
+      "discoveredAt": "2026-07-29T09:09:53.367Z",
+      "discoveredAtSource": "local-entry",
+      "lastReviewedAt": null,
+      "health": "active",
+      "lastCheckedAt": null,
+      "lastPushedAt": null,
+      "githubArchived": null,
+      "githubDisabled": null,
+      "editorial": {
+        "topic": "Productivity",
+        "resourceType": "app",
+        "quality": "unchecked",
+        "fullSummary": "可自托管的个人音乐流媒体服务，兼容 Subsonic 生态。"
+      }
+    },
+    {
+      "id": "acb5ba6665b37092",
+      "githubUrl": "https://github.com/momenbasel/PureMac",
+      "title": "PureMac",
+      "shortSummary": "零遥测的原生 macOS 清理工具，覆盖系统、Xcode 与 Homebrew 缓存维护。",
+      "capabilities": [
+        "System Maintenance",
+        "Privacy",
+        "macOS"
+      ],
+      "techStack": [
+        "Swift",
+        "SwiftUI"
+      ],
+      "personalNote": "",
+      "whySaved": "作为未来研究原生 macOS 工具、隐私产品与系统维护体验的开源参考。",
+      "discoveredAt": "2026-07-29T09:09:53.988Z",
+      "discoveredAtSource": "local-entry",
+      "lastReviewedAt": null,
+      "health": "active",
+      "lastCheckedAt": null,
+      "lastPushedAt": null,
+      "githubArchived": null,
+      "githubDisabled": null,
+      "editorial": {
+        "topic": "Developer Tools",
+        "resourceType": "app",
+        "quality": "unchecked",
+        "fullSummary": "零遥测的原生 macOS 清理工具，覆盖系统、Xcode 与 Homebrew 缓存维护。"
+      }
+    },
+    {
+      "id": "13914fe8be104be1",
+      "githubUrl": "https://github.com/TandoorRecipes/recipes",
+      "title": "Tandoor Recipes",
+      "shortSummary": "可自托管的食谱、膳食规划和购物清单管理应用。",
+      "capabilities": [
+        "Self-hosting",
+        "Planning",
+        "Personal Knowledge"
+      ],
+      "techStack": [
+        "Django",
+        "Docker"
+      ],
+      "personalNote": "",
+      "whySaved": "作为未来研究自托管个人信息管理、规划工作流与 Docker 应用的开源参考。",
+      "discoveredAt": "2026-07-29T09:09:54.541Z",
+      "discoveredAtSource": "local-entry",
+      "lastReviewedAt": null,
+      "health": "active",
+      "lastCheckedAt": null,
+      "lastPushedAt": null,
+      "githubArchived": null,
+      "githubDisabled": null,
+      "editorial": {
+        "topic": "Productivity",
+        "resourceType": "app",
+        "quality": "unchecked",
+        "fullSummary": "可自托管的食谱、膳食规划和购物清单管理应用。"
+      }
     }
   ]
 }

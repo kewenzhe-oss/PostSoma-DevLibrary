@@ -5,11 +5,11 @@
   },
   {
     "name": "0 - MOOC",
-    "count": 20
+    "count": 21
   },
   {
     "name": "AI",
-    "count": 111
+    "count": 115
   },
   {
     "name": "Algorithms",
@@ -53,7 +53,7 @@
   },
   {
     "name": "Automation",
-    "count": 12
+    "count": 14
   },
   {
     "name": "Ballerina",
@@ -81,11 +81,11 @@
   },
   {
     "name": "BY PROGRAMMING LANGUAGE",
-    "count": 1631
+    "count": 1636
   },
   {
     "name": "BY SUBJECT",
-    "count": 801
+    "count": 807
   },
   {
     "name": "C",
@@ -161,11 +161,11 @@
   },
   {
     "name": "Data",
-    "count": 13
+    "count": 18
   },
   {
     "name": "Data Science",
-    "count": 45
+    "count": 47
   },
   {
     "name": "Data Structures and Algorithms",
@@ -184,12 +184,16 @@
     "count": 33
   },
   {
+    "name": "Developer Tools",
+    "count": 2
+  },
+  {
     "name": "Devops",
     "count": 1
   },
   {
     "name": "DevOps",
-    "count": 26
+    "count": 27
   },
   {
     "name": "DevTools",
@@ -201,7 +205,7 @@
   },
   {
     "name": "Docker",
-    "count": 35
+    "count": 36
   },
   {
     "name": "Elastic",
@@ -241,7 +245,7 @@
   },
   {
     "name": "Go",
-    "count": 30
+    "count": 31
   },
   {
     "name": "Graph Theory",
@@ -293,7 +297,7 @@
   },
   {
     "name": "JavaScript",
-    "count": 145
+    "count": 146
   },
   {
     "name": "Jenkins",
@@ -317,7 +321,7 @@
   },
   {
     "name": "Language Agnostic",
-    "count": 10
+    "count": 11
   },
   {
     "name": "Language Translations",
@@ -369,11 +373,11 @@
   },
   {
     "name": "Nest.js",
-    "count": 91
+    "count": 90
   },
   {
     "name": "Networking",
-    "count": 5
+    "count": 6
   },
   {
     "name": "Nim",
@@ -453,7 +457,7 @@
   },
   {
     "name": "Productivity",
-    "count": 19
+    "count": 24
   },
   {
     "name": "Puppet",
@@ -461,7 +465,7 @@
   },
   {
     "name": "Python",
-    "count": 163
+    "count": 164
   },
   {
     "name": "QB64",
@@ -501,7 +505,7 @@
   },
   {
     "name": "Ruby",
-    "count": 18
+    "count": 19
   },
   {
     "name": "Rust",
@@ -521,7 +525,7 @@
   },
   {
     "name": "Security",
-    "count": 50
+    "count": 51
   },
   {
     "name": "Selenium",
@@ -533,7 +537,7 @@
   },
   {
     "name": "Software Engineering",
-    "count": 5
+    "count": 6
   },
   {
     "name": "Solidity",
@@ -549,7 +553,7 @@
   },
   {
     "name": "SQL",
-    "count": 24
+    "count": 25
   },
   {
     "name": "Svelte",
@@ -577,7 +581,7 @@
   },
   {
     "name": "TypeScript",
-    "count": 36
+    "count": 37
   },
   {
     "name": "UI/UX",
@@ -605,7 +609,7 @@
   },
   {
     "name": "Web Development",
-    "count": 29
+    "count": 28
   },
   {
     "name": "Web3",
@@ -633,10 +637,10 @@
   },
   {
     "name": "语言无关",
-    "count": 123
+    "count": 125
   },
   {
     "name": "语言相关",
-    "count": 250
+    "count": 249
   }
 ]
