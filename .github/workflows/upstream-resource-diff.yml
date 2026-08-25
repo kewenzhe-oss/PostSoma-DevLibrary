@@ -1,0 +1,83 @@
+name: Upstream Resource Diff (Manual)
+
+on:
+  workflow_dispatch:
+    inputs:
+      upstream_ref:
+        description: EbookFoundation branch, tag, or commit to compare
+        required: true
+        default: main
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: upstream-resource-diff
+  cancel-in-progress: false
+
+jobs:
+  compare:
+    name: Compare DevLibrary with EbookFoundation
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout DevLibrary
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: ./postsoma-devlibrary/package-lock.json
+
+      - name: Install DevLibrary dependencies
+        working-directory: ./postsoma-devlibrary
+        run: npm ci
+
+      - name: Checkout EbookFoundation snapshot
+        env:
+          UPSTREAM_REF: ${{ inputs.upstream_ref }}
+        run: |
+          git init "$RUNNER_TEMP/free-programming-books"
+          git -C "$RUNNER_TEMP/free-programming-books" remote add origin \
+            https://github.com/EbookFoundation/free-programming-books.git
+          git -C "$RUNNER_TEMP/free-programming-books" fetch \
+            --depth 1 origin "$UPSTREAM_REF"
+          git -C "$RUNNER_TEMP/free-programming-books" checkout \
+            --detach FETCH_HEAD
+
+      - name: Record upstream commit
+        id: upstream
+        run: |
+          upstream_sha="$(git -C "$RUNNER_TEMP/free-programming-books" rev-parse HEAD)"
+          echo "sha=$upstream_sha" >> "$GITHUB_OUTPUT"
+          echo "short_sha=${upstream_sha:0:12}" >> "$GITHUB_OUTPUT"
+
+      - name: Generate read-only diff artifact
+        working-directory: ./postsoma-devlibrary
+        run: |
+          npm run upstream:diff -- \
+            --upstream-dir "$RUNNER_TEMP/free-programming-books" \
+            --local-dir "$GITHUB_WORKSPACE" \
+            --output-dir "$RUNNER_TEMP/upstream-resource-diff" \
+            --baseline-commit "$GITHUB_SHA" \
+            --upstream-commit "${{ steps.upstream.outputs.sha }}"
+
+      - name: Publish report in workflow summary
+        if: always()
+        run: |
+          if [ -f "$RUNNER_TEMP/upstream-resource-diff/summary.md" ]; then
+            cat "$RUNNER_TEMP/upstream-resource-diff/summary.md" >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "No summary was generated. Review the failed step logs." >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+      - name: Upload diff artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: upstream-resource-diff-${{ github.run_id }}
+          path: ${{ runner.temp }}/upstream-resource-diff
+          if-no-files-found: warn
+          retention-days: 30

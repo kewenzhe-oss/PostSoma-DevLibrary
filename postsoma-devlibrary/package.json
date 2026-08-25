@@ -14,6 +14,7 @@
     "verify:three-layers": "tsx scripts/pipeline/verify-three-layers.ts",
     "prepipeline:generate": "npm run github:validate-curation -- --allow-canonical-favorites-missing-from-resources",
     "pipeline:generate": "tsx scripts/pipeline/generateResources.ts",
+    "upstream:diff": "tsx scripts/upstream/diffFreeProgrammingBooks.ts",
     "postpipeline:generate": "npm run github:validate-curation",
     "github:migrate": "tsx scripts/github/migrateGithubFavorites.ts",
     "postgithub:migrate": "npm run github:validate-curation",
