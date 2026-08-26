@@ -75,11 +75,15 @@ export default async function ResourcesPage() {
         }}
       />
       <div className="mb-4 md:mb-8 animate-fade-in">
+        <p className="mb-2 font-mono text-[10px] uppercase tracking-[0.2em] text-archive-accent-dim">
+          Learn → Practice → Build
+        </p>
         <h1 className="font-display text-2xl md:text-3xl text-archive-text mb-1 md:mb-2">
           Resource Archive
         </h1>
-        <p className="font-sans text-xs md:text-sm text-archive-subtle">
-          Search and filter the complete collection.
+        <p className="max-w-2xl font-sans text-xs leading-relaxed text-archive-subtle md:text-sm">
+          Learn with books and courses, practice with quick references and interactive tools,
+          then bring proven open-source projects back into your build.
         </p>
       </div>
 

@@ -15,7 +15,15 @@ let _indexedResources: Resource[] = [];
 
 function buildIndex(resources: Resource[]): MiniSearch<Resource> {
   const index = new MiniSearch<Resource>({
-    fields: ["title", "category", "subcategory", "tags", "type"],
+    fields: [
+      "title",
+      "category",
+      "subcategory",
+      "canonicalTopic",
+      "canonicalSubcategory",
+      "tags",
+      "type",
+    ],
     storeFields: [
       "id",
       "title",
@@ -38,6 +46,12 @@ function buildIndex(resources: Resource[]): MiniSearch<Resource> {
     // join array tags for indexing
     extractField: (document: Resource, fieldName: string) => {
       const doc = document as unknown as Record<string, unknown>;
+      if (fieldName === "canonicalTopic") {
+        return document.facet?.canonicalTopic ?? "";
+      }
+      if (fieldName === "canonicalSubcategory") {
+        return document.facet?.subcategory?.id ?? "";
+      }
       const value = doc[fieldName];
       if (fieldName === "tags" && Array.isArray(value)) {
         return value.join(" ");

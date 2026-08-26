@@ -3744,7 +3744,7 @@
         "path": [
           "BY SUBJECT"
         ],
-        "resourceCount": 807,
+        "resourceCount": 808,
         "children": [
           {
             "id": "en:BY SUBJECT:0 - Meta-Lists",
@@ -3779,7 +3779,7 @@
               "BY SUBJECT",
               "Artificial Intelligence"
             ],
-            "resourceCount": 24,
+            "resourceCount": 25,
             "children": []
           },
           {
@@ -7079,7 +7079,7 @@
         "path": [
           "BY SUBJECT"
         ],
-        "resourceCount": 807,
+        "resourceCount": 808,
         "children": [
           {
             "id": "all:BY SUBJECT:0 - Meta-Lists",
@@ -7114,7 +7114,7 @@
               "BY SUBJECT",
               "Artificial Intelligence"
             ],
-            "resourceCount": 24,
+            "resourceCount": 25,
             "children": []
           },
           {
@@ -8820,7 +8820,7 @@
         "path": [
           "Docker"
         ],
-        "resourceCount": 22,
+        "resourceCount": 23,
         "children": []
       },
       {
@@ -8831,7 +8831,7 @@
         "path": [
           "Git"
         ],
-        "resourceCount": 11,
+        "resourceCount": 12,
         "children": []
       },
       {
@@ -9346,7 +9346,7 @@
         "path": [
           "Shell Scripting"
         ],
-        "resourceCount": 4,
+        "resourceCount": 5,
         "children": []
       },
       {
@@ -9379,7 +9379,7 @@
         "path": [
           "SQL"
         ],
-        "resourceCount": 7,
+        "resourceCount": 8,
         "children": []
       },
       {
@@ -9645,7 +9645,7 @@
         "path": [
           "Docker"
         ],
-        "resourceCount": 22,
+        "resourceCount": 23,
         "children": []
       },
       {
@@ -9656,7 +9656,7 @@
         "path": [
           "Git"
         ],
-        "resourceCount": 11,
+        "resourceCount": 12,
         "children": []
       },
       {
@@ -10171,7 +10171,7 @@
         "path": [
           "Shell Scripting"
         ],
-        "resourceCount": 4,
+        "resourceCount": 5,
         "children": []
       },
       {
@@ -10204,7 +10204,7 @@
         "path": [
           "SQL"
         ],
-        "resourceCount": 7,
+        "resourceCount": 8,
         "children": []
       },
       {
@@ -10364,7 +10364,7 @@
         "path": [
           "0 - MOOC"
         ],
-        "resourceCount": 20,
+        "resourceCount": 22,
         "children": []
       },
       {
@@ -10698,7 +10698,7 @@
         "path": [
           "Computer Science"
         ],
-        "resourceCount": 14,
+        "resourceCount": 15,
         "children": []
       },
       {
@@ -11736,7 +11736,7 @@
         "path": [
           "0 - MOOC"
         ],
-        "resourceCount": 21,
+        "resourceCount": 23,
         "children": []
       },
       {
@@ -12081,7 +12081,7 @@
         "path": [
           "Computer Science"
         ],
-        "resourceCount": 14,
+        "resourceCount": 15,
         "children": []
       },
       {
@@ -15259,6 +15259,17 @@
         ]
       },
       {
+        "id": "en:AI & Data",
+        "label": "AI & Data",
+        "language": "en",
+        "level": 1,
+        "path": [
+          "AI & Data"
+        ],
+        "resourceCount": 3,
+        "children": []
+      },
+      {
         "id": "en:Automation",
         "label": "Automation",
         "language": "en",
@@ -15266,7 +15277,7 @@
         "path": [
           "Automation"
         ],
-        "resourceCount": 14,
+        "resourceCount": 18,
         "children": [
           {
             "id": "en:Automation:agents",
@@ -15317,6 +15328,17 @@
             "children": []
           }
         ]
+      },
+      {
+        "id": "en:Backend Development",
+        "label": "Backend Development",
+        "language": "en",
+        "level": 1,
+        "path": [
+          "Backend Development"
+        ],
+        "resourceCount": 1,
+        "children": []
       },
       {
         "id": "en:Browser",
@@ -15439,12 +15461,45 @@
         ]
       },
       {
+        "id": "en:Desktop Development",
+        "label": "Desktop Development",
+        "language": "en",
+        "level": 1,
+        "path": [
+          "Desktop Development"
+        ],
+        "resourceCount": 1,
+        "children": []
+      },
+      {
+        "id": "en:Developer Resources",
+        "label": "Developer Resources",
+        "language": "en",
+        "level": 1,
+        "path": [
+          "Developer Resources"
+        ],
+        "resourceCount": 1,
+        "children": []
+      },
+      {
         "id": "en:Developer Tools",
         "label": "Developer Tools",
         "language": "en",
         "level": 1,
         "path": [
           "Developer Tools"
+        ],
+        "resourceCount": 4,
+        "children": []
+      },
+      {
+        "id": "en:DevOps",
+        "label": "DevOps",
+        "language": "en",
+        "level": 1,
+        "path": [
+          "DevOps"
         ],
         "resourceCount": 2,
         "children": []
@@ -15544,6 +15599,39 @@
             "children": []
           }
         ]
+      },
+      {
+        "id": "en:Document Tools",
+        "label": "Document Tools",
+        "language": "en",
+        "level": 1,
+        "path": [
+          "Document Tools"
+        ],
+        "resourceCount": 1,
+        "children": []
+      },
+      {
+        "id": "en:Finance",
+        "label": "Finance",
+        "language": "en",
+        "level": 1,
+        "path": [
+          "Finance"
+        ],
+        "resourceCount": 1,
+        "children": []
+      },
+      {
+        "id": "en:Frontend Development",
+        "label": "Frontend Development",
+        "language": "en",
+        "level": 1,
+        "path": [
+          "Frontend Development"
+        ],
+        "resourceCount": 3,
+        "children": []
       },
       {
         "id": "en:Infra",
@@ -15654,6 +15742,17 @@
         ]
       },
       {
+        "id": "en:Mobile Development",
+        "label": "Mobile Development",
+        "language": "en",
+        "level": 1,
+        "path": [
+          "Mobile Development"
+        ],
+        "resourceCount": 1,
+        "children": []
+      },
+      {
         "id": "en:Other",
         "label": "Other",
         "language": "en",
@@ -15745,7 +15844,7 @@
         "path": [
           "Productivity"
         ],
-        "resourceCount": 24,
+        "resourceCount": 28,
         "children": [
           {
             "id": "en:Productivity:api",
@@ -15853,7 +15952,7 @@
         "path": [
           "Security"
         ],
-        "resourceCount": 27,
+        "resourceCount": 30,
         "children": [
           {
             "id": "en:Security:automation",
@@ -15952,6 +16051,28 @@
             "children": []
           }
         ]
+      },
+      {
+        "id": "en:System Development",
+        "label": "System Development",
+        "language": "en",
+        "level": 1,
+        "path": [
+          "System Development"
+        ],
+        "resourceCount": 1,
+        "children": []
+      },
+      {
+        "id": "en:Web Development",
+        "label": "Web Development",
+        "language": "en",
+        "level": 1,
+        "path": [
+          "Web Development"
+        ],
+        "resourceCount": 4,
+        "children": []
       }
     ],
     "all": [
@@ -16124,6 +16245,17 @@
         ]
       },
       {
+        "id": "all:AI & Data",
+        "label": "AI & Data",
+        "language": "all",
+        "level": 1,
+        "path": [
+          "AI & Data"
+        ],
+        "resourceCount": 3,
+        "children": []
+      },
+      {
         "id": "all:Automation",
         "label": "Automation",
         "language": "all",
@@ -16131,7 +16263,7 @@
         "path": [
           "Automation"
         ],
-        "resourceCount": 14,
+        "resourceCount": 18,
         "children": [
           {
             "id": "all:Automation:agents",
@@ -16182,6 +16314,17 @@
             "children": []
           }
         ]
+      },
+      {
+        "id": "all:Backend Development",
+        "label": "Backend Development",
+        "language": "all",
+        "level": 1,
+        "path": [
+          "Backend Development"
+        ],
+        "resourceCount": 1,
+        "children": []
       },
       {
         "id": "all:Browser",
@@ -16304,12 +16447,45 @@
         ]
       },
       {
+        "id": "all:Desktop Development",
+        "label": "Desktop Development",
+        "language": "all",
+        "level": 1,
+        "path": [
+          "Desktop Development"
+        ],
+        "resourceCount": 1,
+        "children": []
+      },
+      {
+        "id": "all:Developer Resources",
+        "label": "Developer Resources",
+        "language": "all",
+        "level": 1,
+        "path": [
+          "Developer Resources"
+        ],
+        "resourceCount": 1,
+        "children": []
+      },
+      {
         "id": "all:Developer Tools",
         "label": "Developer Tools",
         "language": "all",
         "level": 1,
         "path": [
           "Developer Tools"
+        ],
+        "resourceCount": 4,
+        "children": []
+      },
+      {
+        "id": "all:DevOps",
+        "label": "DevOps",
+        "language": "all",
+        "level": 1,
+        "path": [
+          "DevOps"
         ],
         "resourceCount": 2,
         "children": []
@@ -16409,6 +16585,39 @@
             "children": []
           }
         ]
+      },
+      {
+        "id": "all:Document Tools",
+        "label": "Document Tools",
+        "language": "all",
+        "level": 1,
+        "path": [
+          "Document Tools"
+        ],
+        "resourceCount": 1,
+        "children": []
+      },
+      {
+        "id": "all:Finance",
+        "label": "Finance",
+        "language": "all",
+        "level": 1,
+        "path": [
+          "Finance"
+        ],
+        "resourceCount": 1,
+        "children": []
+      },
+      {
+        "id": "all:Frontend Development",
+        "label": "Frontend Development",
+        "language": "all",
+        "level": 1,
+        "path": [
+          "Frontend Development"
+        ],
+        "resourceCount": 3,
+        "children": []
       },
       {
         "id": "all:Infra",
@@ -16519,6 +16728,17 @@
         ]
       },
       {
+        "id": "all:Mobile Development",
+        "label": "Mobile Development",
+        "language": "all",
+        "level": 1,
+        "path": [
+          "Mobile Development"
+        ],
+        "resourceCount": 1,
+        "children": []
+      },
+      {
         "id": "all:Other",
         "label": "Other",
         "language": "all",
@@ -16610,7 +16830,7 @@
         "path": [
           "Productivity"
         ],
-        "resourceCount": 24,
+        "resourceCount": 28,
         "children": [
           {
             "id": "all:Productivity:api",
@@ -16718,7 +16938,7 @@
         "path": [
           "Security"
         ],
-        "resourceCount": 27,
+        "resourceCount": 30,
         "children": [
           {
             "id": "all:Security:automation",
@@ -16817,6 +17037,28 @@
             "children": []
           }
         ]
+      },
+      {
+        "id": "all:System Development",
+        "label": "System Development",
+        "language": "all",
+        "level": 1,
+        "path": [
+          "System Development"
+        ],
+        "resourceCount": 1,
+        "children": []
+      },
+      {
+        "id": "all:Web Development",
+        "label": "Web Development",
+        "language": "all",
+        "level": 1,
+        "path": [
+          "Web Development"
+        ],
+        "resourceCount": 4,
+        "children": []
       }
     ]
   }

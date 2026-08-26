@@ -9404,6 +9404,998 @@
         "quality": "unchecked",
         "fullSummary": "可自托管的食谱、膳食规划和购物清单管理应用。"
       }
+    },
+    {
+      "id": "f6b90900bc490ff5",
+      "githubUrl": "https://github.com/apple/container",
+      "title": "Container",
+      "shortSummary": "Apple 为 macOS 提供的轻量容器工具，可在 Apple silicon 上用独立虚拟机运行 Linux 容器。",
+      "capabilities": [
+        "Containers",
+        "Virtualization",
+        "Developer Tooling"
+      ],
+      "techStack": [
+        "Swift",
+        "Linux"
+      ],
+      "personalNote": "",
+      "whySaved": "可参考它在 macOS 上以轻量虚拟机隔离并运行 Linux 容器的实现方式。",
+      "discoveredAt": "2026-08-25T11:07:03.999Z",
+      "discoveredAtSource": "local-entry",
+      "lastReviewedAt": null,
+      "health": "active",
+      "lastCheckedAt": null,
+      "lastPushedAt": null,
+      "githubArchived": null,
+      "githubDisabled": null,
+      "editorial": {
+        "topic": "DevOps",
+        "resourceType": "cli",
+        "quality": "unchecked",
+        "fullSummary": "Apple 为 macOS 提供的轻量容器工具，可在 Apple silicon 上用独立虚拟机运行 Linux 容器。"
+      }
+    },
+    {
+      "id": "1ea296e0f14e58b1",
+      "githubUrl": "https://github.com/metasequoiaime/MetasequoiaImeTsf",
+      "title": "MetasequoiaImeTsf（水杉输入法）",
+      "shortSummary": "面向 Windows TSF 的开源中文与日文输入法项目，适合研究桌面输入法架构与文字输入处理。",
+      "capabilities": [
+        "Input Method",
+        "Desktop",
+        "Localization"
+      ],
+      "techStack": [
+        "C++",
+        "Windows TSF"
+      ],
+      "personalNote": "",
+      "whySaved": "可参考它实现 Windows 中文与日文输入法及 TSF 集成的方法。",
+      "discoveredAt": "2026-08-25T11:07:04.468Z",
+      "discoveredAtSource": "local-entry",
+      "lastReviewedAt": null,
+      "health": "active",
+      "lastCheckedAt": null,
+      "lastPushedAt": null,
+      "githubArchived": null,
+      "githubDisabled": null,
+      "editorial": {
+        "topic": "Desktop Development",
+        "resourceType": "app",
+        "quality": "unchecked",
+        "fullSummary": "面向 Windows TSF 的开源中文与日文输入法项目，适合研究桌面输入法架构与文字输入处理。"
+      }
+    },
+    {
+      "id": "eabd28a973dd936d",
+      "githubUrl": "https://github.com/nfzerox/VirtualMacOniPad",
+      "title": "VirtualMacOniPad",
+      "shortSummary": "在受支持的 M1/M2 iPad 上运行 macOS 的实验性项目，用于探索 Apple 设备虚拟化与系统兼容。",
+      "capabilities": [
+        "Virtualization",
+        "iPadOS",
+        "System Research"
+      ],
+      "techStack": [
+        "Objective-C",
+        "Apple Silicon"
+      ],
+      "personalNote": "",
+      "whySaved": "可参考它在 iPad 上运行 macOS 与处理设备虚拟化兼容性的思路。",
+      "discoveredAt": "2026-08-25T11:07:04.917Z",
+      "discoveredAtSource": "local-entry",
+      "lastReviewedAt": null,
+      "health": "active",
+      "lastCheckedAt": null,
+      "lastPushedAt": null,
+      "githubArchived": null,
+      "githubDisabled": null,
+      "editorial": {
+        "topic": "System Development",
+        "resourceType": "app",
+        "quality": "unchecked",
+        "fullSummary": "在受支持的 M1/M2 iPad 上运行 macOS 的实验性项目，用于探索 Apple 设备虚拟化与系统兼容。"
+      }
+    },
+    {
+      "id": "79dfe61a22668fe4",
+      "githubUrl": "https://github.com/ClearURLs/Addon",
+      "title": "ClearURLs",
+      "shortSummary": "自动移除网址追踪参数的浏览器扩展，帮助减少链接中的跟踪信息并改善隐私。",
+      "capabilities": [
+        "Privacy",
+        "URL Cleaning",
+        "Browser Extension"
+      ],
+      "techStack": [
+        "JavaScript",
+        "WebExtensions"
+      ],
+      "personalNote": "",
+      "whySaved": "可参考它识别并清除 URL 追踪参数以增强浏览隐私的方法。",
+      "discoveredAt": "2026-08-25T11:07:05.396Z",
+      "discoveredAtSource": "local-entry",
+      "lastReviewedAt": null,
+      "health": "active",
+      "lastCheckedAt": null,
+      "lastPushedAt": null,
+      "githubArchived": null,
+      "githubDisabled": null,
+      "editorial": {
+        "topic": "Web Development",
+        "resourceType": "extension",
+        "quality": "unchecked",
+        "fullSummary": "自动移除网址追踪参数的浏览器扩展，帮助减少链接中的跟踪信息并改善隐私。"
+      }
+    },
+    {
+      "id": "95dc502c21b68015",
+      "githubUrl": "https://github.com/Tyrrrz/YoutubeExplode",
+      "title": "YoutubeExplode",
+      "shortSummary": "面向 .NET 的 YouTube 内部 API 抽象库，可获取视频、播放列表、字幕与媒体流信息。",
+      "capabilities": [
+        "Video",
+        "Media Extraction",
+        "API Client"
+      ],
+      "techStack": [
+        "C#",
+        ".NET"
+      ],
+      "personalNote": "",
+      "whySaved": "可参考它在 .NET 应用中读取 YouTube 元数据与媒体流的封装方式。",
+      "discoveredAt": "2026-08-25T11:07:05.860Z",
+      "discoveredAtSource": "local-entry",
+      "lastReviewedAt": null,
+      "health": "active",
+      "lastCheckedAt": null,
+      "lastPushedAt": null,
+      "githubArchived": null,
+      "githubDisabled": null,
+      "editorial": {
+        "topic": "Backend Development",
+        "resourceType": "library",
+        "quality": "unchecked",
+        "fullSummary": "面向 .NET 的 YouTube 内部 API 抽象库，可获取视频、播放列表、字幕与媒体流信息。"
+      }
+    },
+    {
+      "id": "5969023e34574d40",
+      "githubUrl": "https://github.com/maziyarpanahi/openmed",
+      "title": "OpenMed",
+      "shortSummary": "本地优先的医疗 AI 工具，聚焦临床实体识别、敏感信息去标识与隐私友好的文档处理。",
+      "capabilities": [
+        "Healthcare AI",
+        "NER",
+        "PII Redaction",
+        "Local AI"
+      ],
+      "techStack": [
+        "Python",
+        "Apple MLX",
+        "Swift"
+      ],
+      "personalNote": "",
+      "whySaved": "可参考它在本地完成医疗文本识别与敏感健康信息去标识的设计。",
+      "discoveredAt": "2026-08-25T11:07:06.323Z",
+      "discoveredAtSource": "local-entry",
+      "lastReviewedAt": null,
+      "health": "active",
+      "lastCheckedAt": null,
+      "lastPushedAt": null,
+      "githubArchived": null,
+      "githubDisabled": null,
+      "editorial": {
+        "topic": "AI & Data",
+        "resourceType": "app",
+        "quality": "unchecked",
+        "fullSummary": "本地优先的医疗 AI 工具，聚焦临床实体识别、敏感信息去标识与隐私友好的文档处理。"
+      }
+    },
+    {
+      "id": "0b0e7a72b8057c2b",
+      "githubUrl": "https://github.com/MobSF/Mobile-Security-Framework-MobSF",
+      "title": "Mobile Security Framework (MobSF)",
+      "shortSummary": "自动化移动应用安全分析平台，覆盖 Android、iOS 与 Windows 应用的静态、动态和恶意软件分析。",
+      "capabilities": [
+        "Mobile Security",
+        "Static Analysis",
+        "Dynamic Analysis"
+      ],
+      "techStack": [
+        "Python",
+        "Docker"
+      ],
+      "personalNote": "",
+      "whySaved": "可参考它搭建移动应用自动化安全审计与恶意行为分析流程。",
+      "discoveredAt": "2026-08-25T11:07:06.787Z",
+      "discoveredAtSource": "local-entry",
+      "lastReviewedAt": null,
+      "health": "active",
+      "lastCheckedAt": null,
+      "lastPushedAt": null,
+      "githubArchived": null,
+      "githubDisabled": null,
+      "editorial": {
+        "topic": "Security",
+        "resourceType": "framework",
+        "quality": "unchecked",
+        "fullSummary": "自动化移动应用安全分析平台，覆盖 Android、iOS 与 Windows 应用的静态、动态和恶意软件分析。"
+      }
+    },
+    {
+      "id": "093371fa3c012c93",
+      "githubUrl": "https://github.com/schlagmichdoch/pairdrop",
+      "title": "PairDrop",
+      "shortSummary": "无需注册即可在不同设备和平台之间直接传输文件的网页应用，强调低门槛与跨平台体验。",
+      "capabilities": [
+        "File Transfer",
+        "Peer-to-Peer",
+        "Cross-platform"
+      ],
+      "techStack": [
+        "JavaScript",
+        "WebRTC"
+      ],
+      "personalNote": "",
+      "whySaved": "可参考它实现免注册、跨设备点对点文件传输的产品与技术方案。",
+      "discoveredAt": "2026-08-25T11:07:07.237Z",
+      "discoveredAtSource": "local-entry",
+      "lastReviewedAt": null,
+      "health": "active",
+      "lastCheckedAt": null,
+      "lastPushedAt": null,
+      "githubArchived": null,
+      "githubDisabled": null,
+      "editorial": {
+        "topic": "Web Development",
+        "resourceType": "app",
+        "quality": "unchecked",
+        "fullSummary": "无需注册即可在不同设备和平台之间直接传输文件的网页应用，强调低门槛与跨平台体验。"
+      }
+    },
+    {
+      "id": "d5c3c51d6e6ce977",
+      "githubUrl": "https://github.com/smicallef/spiderfoot",
+      "title": "SpiderFoot",
+      "shortSummary": "自动化 OSINT 与攻击面发现工具，可从多种公开数据源收集并关联目标情报。",
+      "capabilities": [
+        "OSINT",
+        "Attack Surface",
+        "Security Automation"
+      ],
+      "techStack": [
+        "Python"
+      ],
+      "personalNote": "",
+      "whySaved": "可参考它组织多源 OSINT 收集、关联分析与攻击面侦察的流程。",
+      "discoveredAt": "2026-08-25T11:07:07.692Z",
+      "discoveredAtSource": "local-entry",
+      "lastReviewedAt": null,
+      "health": "active",
+      "lastCheckedAt": null,
+      "lastPushedAt": null,
+      "githubArchived": null,
+      "githubDisabled": null,
+      "editorial": {
+        "topic": "Security",
+        "resourceType": "app",
+        "quality": "unchecked",
+        "fullSummary": "自动化 OSINT 与攻击面发现工具，可从多种公开数据源收集并关联目标情报。"
+      }
+    },
+    {
+      "id": "22f0b7fbd2dd5ebf",
+      "githubUrl": "https://github.com/shawnxie94/infinitum",
+      "title": "Infinitum",
+      "shortSummary": "基于 RSS 的信息聚合与阅读项目，用于集中订阅、整理和浏览持续更新的内容源。",
+      "capabilities": [
+        "RSS",
+        "Content Aggregation",
+        "Reading"
+      ],
+      "techStack": [
+        "TypeScript"
+      ],
+      "personalNote": "",
+      "whySaved": "可参考它通过 RSS 构建个人信息聚合与持续阅读工作流。",
+      "discoveredAt": "2026-08-25T11:07:08.173Z",
+      "discoveredAtSource": "local-entry",
+      "lastReviewedAt": null,
+      "health": "active",
+      "lastCheckedAt": null,
+      "lastPushedAt": null,
+      "githubArchived": null,
+      "githubDisabled": null,
+      "editorial": {
+        "topic": "Web Development",
+        "resourceType": "app",
+        "quality": "unchecked",
+        "fullSummary": "基于 RSS 的信息聚合与阅读项目，用于集中订阅、整理和浏览持续更新的内容源。"
+      }
+    },
+    {
+      "id": "3e5bc6114122e8e4",
+      "githubUrl": "https://github.com/lightpanda-io/browser",
+      "title": "Lightpanda Browser",
+      "shortSummary": "为 AI 与自动化场景设计的无头浏览器，重点优化页面执行效率与程序化浏览体验。",
+      "capabilities": [
+        "Headless Browser",
+        "Web Automation",
+        "AI Browsing"
+      ],
+      "techStack": [
+        "Zig",
+        "Chrome DevTools Protocol"
+      ],
+      "personalNote": "",
+      "whySaved": "可参考它为 AI 代理和网页自动化构建高性能无头浏览器的方式。",
+      "discoveredAt": "2026-08-25T11:07:08.673Z",
+      "discoveredAtSource": "local-entry",
+      "lastReviewedAt": null,
+      "health": "active",
+      "lastCheckedAt": null,
+      "lastPushedAt": null,
+      "githubArchived": null,
+      "githubDisabled": null,
+      "editorial": {
+        "topic": "Automation",
+        "resourceType": "app",
+        "quality": "unchecked",
+        "fullSummary": "为 AI 与自动化场景设计的无头浏览器，重点优化页面执行效率与程序化浏览体验。"
+      }
+    },
+    {
+      "id": "59e98f92d397fa65",
+      "githubUrl": "https://github.com/echohive42/AI-reads-books-page-by-page",
+      "title": "AI Reads Books Page by Page",
+      "shortSummary": "按页处理 PDF 书籍并提取、总结知识的实验项目，适合研究长文档分段阅读与知识整理。",
+      "capabilities": [
+        "Document AI",
+        "PDF",
+        "Summarization",
+        "Knowledge Extraction"
+      ],
+      "techStack": [
+        "Python"
+      ],
+      "personalNote": "",
+      "whySaved": "可参考它让 AI 按页读取长篇 PDF 并逐步提炼知识的工作流。",
+      "discoveredAt": "2026-08-25T11:07:09.127Z",
+      "discoveredAtSource": "local-entry",
+      "lastReviewedAt": null,
+      "health": "active",
+      "lastCheckedAt": null,
+      "lastPushedAt": null,
+      "githubArchived": null,
+      "githubDisabled": null,
+      "editorial": {
+        "topic": "AI & Data",
+        "resourceType": "app",
+        "quality": "unchecked",
+        "fullSummary": "按页处理 PDF 书籍并提取、总结知识的实验项目，适合研究长文档分段阅读与知识整理。"
+      }
+    },
+    {
+      "id": "db0a3545143e00a3",
+      "githubUrl": "https://github.com/jaywcjlove/awesome-mac",
+      "title": "Awesome Mac",
+      "shortSummary": "持续整理优质 macOS 软件与工具的精选清单，覆盖开发、效率、设计与系统管理等场景。",
+      "capabilities": [
+        "Software Discovery",
+        "macOS",
+        "Curated List"
+      ],
+      "techStack": [
+        "Markdown"
+      ],
+      "personalNote": "",
+      "whySaved": "可作为寻找和比较 macOS 开发与效率工具的分类参考目录。",
+      "discoveredAt": "2026-08-25T11:07:09.594Z",
+      "discoveredAtSource": "local-entry",
+      "lastReviewedAt": null,
+      "health": "active",
+      "lastCheckedAt": null,
+      "lastPushedAt": null,
+      "githubArchived": null,
+      "githubDisabled": null,
+      "editorial": {
+        "topic": "Developer Resources",
+        "resourceType": "collection",
+        "quality": "unchecked",
+        "fullSummary": "持续整理优质 macOS 软件与工具的精选清单，覆盖开发、效率、设计与系统管理等场景。"
+      }
+    },
+    {
+      "id": "72de75a74857d2cb",
+      "githubUrl": "https://github.com/nilbuild/slim",
+      "title": "Slim",
+      "shortSummary": "把本地服务快速映射为本地或公开访问地址的开发工具，便于预览、分享与联调。",
+      "capabilities": [
+        "Local Tunneling",
+        "Developer Tooling",
+        "Preview"
+      ],
+      "techStack": [],
+      "personalNote": "",
+      "whySaved": "可参考它简化 localhost 暴露、临时分享与远程联调的使用方式。",
+      "discoveredAt": "2026-08-25T11:07:10.041Z",
+      "discoveredAtSource": "local-entry",
+      "lastReviewedAt": null,
+      "health": "active",
+      "lastCheckedAt": null,
+      "lastPushedAt": null,
+      "githubArchived": null,
+      "githubDisabled": null,
+      "editorial": {
+        "topic": "Developer Tools",
+        "resourceType": "cli",
+        "quality": "unchecked",
+        "fullSummary": "把本地服务快速映射为本地或公开访问地址的开发工具，便于预览、分享与联调。"
+      }
+    },
+    {
+      "id": "66a6bfb667a601ed",
+      "githubUrl": "https://github.com/litu54/DevOps-Interview-Guide",
+      "title": "DevOps Interview Guide",
+      "shortSummary": "面向 DevOps 面试准备的系统化资料，汇集常见主题、问题与实践知识。",
+      "capabilities": [
+        "DevOps",
+        "Interview Preparation",
+        "Learning"
+      ],
+      "techStack": [
+        "Markdown"
+      ],
+      "personalNote": "",
+      "whySaved": "可作为梳理 DevOps 核心知识与准备技术面试的结构化参考。",
+      "discoveredAt": "2026-08-25T11:07:10.504Z",
+      "discoveredAtSource": "local-entry",
+      "lastReviewedAt": null,
+      "health": "active",
+      "lastCheckedAt": null,
+      "lastPushedAt": null,
+      "githubArchived": null,
+      "githubDisabled": null,
+      "editorial": {
+        "topic": "DevOps",
+        "resourceType": "documentation",
+        "quality": "unchecked",
+        "fullSummary": "面向 DevOps 面试准备的系统化资料，汇集常见主题、问题与实践知识。"
+      }
+    },
+    {
+      "id": "6261f22b12c88c72",
+      "githubUrl": "https://github.com/g1879/DrissionPage",
+      "title": "DrissionPage",
+      "shortSummary": "融合浏览器控制与网络请求能力的 Python 网页自动化工具，适合抓取、测试和流程自动化。",
+      "capabilities": [
+        "Web Automation",
+        "Browser Control",
+        "Scraping"
+      ],
+      "techStack": [
+        "Python"
+      ],
+      "personalNote": "",
+      "whySaved": "可参考它在同一套 Python 接口中结合浏览器操作与数据抓取的设计。",
+      "discoveredAt": "2026-08-25T11:07:10.978Z",
+      "discoveredAtSource": "local-entry",
+      "lastReviewedAt": null,
+      "health": "active",
+      "lastCheckedAt": null,
+      "lastPushedAt": null,
+      "githubArchived": null,
+      "githubDisabled": null,
+      "editorial": {
+        "topic": "Automation",
+        "resourceType": "library",
+        "quality": "unchecked",
+        "fullSummary": "融合浏览器控制与网络请求能力的 Python 网页自动化工具，适合抓取、测试和流程自动化。"
+      }
+    },
+    {
+      "id": "abe988e17b64939e",
+      "githubUrl": "https://github.com/ui-layouts/ui-tools",
+      "title": "UI Tools",
+      "shortSummary": "汇集开源 UI 设计与开发工具的精选集合，便于发现布局、视觉和前端生产力资源。",
+      "capabilities": [
+        "UI Design",
+        "Tool Discovery",
+        "Curated List"
+      ],
+      "techStack": [
+        "Web"
+      ],
+      "personalNote": "",
+      "whySaved": "可作为筛选 UI 设计、布局与前端开发工具的集中参考清单。",
+      "discoveredAt": "2026-08-25T11:07:11.436Z",
+      "discoveredAtSource": "local-entry",
+      "lastReviewedAt": null,
+      "health": "active",
+      "lastCheckedAt": null,
+      "lastPushedAt": null,
+      "githubArchived": null,
+      "githubDisabled": null,
+      "editorial": {
+        "topic": "Frontend Development",
+        "resourceType": "collection",
+        "quality": "unchecked",
+        "fullSummary": "汇集开源 UI 设计与开发工具的精选集合，便于发现布局、视觉和前端生产力资源。"
+      }
+    },
+    {
+      "id": "5fe79d83a9798c2b",
+      "githubUrl": "https://github.com/cporter202/scraping-apis-for-devs",
+      "title": "Scraping APIs for Developers",
+      "shortSummary": "面向开发者整理的网页抓取 API 清单，可用于比较不同数据采集服务的能力与适用场景。",
+      "capabilities": [
+        "Web Scraping",
+        "API Discovery",
+        "Data Collection"
+      ],
+      "techStack": [
+        "API"
+      ],
+      "personalNote": "",
+      "whySaved": "可作为比较网页抓取 API、代理能力和数据采集方案的参考目录。",
+      "discoveredAt": "2026-08-25T11:07:11.892Z",
+      "discoveredAtSource": "local-entry",
+      "lastReviewedAt": null,
+      "health": "active",
+      "lastCheckedAt": null,
+      "lastPushedAt": null,
+      "githubArchived": null,
+      "githubDisabled": null,
+      "editorial": {
+        "topic": "Automation",
+        "resourceType": "collection",
+        "quality": "unchecked",
+        "fullSummary": "面向开发者整理的网页抓取 API 清单，可用于比较不同数据采集服务的能力与适用场景。"
+      }
+    },
+    {
+      "id": "1b61ecfadea23323",
+      "githubUrl": "https://github.com/arhamkhnz/next-shadcn-admin-dashboard",
+      "title": "Next Shadcn Admin Dashboard",
+      "shortSummary": "基于 Next.js 与 shadcn/ui 的现代后台管理模板，提供常用布局、组件和应用结构。",
+      "capabilities": [
+        "Admin Dashboard",
+        "UI Components",
+        "App Scaffold"
+      ],
+      "techStack": [
+        "Next.js",
+        "TypeScript",
+        "shadcn/ui",
+        "Tailwind CSS"
+      ],
+      "personalNote": "",
+      "whySaved": "可参考它快速搭建 Next.js 后台系统的页面结构与组件组织方式。",
+      "discoveredAt": "2026-08-25T11:07:12.352Z",
+      "discoveredAtSource": "local-entry",
+      "lastReviewedAt": null,
+      "health": "active",
+      "lastCheckedAt": null,
+      "lastPushedAt": null,
+      "githubArchived": null,
+      "githubDisabled": null,
+      "editorial": {
+        "topic": "Frontend Development",
+        "resourceType": "app",
+        "quality": "unchecked",
+        "fullSummary": "基于 Next.js 与 shadcn/ui 的现代后台管理模板，提供常用布局、组件和应用结构。"
+      }
+    },
+    {
+      "id": "d7aea9373ae6454a",
+      "githubUrl": "https://github.com/opf/openproject",
+      "title": "OpenProject",
+      "shortSummary": "开源项目与项目组合管理平台，覆盖计划、任务、协作、时间跟踪和敏捷工作流。",
+      "capabilities": [
+        "Project Management",
+        "Collaboration",
+        "Agile"
+      ],
+      "techStack": [
+        "Ruby on Rails",
+        "Angular",
+        "TypeScript"
+      ],
+      "personalNote": "",
+      "whySaved": "可参考它构建完整项目管理、团队协作与敏捷交付系统的功能设计。",
+      "discoveredAt": "2026-08-25T11:07:12.807Z",
+      "discoveredAtSource": "local-entry",
+      "lastReviewedAt": null,
+      "health": "active",
+      "lastCheckedAt": null,
+      "lastPushedAt": null,
+      "githubArchived": null,
+      "githubDisabled": null,
+      "editorial": {
+        "topic": "Productivity",
+        "resourceType": "app",
+        "quality": "unchecked",
+        "fullSummary": "开源项目与项目组合管理平台，覆盖计划、任务、协作、时间跟踪和敏捷工作流。"
+      }
+    },
+    {
+      "id": "b2783939baa36f0b",
+      "githubUrl": "https://github.com/Stirling-Tools/Stirling-PDF",
+      "title": "Stirling PDF",
+      "shortSummary": "功能完整的自托管 PDF 处理应用，支持转换、合并、拆分、签名、OCR 与安全操作。",
+      "capabilities": [
+        "PDF",
+        "Document Processing",
+        "OCR",
+        "Self-hosted"
+      ],
+      "techStack": [
+        "Java",
+        "Spring Boot"
+      ],
+      "personalNote": "",
+      "whySaved": "可参考它将常见 PDF 编辑、转换与 OCR 能力整合为自托管工具的方式。",
+      "discoveredAt": "2026-08-25T11:07:13.269Z",
+      "discoveredAtSource": "local-entry",
+      "lastReviewedAt": null,
+      "health": "active",
+      "lastCheckedAt": null,
+      "lastPushedAt": null,
+      "githubArchived": null,
+      "githubDisabled": null,
+      "editorial": {
+        "topic": "Document Tools",
+        "resourceType": "app",
+        "quality": "unchecked",
+        "fullSummary": "功能完整的自托管 PDF 处理应用，支持转换、合并、拆分、签名、OCR 与安全操作。"
+      }
+    },
+    {
+      "id": "546f7ca2d06f8a77",
+      "githubUrl": "https://github.com/soybeanjs/soybean-admin",
+      "title": "SoybeanAdmin",
+      "shortSummary": "基于 Vue 3、Vite、TypeScript 与 Naive UI 的后台管理模板，提供完善的工程化基础。",
+      "capabilities": [
+        "Admin Dashboard",
+        "UI Components",
+        "App Scaffold"
+      ],
+      "techStack": [
+        "Vue 3",
+        "Vite",
+        "TypeScript",
+        "Pinia",
+        "Naive UI",
+        "UnoCSS"
+      ],
+      "personalNote": "",
+      "whySaved": "可参考它组织 Vue 3 后台项目、权限路由与可复用管理界面的方式。",
+      "discoveredAt": "2026-08-25T11:07:13.741Z",
+      "discoveredAtSource": "local-entry",
+      "lastReviewedAt": null,
+      "health": "active",
+      "lastCheckedAt": null,
+      "lastPushedAt": null,
+      "githubArchived": null,
+      "githubDisabled": null,
+      "editorial": {
+        "topic": "Frontend Development",
+        "resourceType": "app",
+        "quality": "unchecked",
+        "fullSummary": "基于 Vue 3、Vite、TypeScript 与 Naive UI 的后台管理模板，提供完善的工程化基础。"
+      }
+    },
+    {
+      "id": "d26856ab5954d6ee",
+      "githubUrl": "https://github.com/plankanban/planka",
+      "title": "Planka",
+      "shortSummary": "开源且可自托管的看板式项目管理工具，支持卡片、列表、协作与团队工作流。",
+      "capabilities": [
+        "Kanban",
+        "Project Management",
+        "Collaboration",
+        "Self-hosted"
+      ],
+      "techStack": [
+        "React",
+        "Node.js",
+        "PostgreSQL"
+      ],
+      "personalNote": "",
+      "whySaved": "可参考它实现自托管看板、任务协作与轻量项目管理的产品设计。",
+      "discoveredAt": "2026-08-25T11:07:14.189Z",
+      "discoveredAtSource": "local-entry",
+      "lastReviewedAt": null,
+      "health": "active",
+      "lastCheckedAt": null,
+      "lastPushedAt": null,
+      "githubArchived": null,
+      "githubDisabled": null,
+      "editorial": {
+        "topic": "Productivity",
+        "resourceType": "app",
+        "quality": "unchecked",
+        "fullSummary": "开源且可自托管的看板式项目管理工具，支持卡片、列表、协作与团队工作流。"
+      }
+    },
+    {
+      "id": "23317f0740885ab5",
+      "githubUrl": "https://github.com/karakeep-app/karakeep",
+      "title": "Karakeep",
+      "shortSummary": "自托管书签与稍后读应用，支持全文检索、内容归档以及 AI 辅助标签和整理。",
+      "capabilities": [
+        "Bookmarking",
+        "Knowledge Management",
+        "Full-text Search",
+        "Self-hosted"
+      ],
+      "techStack": [
+        "TypeScript",
+        "Next.js"
+      ],
+      "personalNote": "",
+      "whySaved": "可参考它构建个人知识收藏、全文检索与自动整理书签的完整流程。",
+      "discoveredAt": "2026-08-25T11:07:14.642Z",
+      "discoveredAtSource": "local-entry",
+      "lastReviewedAt": null,
+      "health": "active",
+      "lastCheckedAt": null,
+      "lastPushedAt": null,
+      "githubArchived": null,
+      "githubDisabled": null,
+      "editorial": {
+        "topic": "Productivity",
+        "resourceType": "app",
+        "quality": "unchecked",
+        "fullSummary": "自托管书签与稍后读应用，支持全文检索、内容归档以及 AI 辅助标签和整理。"
+      }
+    },
+    {
+      "id": "12e93a758b37d411",
+      "githubUrl": "https://github.com/34306/usbliter8-fun",
+      "title": "usbliter8-fun",
+      "shortSummary": "围绕 usbliter8 漏洞与特定硬件开展 iOS 安全研究的实验项目，具有较高风险与设备限制。",
+      "capabilities": [
+        "iOS Security",
+        "Exploit Research",
+        "Hardware"
+      ],
+      "techStack": [
+        "Python",
+        "RP2350"
+      ],
+      "personalNote": "",
+      "whySaved": "可作为研究 iOS 漏洞利用链、硬件交互与移动安全实验的技术参考。",
+      "discoveredAt": "2026-08-25T11:07:15.102Z",
+      "discoveredAtSource": "local-entry",
+      "lastReviewedAt": null,
+      "health": "active",
+      "lastCheckedAt": null,
+      "lastPushedAt": null,
+      "githubArchived": null,
+      "githubDisabled": null,
+      "editorial": {
+        "topic": "Security",
+        "resourceType": "documentation",
+        "quality": "unchecked",
+        "fullSummary": "围绕 usbliter8 漏洞与特定硬件开展 iOS 安全研究的实验项目，具有较高风险与设备限制。"
+      }
+    },
+    {
+      "id": "609b77217e47447a",
+      "githubUrl": "https://github.com/permissionlesstech/bitchat",
+      "title": "bitchat",
+      "shortSummary": "通过蓝牙 mesh 构建的去中心化聊天应用，可在缺少互联网连接时进行近距离通信。",
+      "capabilities": [
+        "Offline Messaging",
+        "Bluetooth Mesh",
+        "Peer-to-Peer"
+      ],
+      "techStack": [
+        "Swift",
+        "Kotlin"
+      ],
+      "personalNote": "",
+      "whySaved": "可参考它使用蓝牙 mesh 实现离线、去中心化即时通信的方法。",
+      "discoveredAt": "2026-08-25T11:07:15.554Z",
+      "discoveredAtSource": "local-entry",
+      "lastReviewedAt": null,
+      "health": "active",
+      "lastCheckedAt": null,
+      "lastPushedAt": null,
+      "githubArchived": null,
+      "githubDisabled": null,
+      "editorial": {
+        "topic": "Mobile Development",
+        "resourceType": "app",
+        "quality": "unchecked",
+        "fullSummary": "通过蓝牙 mesh 构建的去中心化聊天应用，可在缺少互联网连接时进行近距离通信。"
+      }
+    },
+    {
+      "id": "2e372e92868f58b9",
+      "githubUrl": "https://github.com/34306/vphone-aio",
+      "title": "vphone-aio",
+      "shortSummary": "用于自动化安装和运行 vphone 环境的一体化脚本，简化相关依赖与操作步骤。",
+      "capabilities": [
+        "Environment Setup",
+        "Automation",
+        "Virtualization"
+      ],
+      "techStack": [
+        "Shell"
+      ],
+      "personalNote": "",
+      "whySaved": "可参考它把 vphone 的安装、配置与运行过程封装成一键式流程。",
+      "discoveredAt": "2026-08-25T11:07:16.016Z",
+      "discoveredAtSource": "local-entry",
+      "lastReviewedAt": null,
+      "health": "active",
+      "lastCheckedAt": null,
+      "lastPushedAt": null,
+      "githubArchived": null,
+      "githubDisabled": null,
+      "editorial": {
+        "topic": "Developer Tools",
+        "resourceType": "cli",
+        "quality": "unchecked",
+        "fullSummary": "用于自动化安装和运行 vphone 环境的一体化脚本，简化相关依赖与操作步骤。"
+      }
+    },
+    {
+      "id": "749984083684f8e7",
+      "githubUrl": "https://github.com/calesthio/BreakoutAnalysis",
+      "title": "BreakoutAnalysis",
+      "shortSummary": "定时扫描美股并结合市场数据、技术信号与 AI 分析发送突破提醒的自动化系统。",
+      "capabilities": [
+        "Market Monitoring",
+        "Trading Signals",
+        "Automation",
+        "Alerts"
+      ],
+      "techStack": [
+        "Python",
+        "TradingView",
+        "Alpaca API"
+      ],
+      "personalNote": "",
+      "whySaved": "可参考它整合行情扫描、突破判断和通知渠道来构建自动化交易观察工具。",
+      "discoveredAt": "2026-08-25T11:07:16.482Z",
+      "discoveredAtSource": "local-entry",
+      "lastReviewedAt": null,
+      "health": "active",
+      "lastCheckedAt": null,
+      "lastPushedAt": null,
+      "githubArchived": null,
+      "githubDisabled": null,
+      "editorial": {
+        "topic": "Finance",
+        "resourceType": "app",
+        "quality": "unchecked",
+        "fullSummary": "定时扫描美股并结合市场数据、技术信号与 AI 分析发送突破提醒的自动化系统。"
+      }
+    },
+    {
+      "id": "624089c5de6b3534",
+      "githubUrl": "https://github.com/CloakHQ/CloakBrowser",
+      "title": "CloakBrowser",
+      "shortSummary": "面向自动化场景的隐身 Chromium 浏览器，提供 Playwright 兼容能力以减少常见机器人检测。",
+      "capabilities": [
+        "Browser Automation",
+        "Anti-detection",
+        "Web Scraping"
+      ],
+      "techStack": [
+        "Chromium",
+        "Playwright"
+      ],
+      "personalNote": "",
+      "whySaved": "可参考它在 Playwright 自动化中处理浏览器指纹与反机器人检测的方式。",
+      "discoveredAt": "2026-08-25T11:07:16.937Z",
+      "discoveredAtSource": "local-entry",
+      "lastReviewedAt": null,
+      "health": "active",
+      "lastCheckedAt": null,
+      "lastPushedAt": null,
+      "githubArchived": null,
+      "githubDisabled": null,
+      "editorial": {
+        "topic": "Automation",
+        "resourceType": "app",
+        "quality": "unchecked",
+        "fullSummary": "面向自动化场景的隐身 Chromium 浏览器，提供 Playwright 兼容能力以减少常见机器人检测。"
+      }
+    },
+    {
+      "id": "5c87296d9a586755",
+      "githubUrl": "https://github.com/Ouonnki/OuonnkiTV",
+      "title": "OuonnkiTV",
+      "shortSummary": "可部署到 Vercel 的个人影视内容站点项目，提供搜索、播放与自托管配置能力。",
+      "capabilities": [
+        "Media Library",
+        "Streaming",
+        "Self-hosted"
+      ],
+      "techStack": [
+        "Next.js",
+        "TypeScript",
+        "Vercel"
+      ],
+      "personalNote": "",
+      "whySaved": "可参考它快速搭建和部署个人媒体浏览与播放站点的实现结构。",
+      "discoveredAt": "2026-08-25T11:07:17.392Z",
+      "discoveredAtSource": "local-entry",
+      "lastReviewedAt": null,
+      "health": "active",
+      "lastCheckedAt": null,
+      "lastPushedAt": null,
+      "githubArchived": null,
+      "githubDisabled": null,
+      "editorial": {
+        "topic": "Web Development",
+        "resourceType": "app",
+        "quality": "unchecked",
+        "fullSummary": "可部署到 Vercel 的个人影视内容站点项目，提供搜索、播放与自托管配置能力。"
+      }
+    },
+    {
+      "id": "8c25bfbae9074a46",
+      "githubUrl": "https://github.com/dssjon/biblos",
+      "title": "Biblos",
+      "shortSummary": "面向圣经文本的语义搜索与多层分析工具，用于探索经文、主题及上下文关系。",
+      "capabilities": [
+        "Semantic Search",
+        "Text Analysis",
+        "Research"
+      ],
+      "techStack": [],
+      "personalNote": "",
+      "whySaved": "可参考它把语义检索与多层文本分析应用到大型经典文献研究中。",
+      "discoveredAt": "2026-08-25T11:07:17.850Z",
+      "discoveredAtSource": "local-entry",
+      "lastReviewedAt": null,
+      "health": "active",
+      "lastCheckedAt": null,
+      "lastPushedAt": null,
+      "githubArchived": null,
+      "githubDisabled": null,
+      "editorial": {
+        "topic": "AI & Data",
+        "resourceType": "app",
+        "quality": "unchecked",
+        "fullSummary": "面向圣经文本的语义搜索与多层分析工具，用于探索经文、主题及上下文关系。"
+      }
+    },
+    {
+      "id": "6a62311a31a9c448",
+      "githubUrl": "https://github.com/DaKheera47/job-ops",
+      "title": "Job Ops",
+      "shortSummary": "以 DevOps 工作流方式管理求职申请的自托管工具，支持阶段跟踪、自动化与过程可视化。",
+      "capabilities": [
+        "Job Tracking",
+        "Workflow",
+        "Automation",
+        "Self-hosted"
+      ],
+      "techStack": [],
+      "personalNote": "",
+      "whySaved": "可参考它把求职流程建模为可跟踪、可自动化的工作管线。",
+      "discoveredAt": "2026-08-25T11:07:18.300Z",
+      "discoveredAtSource": "local-entry",
+      "lastReviewedAt": null,
+      "health": "active",
+      "lastCheckedAt": null,
+      "lastPushedAt": null,
+      "githubArchived": null,
+      "githubDisabled": null,
+      "editorial": {
+        "topic": "Productivity",
+        "resourceType": "app",
+        "quality": "unchecked",
+        "fullSummary": "以 DevOps 工作流方式管理求职申请的自托管工具，支持阶段跟踪、自动化与过程可视化。"
+      }
     }
   ]
 }

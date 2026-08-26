@@ -4,9 +4,14 @@ import { useEffect, useRef, useState } from "react";
 
 interface ResourceSearchProps {
   value: string;
-  onChange: (value: string) => void;
+  onChange: (value: string, options?: ResourceSearchChangeOptions) => void;
   resultCount?: number;
   isSearching?: boolean;
+}
+
+export interface ResourceSearchChangeOptions {
+  isComposing?: boolean;
+  commitImmediately?: boolean;
 }
 
 export default function ResourceSearch({
@@ -16,6 +21,7 @@ export default function ResourceSearch({
   isSearching = false,
 }: ResourceSearchProps) {
   const inputRef = useRef<HTMLInputElement>(null);
+  const isComposingRef = useRef(false);
   const [placeholder, setPlaceholder] = useState("Search resources… (⌘K)");
 
   // Remove keyboard shortcut hint from placeholder on mobile screens
@@ -65,7 +71,19 @@ export default function ResourceSearch({
         id="resource-search-input"
         type="search"
         value={value}
-        onChange={(e) => onChange(e.target.value)}
+        onCompositionStart={() => {
+          isComposingRef.current = true;
+        }}
+        onCompositionEnd={(event) => {
+          isComposingRef.current = false;
+          onChange(event.currentTarget.value, { commitImmediately: true });
+        }}
+        onChange={(event) => {
+          const nativeEvent = event.nativeEvent as InputEvent;
+          onChange(event.target.value, {
+            isComposing: isComposingRef.current || nativeEvent.isComposing,
+          });
+        }}
         placeholder={placeholder}
         className="archive-input pl-9 pr-24"
         autoComplete="off"

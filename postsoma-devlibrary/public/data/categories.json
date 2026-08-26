@@ -5,11 +5,15 @@
   },
   {
     "name": "0 - MOOC",
-    "count": 21
+    "count": 23
   },
   {
     "name": "AI",
     "count": 115
+  },
+  {
+    "name": "AI & Data",
+    "count": 3
   },
   {
     "name": "Algorithms",
@@ -53,7 +57,11 @@
   },
   {
     "name": "Automation",
-    "count": 14
+    "count": 18
+  },
+  {
+    "name": "Backend Development",
+    "count": 1
   },
   {
     "name": "Ballerina",
@@ -85,7 +93,7 @@
   },
   {
     "name": "BY SUBJECT",
-    "count": 807
+    "count": 808
   },
   {
     "name": "C",
@@ -133,7 +141,7 @@
   },
   {
     "name": "Computer Science",
-    "count": 14
+    "count": 15
   },
   {
     "name": "Conda",
@@ -184,8 +192,16 @@
     "count": 33
   },
   {
+    "name": "Desktop Development",
+    "count": 1
+  },
+  {
+    "name": "Developer Resources",
+    "count": 1
+  },
+  {
     "name": "Developer Tools",
-    "count": 2
+    "count": 4
   },
   {
     "name": "Devops",
@@ -193,7 +209,7 @@
   },
   {
     "name": "DevOps",
-    "count": 27
+    "count": 29
   },
   {
     "name": "DevTools",
@@ -205,7 +221,11 @@
   },
   {
     "name": "Docker",
-    "count": 36
+    "count": 37
+  },
+  {
+    "name": "Document Tools",
+    "count": 1
   },
   {
     "name": "Elastic",
@@ -220,12 +240,20 @@
     "count": 1
   },
   {
+    "name": "Finance",
+    "count": 1
+  },
+  {
     "name": "Flutter",
     "count": 18
   },
   {
     "name": "Fortran",
     "count": 5
+  },
+  {
+    "name": "Frontend Development",
+    "count": 3
   },
   {
     "name": "Game Development",
@@ -237,7 +265,7 @@
   },
   {
     "name": "Git",
-    "count": 45
+    "count": 46
   },
   {
     "name": "GLSL",
@@ -364,6 +392,10 @@
     "count": 16
   },
   {
+    "name": "Mobile Development",
+    "count": 1
+  },
+  {
     "name": "MongoDB",
     "count": 3
   },
@@ -457,7 +489,7 @@
   },
   {
     "name": "Productivity",
-    "count": 24
+    "count": 28
   },
   {
     "name": "Puppet",
@@ -525,7 +557,7 @@
   },
   {
     "name": "Security",
-    "count": 51
+    "count": 54
   },
   {
     "name": "Selenium",
@@ -533,7 +565,7 @@
   },
   {
     "name": "Shell Scripting",
-    "count": 4
+    "count": 5
   },
   {
     "name": "Software Engineering",
@@ -553,7 +585,7 @@
   },
   {
     "name": "SQL",
-    "count": 25
+    "count": 26
   },
   {
     "name": "Svelte",
@@ -566,6 +598,10 @@
   {
     "name": "System Design",
     "count": 9
+  },
+  {
+    "name": "System Development",
+    "count": 1
   },
   {
     "name": "TensorFlow",
@@ -609,7 +645,7 @@
   },
   {
     "name": "Web Development",
-    "count": 28
+    "count": 32
   },
   {
     "name": "Web3",

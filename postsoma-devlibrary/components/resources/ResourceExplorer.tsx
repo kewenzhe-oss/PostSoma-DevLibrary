@@ -4,20 +4,36 @@ import { useState, useMemo, useTransition, useRef, useEffect, useCallback } from
 import { createPortal } from "react-dom";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import Link from "next/link";
-import type { Resource, ResourceTocNode } from "@/lib/types/resource";
+import type {
+  CanonicalTopicId,
+  Resource,
+  ResourceLanguage,
+  ResourceTocNode,
+  ResourceType,
+} from "@/lib/types/resource";
 import type {
   GitHubFavorite,
   GitHubFavoriteHealth,
 } from "@/lib/types/github-favorite";
-import ResourceSearch from "@/components/resources/ResourceSearch";
+import ResourceSearch, {
+  type ResourceSearchChangeOptions,
+} from "@/components/resources/ResourceSearch";
 import ResourceGrid from "@/components/resources/ResourceGrid";
-import ResourceToc from "@/components/resources/ResourceToc";
+import ResourceFacetPanel from "@/components/resources/ResourceFacetPanel";
 import GitHubBrowseControls from "@/components/resources/GitHubBrowseControls";
 import EmptyState from "@/components/ui/EmptyState";
 import BookmarkButton from "./BookmarkButton";
 import { generateDescription, TYPE_LABELS } from "@/lib/utils/resource";
 import { getProviderLabel } from "@/lib/utils/provider";
 import { searchResources } from "@/lib/data/search";
+import {
+  buildResourceFacetModel,
+  CANONICAL_TOPIC_LABELS,
+  filterResourcesByFacets,
+  getCanonicalTopicLabel,
+  getResourceFacetBreadcrumb,
+  type ResourceFacetSelection,
+} from "@/lib/data/resource-facets";
 import {
   buildGitHubFacetOptions,
   formatGitHubFacetLabel,
@@ -40,6 +56,46 @@ function doesTocPathExist(nodes: ResourceTocNode[], targetPath: string[]): boole
     if (node.children && doesTocPathExist(node.children, targetPath)) return true;
   }
   return false;
+}
+
+const RESOURCE_TYPE_VALUES: ResourceType[] = [
+  "book",
+  "course",
+  "tutorial",
+  "documentation",
+  "interactive",
+  "article",
+  "app",
+  "library",
+  "framework",
+  "cli",
+  "collection",
+  "extension",
+  "unknown",
+];
+
+const CANONICAL_TOPIC_IDS = new Set(
+  CANONICAL_TOPIC_LABELS.map((topic) => topic.id),
+);
+
+const INTERNAL_URL_SYNC_TTL_MS = 5_000;
+
+const COLLECTION_CONTEXT: Record<string, string> = {
+  books: "Build durable foundations from long-form references.",
+  courses: "Follow structured instruction and guided lessons.",
+  cheat_sheets: "Recall syntax and patterns at the moment of use.",
+  interactive: "Practice concepts through exercises, playgrounds and visual tools.",
+};
+
+function readMultiValueParam(
+  params: Readonly<URLSearchParams>,
+  key: string,
+): string[] {
+  return params
+    .getAll(key)
+    .flatMap((value) => value.split(","))
+    .map((value) => value.trim())
+    .filter(Boolean);
 }
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -105,6 +161,35 @@ function GitHubFilterPill({
   );
 }
 
+function PublicFilterPill({
+  label,
+  value,
+  onClear,
+}: {
+  label: string;
+  value: string;
+  onClear: () => void;
+}) {
+  return (
+    <div className="inline-flex items-center gap-1.5 rounded-full border border-archive-border/60 bg-archive-surface/80 px-3 py-1 text-xs animate-fade-in">
+      <span className="font-mono text-[9px] uppercase tracking-wider text-archive-subtle/60">
+        {label}
+      </span>
+      <span className="max-w-[180px] truncate font-sans font-medium text-archive-text">
+        {value}
+      </span>
+      <button
+        type="button"
+        onClick={onClear}
+        className="ml-0.5 shrink-0 font-mono text-xs font-bold text-archive-subtle transition-colors hover:text-archive-accent"
+        aria-label={`Clear ${label} ${value}`}
+      >
+        ×
+      </button>
+    </div>
+  );
+}
+
 // ─── Collection Tab ───────────────────────────────────────────────────────────
 
 function CollectionTab({
@@ -151,9 +236,10 @@ export default function ResourceExplorer({
   const [language, setLanguage] = useState<"all" | "zh" | "en">("all");
   const [selectedCollection, setSelectedCollection] = useState<string>("books");
   const [selectedTocPath, setSelectedTocPath] = useState<string[] | null>(null);
+  const [selectedTopics, setSelectedTopics] = useState<CanonicalTopicId[]>([]);
+  const [selectedSubcategories, setSelectedSubcategories] = useState<string[]>([]);
+  const [selectedResourceTypes, setSelectedResourceTypes] = useState<ResourceType[]>([]);
   const [previewResource, setPreviewResource] = useState<Resource | null>(null);
-  const [previewTopic, setPreviewTopic] = useState<{ topicName: string; category: string; subcategory?: string; resources: Resource[] } | null>(null);
-  const [viewMode, setViewMode] = useState<"topics" | "resources">("topics");
   const [githubBrowseMode, setGithubBrowseMode] =
     useState<GitHubBrowseMode>("topic");
   const [githubCapability, setGithubCapability] = useState("");
@@ -162,7 +248,7 @@ export default function ResourceExplorer({
     useState<GitHubFavoriteHealth | "">("");
   const [isFilterDrawerOpen, setIsFilterDrawerOpen] = useState(false);
   const [, startTransition] = useTransition();
-  const showGlobalTopicGroups = selectedCollection !== "github";
+  const showPublicFacets = selectedCollection !== "github";
 
   const githubFavoritesById = useMemo(
     () =>
@@ -215,24 +301,44 @@ export default function ResourceExplorer({
     [githubFavorites],
   );
 
-  // GitHub is an item-first research list; books and courses remain topic-first.
-  useEffect(() => {
-    if (selectedCollection === "books" || selectedCollection === "courses") {
-      setViewMode("topics");
-    } else {
-      setViewMode("resources");
-    }
-  }, [selectedCollection]);
-
   const resultsTopRef = useRef<HTMLDivElement | null>(null);
+  const latestQueryRef = useRef("");
+  const pendingInternalUrlsRef = useRef(new Map<string, number>());
 
   // Sync state from URL search parameters on mount & searchParams changes
   useEffect(() => {
     const q = searchParams.get("q") || "";
+    const currentQueryString = searchParams.toString();
+    const currentTarget = `${pathname}${currentQueryString ? "?" + currentQueryString : ""}`;
+    const internalSyncStartedAt = pendingInternalUrlsRef.current.get(currentTarget);
+    const isRecentInternalSync =
+      internalSyncStartedAt !== undefined &&
+      Date.now() - internalSyncStartedAt <= INTERNAL_URL_SYNC_TTL_MS;
+
+    if (internalSyncStartedAt !== undefined) {
+      pendingInternalUrlsRef.current.delete(currentTarget);
+    }
+
+    // A previously issued router.replace can finish after the user has typed
+    // more characters. Ignore that stale internal navigation instead of
+    // echoing its older q value back into the controlled input.
+    if (isRecentInternalSync && q !== latestQueryRef.current) {
+      return;
+    }
+
     const lang = (searchParams.get("lang") || "all") as "all" | "zh" | "en";
     const col = searchParams.get("col") || "books";
     const pathVal = searchParams.get("path");
     const path = pathVal ? pathVal.split(":") : null;
+    const topics = readMultiValueParam(searchParams, "topic").filter(
+      (value): value is CanonicalTopicId =>
+        CANONICAL_TOPIC_IDS.has(value as CanonicalTopicId),
+    );
+    const subcategories = readMultiValueParam(searchParams, "sub");
+    const resourceTypes = readMultiValueParam(searchParams, "type").filter(
+      (value): value is ResourceType =>
+        RESOURCE_TYPE_VALUES.includes(value as ResourceType),
+    );
     const githubMode =
       searchParams.get("ghmode") === "recall" ? "recall" : "topic";
     const capability = searchParams.get("cap") || "";
@@ -245,6 +351,7 @@ export default function ResourceExplorer({
       healthParam === "unavailable"
         ? healthParam
         : "";
+    latestQueryRef.current = q;
     setQuery((current) => (current !== q ? q : current));
     setLanguage((current) => (current !== lang ? lang : current));
     setSelectedCollection((current) => (current !== col ? col : current));
@@ -253,6 +360,15 @@ export default function ResourceExplorer({
       const newStr = pathVal || "";
       return currentStr !== newStr ? path : current;
     });
+    setSelectedTopics((current) =>
+      current.join(",") !== topics.join(",") ? topics : current,
+    );
+    setSelectedSubcategories((current) =>
+      current.join(",") !== subcategories.join(",") ? subcategories : current,
+    );
+    setSelectedResourceTypes((current) =>
+      current.join(",") !== resourceTypes.join(",") ? resourceTypes : current,
+    );
     setGithubBrowseMode((current) =>
       current !== githubMode ? githubMode : current,
     );
@@ -263,7 +379,7 @@ export default function ResourceExplorer({
       current !== techStack ? techStack : current,
     );
     setGithubHealth((current) => (current !== health ? health : current));
-  }, [searchParams]);
+  }, [pathname, searchParams]);
 
   // Keep stateRef in sync for debounced query sync to URL
   const stateRef = useRef({
@@ -271,6 +387,9 @@ export default function ResourceExplorer({
     language,
     selectedCollection,
     selectedTocPath,
+    selectedTopics,
+    selectedSubcategories,
+    selectedResourceTypes,
     githubBrowseMode,
     githubCapability,
     githubTechStack,
@@ -282,6 +401,9 @@ export default function ResourceExplorer({
       language,
       selectedCollection,
       selectedTocPath,
+      selectedTopics,
+      selectedSubcategories,
+      selectedResourceTypes,
       githubBrowseMode,
       githubCapability,
       githubTechStack,
@@ -292,6 +414,9 @@ export default function ResourceExplorer({
     language,
     selectedCollection,
     selectedTocPath,
+    selectedTopics,
+    selectedSubcategories,
+    selectedResourceTypes,
     githubBrowseMode,
     githubCapability,
     githubTechStack,
@@ -299,58 +424,114 @@ export default function ResourceExplorer({
   ]);
 
   // Helper to synchronize active state parameters to browser URL
-  const syncToUrl = (
-    q: string,
-    lang: string,
-    col: string,
-    path: string[] | null,
-    githubOverrides: Partial<{
-      mode: GitHubBrowseMode;
-      capability: string;
-      techStack: string;
-      health: GitHubFavoriteHealth | "";
-    }> = {},
-  ) => {
-    const params = new URLSearchParams();
-    if (q.trim()) params.set("q", q);
-    if (lang !== "all") params.set("lang", lang);
-    if (col !== "books") params.set("col", col);
-    if (path && path.length > 0) params.set("path", path.join(":"));
-    if (col === "github") {
-      const mode = githubOverrides.mode ?? stateRef.current.githubBrowseMode;
-      const capability =
-        githubOverrides.capability ?? stateRef.current.githubCapability;
-      const techStack =
-        githubOverrides.techStack ?? stateRef.current.githubTechStack;
-      const health = githubOverrides.health ?? stateRef.current.githubHealth;
+  const syncToUrl = useCallback(
+    (
+      q: string,
+      lang: string,
+      col: string,
+      path: string[] | null,
+      githubOverrides: Partial<{
+        mode: GitHubBrowseMode;
+        capability: string;
+        techStack: string;
+        health: GitHubFavoriteHealth | "";
+      }> = {},
+      publicFacetOverrides: Partial<{
+        topics: CanonicalTopicId[];
+        subcategories: string[];
+        resourceTypes: ResourceType[];
+      }> = {},
+    ) => {
+      const params = new URLSearchParams();
+      if (q.trim()) params.set("q", q);
+      if (lang !== "all") params.set("lang", lang);
+      if (col !== "books") params.set("col", col);
+      if (path && path.length > 0) params.set("path", path.join(":"));
+      if (col === "github") {
+        const mode = githubOverrides.mode ?? stateRef.current.githubBrowseMode;
+        const capability =
+          githubOverrides.capability ?? stateRef.current.githubCapability;
+        const techStack =
+          githubOverrides.techStack ?? stateRef.current.githubTechStack;
+        const health = githubOverrides.health ?? stateRef.current.githubHealth;
 
-      if (mode === "recall") params.set("ghmode", mode);
-      if (capability) params.set("cap", capability);
-      if (techStack) params.set("stack", techStack);
-      if (health) params.set("health", health);
-    }
+        if (mode === "recall") params.set("ghmode", mode);
+        if (capability) params.set("cap", capability);
+        if (techStack) params.set("stack", techStack);
+        if (health) params.set("health", health);
+      } else {
+        const topics =
+          publicFacetOverrides.topics ?? stateRef.current.selectedTopics;
+        const subcategories =
+          publicFacetOverrides.subcategories ??
+          stateRef.current.selectedSubcategories;
+        const resourceTypes =
+          publicFacetOverrides.resourceTypes ??
+          stateRef.current.selectedResourceTypes;
+        topics.forEach((topic) => params.append("topic", topic));
+        subcategories.forEach((subcategory) => params.append("sub", subcategory));
+        resourceTypes.forEach((resourceType) => params.append("type", resourceType));
+      }
 
-    const qs = params.toString();
-    const target = `${pathname}${qs ? "?" + qs : ""}`;
-    router.replace(target, { scroll: false });
-  };
+      const qs = params.toString();
+      const target = `${pathname}${qs ? "?" + qs : ""}`;
+      const currentQueryString = searchParams.toString();
+      const currentTarget = `${pathname}${currentQueryString ? "?" + currentQueryString : ""}`;
+
+      if (target === currentTarget) return;
+
+      const now = Date.now();
+      for (const [pendingTarget, startedAt] of pendingInternalUrlsRef.current) {
+        if (now - startedAt > INTERNAL_URL_SYNC_TTL_MS) {
+          pendingInternalUrlsRef.current.delete(pendingTarget);
+        }
+      }
+      pendingInternalUrlsRef.current.set(target, now);
+      router.replace(target, { scroll: false });
+    },
+    [pathname, router, searchParams],
+  );
 
   // Debounced search query URL synchronization
-  const debounceTimer = useRef<NodeJS.Timeout | null>(null);
-  function handleQueryChange(newQuery: string) {
-    setQuery(newQuery);
-    if (debounceTimer.current) {
-      clearTimeout(debounceTimer.current);
-    }
-    debounceTimer.current = setTimeout(() => {
-      syncToUrl(
-        newQuery,
-        stateRef.current.language,
-        stateRef.current.selectedCollection,
-        stateRef.current.selectedTocPath
-      );
-    }, 250);
-  }
+  const debounceTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const handleQueryChange = useCallback(
+    (
+      newQuery: string,
+      options: ResourceSearchChangeOptions = {},
+    ) => {
+      latestQueryRef.current = newQuery;
+      setQuery(newQuery);
+      if (debounceTimer.current) {
+        clearTimeout(debounceTimer.current);
+      }
+
+      // IMEs emit intermediate controlled-input values while composing. Keep
+      // those visible locally, but do not navigate until compositionend commits
+      // the final text.
+      if (options.isComposing) return;
+
+      debounceTimer.current = setTimeout(() => {
+        syncToUrl(
+          newQuery,
+          stateRef.current.language,
+          stateRef.current.selectedCollection,
+          stateRef.current.selectedTocPath,
+        );
+      }, options.commitImmediately ? 0 : 250);
+    },
+    [syncToUrl],
+  );
+
+  useEffect(
+    () => () => {
+      if (debounceTimer.current) {
+        clearTimeout(debounceTimer.current);
+        debounceTimer.current = null;
+      }
+      pendingInternalUrlsRef.current.clear();
+    },
+    [],
+  );
 
   // ── Reactive TOC data: always current for (collection, language) ───────────
   const tocAllLangs = useMemo(() => {
@@ -374,40 +555,64 @@ export default function ResourceExplorer({
     }
   }, [flatActiveNodes, selectedTocPath]);
 
-  // ── Multi-dimension search/filter results ─────────────────────────────────
-  const searchOutcome = useMemo(() => {
-    const baseInput = {
-      language,
+  const publicFacetSelection = useMemo<ResourceFacetSelection>(
+    () => ({
+      topics: selectedTopics,
+      subcategories: selectedSubcategories,
+      languages:
+        language === "all"
+          ? (["en", "zh"] as ResourceLanguage[])
+          : [language],
+      resourceTypes: selectedResourceTypes,
+    }),
+    [language, selectedResourceTypes, selectedSubcategories, selectedTopics],
+  );
+
+  // Query first, then apply the independent facets. The complete query result
+  // set is retained so each facet can calculate useful disjunctive counts.
+  const publicSearchBase = useMemo(() => {
+    if (selectedCollection === "github") return [];
+    return searchResources(resources, {
+      query,
+      language: "all",
       category: "all",
       collection: selectedCollection,
       tocPath: selectedTocPath ?? undefined,
-      limit: 300,
-    } as const;
+      limit: resources.length,
+    });
+  }, [query, resources, selectedCollection, selectedTocPath]);
 
+  const resourceFacetModel = useMemo(
+    () => buildResourceFacetModel(publicSearchBase, publicFacetSelection),
+    [publicFacetSelection, publicSearchBase],
+  );
+
+  // ── Multi-dimension search/filter results ─────────────────────────────────
+  const searchOutcome = useMemo(() => {
     if (selectedCollection === "github") {
-      return searchGitHubFavorites(githubFavoriteLinks.resources, githubFavoriteLinks.favoritesByResourceId, {
-        query,
-        capability: githubCapability,
-        techStack: githubTechStack,
-        health: githubHealth,
-        mode: githubBrowseMode,
-        limit: 300,
-      });
+      return searchGitHubFavorites(
+        githubFavoriteLinks.resources,
+        githubFavoriteLinks.favoritesByResourceId,
+        {
+          query,
+          capability: githubCapability,
+          techStack: githubTechStack,
+          health: githubHealth,
+          mode: githubBrowseMode,
+          limit: 300,
+        },
+      );
     }
 
     return {
-      resources: searchResources(resources, {
-        ...baseInput,
-        query,
-      }),
+      resources: filterResourcesByFacets(publicSearchBase, publicFacetSelection),
       matchReasonsById: new Map(),
     };
   }, [
-    resources,
     query,
-    language,
     selectedCollection,
-    selectedTocPath,
+    publicFacetSelection,
+    publicSearchBase,
     githubFavoriteLinks,
     githubCapability,
     githubTechStack,
@@ -451,6 +656,9 @@ export default function ResourceExplorer({
     language,
     selectedCollection,
     selectedTocPath,
+    selectedTopics,
+    selectedSubcategories,
+    selectedResourceTypes,
     githubCapability,
     githubTechStack,
     githubHealth,
@@ -508,11 +716,17 @@ export default function ResourceExplorer({
     query !== "" ||
     language !== "all" ||
     selectedTocPath !== null ||
+    selectedTopics.length > 0 ||
+    selectedSubcategories.length > 0 ||
+    selectedResourceTypes.length > 0 ||
     hasGitHubStructuredFilters;
 
   const activeFilterCount =
     (language !== "all" ? 1 : 0) +
     (selectedTocPath ? 1 : 0) +
+    selectedTopics.length +
+    selectedSubcategories.length +
+    selectedResourceTypes.length +
     (selectedCollection === "github" && githubCapability ? 1 : 0) +
     (selectedCollection === "github" && githubTechStack ? 1 : 0) +
     (selectedCollection === "github" && githubHealth ? 1 : 0);
@@ -521,9 +735,13 @@ export default function ResourceExplorer({
 
   function handleClear() {
     startTransition(() => {
+      latestQueryRef.current = "";
       setQuery("");
       setLanguage("all");
       setSelectedTocPath(null);
+      setSelectedTopics([]);
+      setSelectedSubcategories([]);
+      setSelectedResourceTypes([]);
       if (selectedCollection === "github") {
         setGithubCapability("");
         setGithubTechStack("");
@@ -533,15 +751,11 @@ export default function ResourceExplorer({
         capability: "",
         techStack: "",
         health: "",
+      }, {
+        topics: [],
+        subcategories: [],
+        resourceTypes: [],
       });
-    });
-  }
-
-  function handlePopularPillClick(pillValue: string) {
-    startTransition(() => {
-      setSelectedTocPath(null);
-      setQuery(pillValue);
-      syncToUrl(pillValue, language, selectedCollection, null);
     });
   }
 
@@ -550,7 +764,14 @@ export default function ResourceExplorer({
     startTransition(() => {
       setSelectedCollection(colId);
       setSelectedTocPath(null);
-      syncToUrl(query, language, colId, null);
+      setSelectedTopics([]);
+      setSelectedSubcategories([]);
+      setSelectedResourceTypes([]);
+      syncToUrl(query, language, colId, null, {}, {
+        topics: [],
+        subcategories: [],
+        resourceTypes: [],
+      });
     });
   }
 
@@ -572,6 +793,63 @@ export default function ResourceExplorer({
     startTransition(() => {
       setLanguage(lang);
       syncToUrl(query, lang, selectedCollection, selectedTocPath);
+    });
+  }
+
+  function handleLanguageFacetToggle(value: ResourceLanguage) {
+    const nextLanguage =
+      language === "all" ? (value === "zh" ? "en" : "zh") : "all";
+    handleLanguageChange(nextLanguage);
+  }
+
+  function handleTopicToggle(value: CanonicalTopicId) {
+    const next = selectedTopics.includes(value)
+      ? selectedTopics.filter((topic) => topic !== value)
+      : [...selectedTopics, value];
+    startTransition(() => {
+      setSelectedTopics(next);
+      syncToUrl(query, language, selectedCollection, selectedTocPath, {}, {
+        topics: next,
+      });
+    });
+  }
+
+  function handleSubcategoryToggle(value: string) {
+    const next = selectedSubcategories.includes(value)
+      ? selectedSubcategories.filter((subcategory) => subcategory !== value)
+      : [...selectedSubcategories, value];
+    startTransition(() => {
+      setSelectedSubcategories(next);
+      syncToUrl(query, language, selectedCollection, selectedTocPath, {}, {
+        subcategories: next,
+      });
+    });
+  }
+
+  function handleResourceTypeToggle(value: ResourceType) {
+    const next = selectedResourceTypes.includes(value)
+      ? selectedResourceTypes.filter((resourceType) => resourceType !== value)
+      : [...selectedResourceTypes, value];
+    startTransition(() => {
+      setSelectedResourceTypes(next);
+      syncToUrl(query, language, selectedCollection, selectedTocPath, {}, {
+        resourceTypes: next,
+      });
+    });
+  }
+
+  function handleClearPublicFacets() {
+    startTransition(() => {
+      setLanguage("all");
+      setSelectedTocPath(null);
+      setSelectedTopics([]);
+      setSelectedSubcategories([]);
+      setSelectedResourceTypes([]);
+      syncToUrl(query, "all", selectedCollection, null, {}, {
+        topics: [],
+        subcategories: [],
+        resourceTypes: [],
+      });
     });
   }
 
@@ -626,11 +904,11 @@ export default function ResourceExplorer({
               resultCount={results.length}
             />
           </div>
-          {showGlobalTopicGroups && (
+          {showPublicFacets && (
             <button
               onClick={() => setIsFilterDrawerOpen(true)}
-              className="lg:hidden h-[38px] px-3.5 border border-archive-border bg-archive-surface rounded-sm text-archive-subtle hover:text-archive-text flex items-center justify-center gap-1.5 active:scale-95 active:bg-archive-muted/40 transition-all shrink-0"
-              title="Open Directory & Filters"
+              className="lg:hidden h-11 px-3.5 border border-archive-border bg-archive-surface rounded-sm text-archive-subtle hover:text-archive-text flex items-center justify-center gap-1.5 active:scale-95 active:bg-archive-muted/40 transition-all shrink-0"
+              title="Open resource filters"
             >
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} className="w-5 h-5">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 11-3 0m3 0a1.5 1.5 0 10-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-9.75 0h9.75" />
@@ -659,6 +937,12 @@ export default function ResourceExplorer({
           </div>
         )}
 
+        {showPublicFacets && COLLECTION_CONTEXT[selectedCollection] && (
+          <p className="font-sans text-[11px] leading-relaxed text-archive-subtle/65">
+            {COLLECTION_CONTEXT[selectedCollection]}
+          </p>
+        )}
+
         {selectedCollection === "github" && (
           <GitHubBrowseControls
             mode={githubBrowseMode}
@@ -677,32 +961,10 @@ export default function ResourceExplorer({
           />
         )}
 
-        {/* Popular Topics Pill Bar — hidden on extra-small screens to save space */}
-        {selectedCollection !== "github" && (
-          <div className="hidden sm:flex items-center gap-2 flex-wrap">
-            <span className="font-mono text-[10px] text-archive-subtle opacity-60">
-              Popular:
-            </span>
-            {["React", "Python", "TypeScript", "Docker", "SQL", "AI"].map((pill) => (
-              <button
-                key={pill}
-                onClick={() => handlePopularPillClick(pill)}
-                className={`px-2 py-0.5 rounded-full text-[10px] font-mono border transition-all ${
-                  query.toLowerCase() === pill.toLowerCase()
-                    ? "border-archive-accent text-archive-accent bg-archive-accent/5"
-                    : "border-archive-border text-archive-subtle hover:border-archive-muted hover:text-archive-text bg-transparent"
-                }`}
-              >
-                #{pill.toLowerCase()}
-              </button>
-            ))}
-          </div>
-        )}
-
         {/* Active Filter Chips */}
         <div className="flex items-center gap-3 flex-wrap min-h-[20px] empty:hidden">
           {/* Path breadcrumb pill */}
-          {showGlobalTopicGroups &&
+          {showPublicFacets &&
             selectedTocPath &&
             selectedTocPath.length > 0 && (
               <PathPill
@@ -726,6 +988,50 @@ export default function ResourceExplorer({
               </button>
             </div>
           )}
+
+          {showPublicFacets &&
+            selectedTopics.map((topic) => (
+              <PublicFilterPill
+                key={topic}
+                label="Topic"
+                value={getCanonicalTopicLabel(topic, language === "zh" ? "zh" : "en")}
+                onClear={() => handleTopicToggle(topic)}
+              />
+            ))}
+
+          {showPublicFacets &&
+            selectedSubcategories.map((subcategory) => {
+              const option = resourceFacetModel.subcategories.find(
+                (candidate) => candidate.value === subcategory,
+              );
+              return (
+                <PublicFilterPill
+                  key={subcategory}
+                  label="Subcategory"
+                  value={
+                    language === "zh"
+                      ? option?.labelZh ?? option?.labelEn ?? subcategory
+                      : option?.labelEn ?? subcategory
+                  }
+                  onClear={() => handleSubcategoryToggle(subcategory)}
+                />
+              );
+            })}
+
+          {showPublicFacets &&
+            selectedResourceTypes.map((resourceType) => {
+              const option = resourceFacetModel.resourceTypes.find(
+                (candidate) => candidate.value === resourceType,
+              );
+              return (
+                <PublicFilterPill
+                  key={resourceType}
+                  label="Format"
+                  value={option?.labelEn ?? resourceType}
+                  onClear={() => handleResourceTypeToggle(resourceType)}
+                />
+              );
+            })}
 
           {selectedCollection === "github" && githubCapability && (
             <GitHubFilterPill
@@ -779,53 +1085,28 @@ export default function ResourceExplorer({
         <span className="font-mono text-[10px] text-archive-subtle opacity-50 border border-archive-border/40 px-2 py-0.5 rounded-full">
           {displayCollections.find((c) => c.id === selectedCollection)?.label ?? selectedCollection}
         </span>
-
-        {/* Dynamic View Mode Layout Toggle */}
-        {selectedCollection !== "github" && (
-          <div className="ml-auto flex items-center bg-archive-surface border border-archive-border rounded p-0.5 select-none animate-fade-in shrink-0">
-            <button
-              onClick={() => setViewMode("topics")}
-              className={`px-2.5 py-1 rounded text-[10px] font-mono font-medium transition-all ${
-                viewMode === "topics"
-                  ? "bg-archive-border text-archive-accent shadow-sm"
-                  : "text-archive-subtle hover:text-archive-text"
-              }`}
-              title="Browse curated topic clusters"
-            >
-              Topics
-            </button>
-            <button
-              onClick={() => setViewMode("resources")}
-              className={`px-2.5 py-1 rounded text-[10px] font-mono font-medium transition-all ${
-                viewMode === "resources"
-                  ? "bg-archive-border text-archive-accent shadow-sm"
-                  : "text-archive-subtle hover:text-archive-text"
-              }`}
-              title="Browse all individual resources in raw data"
-            >
-              Raw Data
-            </button>
-          </div>
+        {showPublicFacets && (
+          <span className="ml-auto hidden font-mono text-[9px] text-archive-subtle/45 sm:inline">
+            {resourceFacetModel.classifiedCount.toLocaleString()} classified in this view
+          </span>
         )}
       </div>
 
-      {/* ── Dual Layout: Mini Rail + Card Grid ──────────────────────────── */}
-      <div className="flex gap-0 w-full items-start">
-        {/* Sticky Mini Rail — desktop only */}
-        {showGlobalTopicGroups && (
-          <div className="hidden lg:block sticky top-6 shrink-0 self-start z-40">
-            <ResourceToc
-              tocAllLangs={tocAllLangs}
-              selectedCollection={selectedCollection}
-              language={language}
-              onLanguageChange={handleLanguageChange}
-              selectedPath={selectedTocPath}
-              onSelectPath={handleSelectTocPath}
+      {/* ── Faceted archive + resource grid ─────────────────────────────── */}
+      <div className="flex w-full items-start gap-5">
+        {showPublicFacets && (
+          <div className="hidden lg:block">
+            <ResourceFacetPanel
+              model={resourceFacetModel}
+              selection={publicFacetSelection}
+              onTopicToggle={handleTopicToggle}
+              onSubcategoryToggle={handleSubcategoryToggle}
+              onLanguageToggle={handleLanguageFacetToggle}
+              onResourceTypeToggle={handleResourceTypeToggle}
+              onClear={handleClearPublicFacets}
             />
           </div>
         )}
-
-
 
         {/* Card Grid */}
         <div className="flex-1 w-full min-w-0">
@@ -833,11 +1114,9 @@ export default function ResourceExplorer({
             <>
               <ResourceGrid
                 resources={displayedResults}
-                viewMode={viewMode}
+                viewMode="resources"
                 language={language}
                 onPreview={setPreviewResource}
-                onPreviewTopic={setPreviewTopic}
-                onToggleViewMode={setViewMode}
                 githubFavoritesById={githubFavoritesById}
                 githubFavoritesByResourceId={githubFavoriteLinks.favoritesByResourceId}
                 isGitHubCollection={selectedCollection === "github"}
@@ -883,27 +1162,17 @@ export default function ResourceExplorer({
         />
       )}
 
-      {previewTopic && (
-        <TopicDrawer
-          topicName={previewTopic.topicName}
-          category={previewTopic.category}
-          subcategory={previewTopic.subcategory}
-          resources={previewTopic.resources}
-          githubFavoritesById={githubFavoritesById}
-          language={language}
-          onClose={() => setPreviewTopic(null)}
-        />
-      )}
-
-      {showGlobalTopicGroups && (
+      {showPublicFacets && (
         <FilterDrawer
           isOpen={isFilterDrawerOpen}
           onClose={() => setIsFilterDrawerOpen(false)}
-          language={language}
-          onLanguageChange={handleLanguageChange}
-          flatActiveNodes={flatActiveNodes}
-          selectedTocPath={selectedTocPath}
-          onSelectTocPath={handleSelectTocPath}
+          model={resourceFacetModel}
+          selection={publicFacetSelection}
+          onTopicToggle={handleTopicToggle}
+          onSubcategoryToggle={handleSubcategoryToggle}
+          onLanguageToggle={handleLanguageFacetToggle}
+          onResourceTypeToggle={handleResourceTypeToggle}
+          onClear={handleClearPublicFacets}
           resultCount={results.length}
         />
       )}
@@ -916,22 +1185,26 @@ export default function ResourceExplorer({
 interface FilterDrawerProps {
   isOpen: boolean;
   onClose: () => void;
-  language: "all" | "zh" | "en";
-  onLanguageChange: (lang: "all" | "zh" | "en") => void;
-  flatActiveNodes: ResourceTocNode[];
-  selectedTocPath: string[] | null;
-  onSelectTocPath: (path: string[] | null) => void;
+  model: ReturnType<typeof buildResourceFacetModel>;
+  selection: ResourceFacetSelection;
+  onTopicToggle: (value: CanonicalTopicId) => void;
+  onSubcategoryToggle: (value: string) => void;
+  onLanguageToggle: (value: ResourceLanguage) => void;
+  onResourceTypeToggle: (value: ResourceType) => void;
+  onClear: () => void;
   resultCount: number;
 }
 
 function FilterDrawer({
   isOpen,
   onClose,
-  language,
-  onLanguageChange,
-  flatActiveNodes,
-  selectedTocPath,
-  onSelectTocPath,
+  model,
+  selection,
+  onTopicToggle,
+  onSubcategoryToggle,
+  onLanguageToggle,
+  onResourceTypeToggle,
+  onClear,
   resultCount,
 }: FilterDrawerProps) {
   const [mounted, setMounted] = useState(false);
@@ -1003,7 +1276,7 @@ function FilterDrawer({
   if (!isOpen || typeof document === "undefined") return null;
 
   return createPortal(
-    <div className="font-sans md:hidden">
+    <div className="font-sans lg:hidden">
       {/* Backdrop overlay */}
       <div
         className={`fixed inset-0 z-[60] bg-black/60 backdrop-blur-xs transition-opacity duration-300 ease-out ${
@@ -1017,7 +1290,7 @@ function FilterDrawer({
         ref={drawerRef}
         role="dialog"
         aria-modal="true"
-        aria-label="Filters and Directory"
+        aria-label="Resource filters"
         className={`fixed left-0 right-0 bottom-0 z-[70] w-full max-h-[85vh] bg-archive-surface border-t border-archive-border rounded-t-xl shadow-2xl flex flex-col transition-transform duration-300 ease-out transform ${
           mounted ? "translate-y-0" : "translate-y-full"
         }`}
@@ -1030,7 +1303,7 @@ function FilterDrawer({
         {/* Header */}
         <div className="flex items-center justify-between px-5 pb-3 border-b border-archive-border/60 shrink-0">
           <h3 className="font-mono text-xs uppercase tracking-widest text-archive-subtle font-semibold">
-            Filters & Directory
+            Refine resources
           </h3>
           <button
             onClick={onClose}
@@ -1042,77 +1315,31 @@ function FilterDrawer({
         </div>
 
         {/* Scrollable contents */}
-        <div className="flex-1 overflow-y-auto px-5 py-4 space-y-6 drawer-scroll">
-          {/* Section 1: Language */}
-          <div className="space-y-2.5">
-            <h4 className="font-mono text-[10px] uppercase tracking-widest text-archive-subtle border-b border-archive-border/40 pb-1 font-bold">
-              Language / 语言
-            </h4>
-            <div className="grid grid-cols-3 gap-2">
-              {(["all", "en", "zh"] as const).map((lang) => {
-                const isActive = language === lang;
-                return (
-                  <button
-                    key={lang}
-                    onClick={() => onLanguageChange(lang)}
-                    className={`h-11 px-3 rounded text-xs font-mono border transition-all flex items-center justify-center active:scale-95 ${
-                      isActive
-                        ? "text-teal-300 bg-teal-500/10 border-teal-500/30 font-semibold"
-                        : "text-archive-subtle border-archive-border/60 hover:text-archive-text"
-                    }`}
-                  >
-                    {lang === "zh" ? "中文 (ZH)" : lang === "en" ? "English (EN)" : "All (全部)"}
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-
-          {/* Section 2: Directory Categories */}
-          <div className="space-y-2.5">
-            <h4 className="font-mono text-[10px] uppercase tracking-widest text-archive-subtle border-b border-archive-border/40 pb-1 font-bold">
-              Directory / 目录分类
-            </h4>
-            <div className="flex flex-col gap-1.5 max-h-[35vh] overflow-y-auto pr-1">
-              {flatActiveNodes.length === 0 ? (
-                <p className="py-4 text-xs font-mono text-archive-subtle opacity-40 text-center">
-                  No categories available
-                </p>
-              ) : (
-                flatActiveNodes.map((node) => {
-                  const isSelected = selectedTocPath?.join(":") === node.path.join(":");
-                  return (
-                    <button
-                      key={node.id}
-                      disabled={node.resourceCount === 0}
-                      onClick={() => {
-                        onSelectTocPath(isSelected ? null : node.path);
-                      }}
-                      className={`text-left px-3 py-3 h-12 rounded transition-all duration-150 flex items-center justify-between border active:scale-[0.99] ${
-                        node.resourceCount === 0
-                          ? "opacity-25 pointer-events-none"
-                          : isSelected
-                          ? "text-teal-300 bg-teal-500/10 border-teal-500/30"
-                          : "text-archive-subtle hover:text-archive-text bg-archive-bg/20 border-archive-border/40 hover:bg-white/[0.04]"
-                      }`}
-                    >
-                      <span className="text-xs truncate mr-2">{node.label}</span>
-                      <span className="font-mono text-[10px] opacity-55 shrink-0 bg-archive-muted/40 px-1.5 py-0.5 rounded">
-                        {node.resourceCount}
-                      </span>
-                    </button>
-                  );
-                })
-              )}
-            </div>
-          </div>
+        <div className="flex-1 overflow-y-auto px-5 py-4 drawer-scroll">
+          <ResourceFacetPanel
+            compact
+            model={model}
+            selection={selection}
+            onTopicToggle={onTopicToggle}
+            onSubcategoryToggle={onSubcategoryToggle}
+            onLanguageToggle={onLanguageToggle}
+            onResourceTypeToggle={onResourceTypeToggle}
+            onClear={onClear}
+          />
         </div>
 
         {/* Footer actions */}
-        <div className="border-t border-archive-border/60 bg-archive-bg/30 p-4 shrink-0 flex flex-col gap-2">
+        <div className="border-t border-archive-border/60 bg-archive-bg/30 p-4 shrink-0 flex gap-2 pb-safe">
+          <button
+            type="button"
+            onClick={onClear}
+            className="h-12 rounded border border-archive-border px-4 font-mono text-xs text-archive-subtle transition-colors hover:text-archive-text"
+          >
+            Reset
+          </button>
           <button
             onClick={onClose}
-            className="w-full h-12 bg-teal-500 text-archive-bg text-sm font-sans font-semibold flex items-center justify-center rounded hover:opacity-90 active:scale-[0.98] transition-all"
+            className="flex h-12 flex-1 items-center justify-center rounded bg-teal-500 font-sans text-sm font-semibold text-archive-bg transition-all hover:opacity-90 active:scale-[0.98]"
           >
             Show {resultCount.toLocaleString()} Resource{resultCount !== 1 ? "s" : ""}
           </button>
@@ -1202,6 +1429,14 @@ function ResourceDrawer({
 
   const queryString = searchParams ? searchParams.toString() : "";
   const detailUrl = `/resource/${resource.id}${queryString ? "?" + queryString : ""}`;
+  const facetBreadcrumb = getResourceFacetBreadcrumb(
+    resource,
+    language === "zh" ? "zh" : "en",
+  );
+  const displayLanguage = resource.facet?.language ?? resource.language;
+  const displayType = resource.facet?.resourceType ?? resource.type;
+  const evidenceSummary =
+    resource.detailSummary ?? resource.cardSummary ?? resource.summary ?? null;
 
   if (typeof document === "undefined") return null;
 
@@ -1249,11 +1484,11 @@ function ResourceDrawer({
           {/* Header Row: badges & ID */}
           <div className="flex items-center gap-2 flex-wrap">
             <span
-              className={resource.language === "zh" ? "lang-badge-zh" : "lang-badge-en"}
+              className={displayLanguage === "zh" ? "lang-badge-zh" : "lang-badge-en"}
             >
-              {resource.language === "zh" ? "中文" : "English"}
+              {displayLanguage === "zh" ? "中文" : "English"}
             </span>
-            <span className="type-badge capitalize">{TYPE_LABELS[resource.type] || resource.type}</span>
+            <span className="type-badge capitalize">{TYPE_LABELS[displayType] || displayType}</span>
             {githubFavorite && (
               <GitHubHealthBadge favorite={githubFavorite} />
             )}
@@ -1282,9 +1517,15 @@ function ResourceDrawer({
           ) : (
             <div className="bg-archive-bg/40 p-4 border border-archive-border rounded-sm relative overflow-hidden">
               <div className="absolute top-0 left-0 w-1 h-full bg-archive-accent/40" />
-              <p className="font-sans text-xs text-archive-subtle leading-relaxed">
-                {generateDescription(resource, language)}
-              </p>
+              {evidenceSummary ? (
+                <p className="font-sans text-xs text-archive-subtle leading-relaxed">
+                  {evidenceSummary}
+                </p>
+              ) : (
+                <p className="font-mono text-[10px] text-archive-subtle/60 leading-relaxed">
+                  Summary not yet curated. Open the original resource for verified details.
+                </p>
+              )}
             </div>
           )}
 
@@ -1295,13 +1536,12 @@ function ResourceDrawer({
                 Category
               </h4>
               <p className="font-sans text-sm text-archive-text">
-                {resource.category}
-                {resource.subcategory && (
-                  <span>
-                    <span className="mx-1.5 opacity-40">/</span>
-                    {resource.subcategory}
+                {facetBreadcrumb.map((segment, index) => (
+                  <span key={`${segment}-${index}`}>
+                    {index > 0 && <span className="mx-1.5 opacity-40">/</span>}
+                    {segment}
                   </span>
-                )}
+                ))}
               </p>
             </div>
 

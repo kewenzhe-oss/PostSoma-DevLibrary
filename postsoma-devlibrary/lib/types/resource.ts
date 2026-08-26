@@ -29,6 +29,43 @@ export type ResourceQuality = "featured" | "standard" | "unchecked";
 
 export type Difficulty = "beginner" | "intermediate" | "advanced";
 
+export type CanonicalTopicId =
+  | "cs-foundations"
+  | "programming-languages"
+  | "web-development"
+  | "mobile-development"
+  | "embedded-iot-robotics"
+  | "ai-data-science"
+  | "databases-data-engineering"
+  | "cloud-devops-sre"
+  | "systems-networking"
+  | "cybersecurity-privacy"
+  | "software-engineering"
+  | "developer-tools-automation"
+  | "graphics-design-games"
+  | "blockchain-web3"
+  | "career-professional"
+  | "general-meta";
+
+export interface ResourceFacetSubcategory {
+  id: string;
+  labelEn: string;
+  labelZh: string | null;
+}
+
+/**
+ * Curated browsing metadata is intentionally kept separate from the canonical
+ * upstream fields. It can improve discovery without changing a Resource ID or
+ * rewriting its source lineage.
+ */
+export interface ResourceFacetMetadata {
+  canonicalTopic: CanonicalTopicId;
+  subcategory: ResourceFacetSubcategory | null;
+  language: ResourceLanguage;
+  resourceType: ResourceType;
+  reviewStatus: "pending" | "approved";
+}
+
 export interface ResourceTaxonomy {
   root: string;
   section?: string;
@@ -73,6 +110,7 @@ export interface Resource {
   detailSummary?: string;
   bestFor?: string[];
   accessNote?: string;
+  facet?: ResourceFacetMetadata;
 }
 
 export interface ResourceManifest {

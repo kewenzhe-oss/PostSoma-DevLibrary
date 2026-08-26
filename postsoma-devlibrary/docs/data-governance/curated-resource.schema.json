@@ -1,0 +1,471 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://www.205022.xyz/schemas/curated-resource.schema.json",
+  "title": "PostSoma DevLibrary Curated Upstream Resource",
+  "description": "Staging contract for AI-assisted cleaning of Books, Courses, Cheat Sheets, and Interactive resources. This is not the GithubFavorite schema.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "id",
+    "title",
+    "canonicalUrl",
+    "collection",
+    "resourceType",
+    "lang",
+    "availableLanguages",
+    "languageEvidence",
+    "canonicalTopic",
+    "subcategory",
+    "tags",
+    "summary",
+    "summarySource",
+    "confidence",
+    "reviewStatus",
+    "review",
+    "duplicateCandidates",
+    "source",
+    "processedAt"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "enum": ["1.0.0", "1.1.0"]
+    },
+    "id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "productionResourceId": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{16}$"
+    },
+    "existingProductionResourceId": {
+      "type": ["string", "null"],
+      "pattern": "^[a-f0-9]{16}$"
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1
+    },
+    "canonicalUrl": {
+      "type": "string",
+      "format": "uri",
+      "pattern": "^https?://"
+    },
+    "collection": {
+      "enum": ["books", "courses", "cheat_sheets", "interactive"]
+    },
+    "resourceType": {
+      "enum": [
+        "book",
+        "course",
+        "tutorial",
+        "documentation",
+        "interactive",
+        "article",
+        "app",
+        "library",
+        "framework",
+        "cli",
+        "collection",
+        "extension",
+        "unknown"
+      ]
+    },
+    "lang": {
+      "enum": ["zh", "en"]
+    },
+    "availableLanguages": {
+      "type": "array",
+      "items": {
+        "enum": ["zh", "en"]
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "languageEvidence": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/evidenceReference"
+      },
+      "minItems": 1
+    },
+    "canonicalTopic": {
+      "$ref": "#/$defs/topicId"
+    },
+    "subcategory": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/subcategory"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+      },
+      "uniqueItems": true
+    },
+    "summary": {
+      "type": ["string", "null"],
+      "minLength": 1,
+      "maxLength": 500
+    },
+    "summarySource": {
+      "$ref": "#/$defs/summarySource"
+    },
+    "confidence": {
+      "$ref": "#/$defs/confidence"
+    },
+    "reviewStatus": {
+      "enum": ["pending", "needs_review", "approved", "rejected"]
+    },
+    "review": {
+      "$ref": "#/$defs/review"
+    },
+    "duplicateCandidates": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/duplicateCandidate"
+      }
+    },
+    "source": {
+      "$ref": "#/$defs/source"
+    },
+    "processedAt": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "schemaVersion": {
+            "const": "1.1.0"
+          }
+        },
+        "required": ["schemaVersion"]
+      },
+      "then": {
+        "required": ["productionResourceId", "existingProductionResourceId"],
+        "properties": {
+          "source": {
+            "required": ["lineNumber"]
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "summary": {
+            "type": "null"
+          }
+        },
+        "required": ["summary"]
+      },
+      "then": {
+        "properties": {
+          "summarySource": {
+            "properties": {
+              "kind": {
+                "const": "none"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "summarySource": {
+            "properties": {
+              "kind": {
+                "const": "ai-grounded"
+              }
+            },
+            "required": ["kind"]
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "summarySource": {
+            "properties": {
+              "evidenceRefs": {
+                "minItems": 1
+              },
+              "model": {
+                "type": "string",
+                "minLength": 1
+              },
+              "promptVersion": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "reviewStatus": {
+            "const": "approved"
+          }
+        },
+        "required": ["reviewStatus"]
+      },
+      "then": {
+        "properties": {
+          "review": {
+            "properties": {
+              "reviewer": {
+                "type": "string",
+                "minLength": 1
+              },
+              "reviewedAt": {
+                "type": "string",
+                "format": "date-time"
+              }
+            }
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "topicId": {
+      "enum": [
+        "cs-foundations",
+        "programming-languages",
+        "web-development",
+        "mobile-development",
+        "embedded-iot-robotics",
+        "ai-data-science",
+        "databases-data-engineering",
+        "cloud-devops-sre",
+        "systems-networking",
+        "cybersecurity-privacy",
+        "software-engineering",
+        "developer-tools-automation",
+        "graphics-design-games",
+        "blockchain-web3",
+        "career-professional",
+        "general-meta"
+      ]
+    },
+    "subcategory": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "labelEn", "labelZh", "aliases"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+        },
+        "labelEn": {
+          "type": "string",
+          "minLength": 1
+        },
+        "labelZh": {
+          "type": ["string", "null"],
+          "minLength": 1
+        },
+        "aliases": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        }
+      }
+    },
+    "evidenceReference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "reference", "note"],
+      "properties": {
+        "kind": {
+          "enum": [
+            "human",
+            "declared-metadata",
+            "readme",
+            "content",
+            "upstream-section",
+            "title"
+          ]
+        },
+        "reference": {
+          "type": "string",
+          "minLength": 1
+        },
+        "note": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "summarySource": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "evidenceRefs", "model", "promptVersion"],
+      "properties": {
+        "kind": {
+          "enum": [
+            "human-authored",
+            "source-metadata",
+            "source-readme",
+            "source-content",
+            "ai-grounded",
+            "upstream-title-only",
+            "none"
+          ]
+        },
+        "evidenceRefs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/evidenceReference"
+          }
+        },
+        "model": {
+          "type": ["string", "null"]
+        },
+        "promptVersion": {
+          "type": ["string", "null"]
+        }
+      }
+    },
+    "confidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["topic", "subcategory", "lang", "summary"],
+      "properties": {
+        "topic": {
+          "$ref": "#/$defs/confidenceValue"
+        },
+        "subcategory": {
+          "$ref": "#/$defs/confidenceValue"
+        },
+        "lang": {
+          "$ref": "#/$defs/confidenceValue"
+        },
+        "summary": {
+          "$ref": "#/$defs/confidenceValue"
+        }
+      }
+    },
+    "confidenceValue": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "review": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["reviewer", "reviewedAt", "notes"],
+      "properties": {
+        "reviewer": {
+          "type": ["string", "null"]
+        },
+        "reviewedAt": {
+          "type": ["string", "null"],
+          "format": "date-time"
+        },
+        "notes": {
+          "type": ["string", "null"]
+        }
+      }
+    },
+    "duplicateCandidate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["candidateId", "candidateUrl", "reason", "confidence"],
+      "properties": {
+        "candidateId": {
+          "type": ["string", "null"]
+        },
+        "candidateUrl": {
+          "type": "string",
+          "format": "uri"
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1
+        },
+        "confidence": {
+          "$ref": "#/$defs/confidenceValue"
+        }
+      }
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "provider",
+        "repository",
+        "sourcePath",
+        "upstreamUrl",
+        "originalTitle",
+        "originalUrl",
+        "originalHeadingPath",
+        "originalCategory",
+        "originalSubcategory",
+        "originalLine"
+      ],
+      "properties": {
+        "provider": {
+          "const": "free-programming-books"
+        },
+        "repository": {
+          "const": "EbookFoundation/free-programming-books"
+        },
+        "sourcePath": {
+          "type": "string",
+          "minLength": 1
+        },
+        "lineNumber": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "upstreamUrl": {
+          "type": ["string", "null"],
+          "format": "uri"
+        },
+        "originalTitle": {
+          "type": "string",
+          "minLength": 1
+        },
+        "originalUrl": {
+          "type": "string",
+          "minLength": 1
+        },
+        "originalHeadingPath": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "originalCategory": {
+          "type": ["string", "null"]
+        },
+        "originalSubcategory": {
+          "type": ["string", "null"]
+        },
+        "originalLine": {
+          "type": ["string", "null"]
+        }
+      }
+    }
+  }
+}

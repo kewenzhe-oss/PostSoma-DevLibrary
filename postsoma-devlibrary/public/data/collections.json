@@ -2,17 +2,17 @@
   {
     "id": "books",
     "label": "Books",
-    "count": 2817
+    "count": 2818
   },
   {
     "id": "cheat_sheets",
     "label": "Cheat Sheets",
-    "count": 314
+    "count": 318
   },
   {
     "id": "courses",
     "label": "Courses",
-    "count": 1344
+    "count": 1347
   },
   {
     "id": "interactive",
@@ -22,6 +22,6 @@
   {
     "id": "github",
     "label": "Github",
-    "count": 258
+    "count": 290
   }
 ]

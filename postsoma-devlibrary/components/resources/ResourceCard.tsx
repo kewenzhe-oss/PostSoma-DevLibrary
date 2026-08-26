@@ -2,7 +2,8 @@ import Link from "next/link";
 import { useSearchParams, useRouter } from "next/navigation";
 import type { Resource } from "@/lib/types/resource";
 import BookmarkButton from "@/components/resources/BookmarkButton";
-import { generateDescription, TYPE_LABELS } from "@/lib/utils/resource";
+import { TYPE_LABELS } from "@/lib/utils/resource";
+import { getResourceFacetBreadcrumb } from "@/lib/data/resource-facets";
 import type { GitHubFavorite } from "@/lib/types/github-favorite";
 import {
   getCompactGitHubSummary,
@@ -35,6 +36,13 @@ export default function ResourceCard({
 
   const queryString = searchParams ? searchParams.toString() : "";
   const detailUrl = `/resource/${resource.id}${queryString ? "?" + queryString : ""}`;
+  const displayLanguage = resource.facet?.language ?? resource.language;
+  const displayType = resource.facet?.resourceType ?? resource.type;
+  const facetBreadcrumb = getResourceFacetBreadcrumb(
+    resource,
+    displayLanguage === "zh" ? "zh" : "en",
+  );
+  const evidenceSummary = resource.cardSummary ?? resource.summary ?? null;
 
   const isDirectOutbound = resource.collection === "cheat_sheets" || resource.collection === "interactive";
 
@@ -135,11 +143,11 @@ export default function ResourceCard({
       <div className="flex items-center justify-between mb-1">
         <div className="flex items-center gap-2 flex-wrap">
           <span
-            className={resource.language === "zh" ? "lang-badge-zh" : "lang-badge-en"}
+            className={displayLanguage === "zh" ? "lang-badge-zh" : "lang-badge-en"}
           >
-            {resource.language === "zh" ? "中文" : "EN"}
+            {displayLanguage === "zh" ? "中文" : "EN"}
           </span>
-          <span className="type-badge">{TYPE_LABELS[resource.type]}</span>
+          <span className="type-badge">{TYPE_LABELS[displayType]}</span>
         </div>
         <BookmarkButton resourceId={resource.id} variant="icon" />
       </div>
@@ -153,19 +161,21 @@ export default function ResourceCard({
 
       {/* Row 3: Category breadcrumb */}
       <p className="font-mono text-[11px] text-archive-subtle truncate">
-        {resource.category}
-        {resource.subcategory && (
-          <span>
-            <span className="mx-1 opacity-40">/</span>
-            {resource.subcategory}
+        {facetBreadcrumb.map((segment, index) => (
+          <span key={`${segment}-${index}`}>
+            {index > 0 && <span className="mx-1 opacity-40">/</span>}
+            {segment}
           </span>
-        )}
+        ))}
       </p>
 
-      {/* Row 4: Description */}
-      <p className="font-sans text-xs text-archive-subtle/85 line-clamp-2 md:line-clamp-3 leading-relaxed">
-        {generateDescription(resource, language)}
-      </p>
+      {/* Only show evidence-backed copy. Missing summaries remain visibly absent
+          instead of being replaced by a category template. */}
+      {evidenceSummary && (
+        <p className="font-sans text-xs text-archive-subtle/85 line-clamp-2 md:line-clamp-3 leading-relaxed">
+          {evidenceSummary}
+        </p>
+      )}
 
       {/* Row 5: Footer Actions */}
       <div className="flex items-center justify-between gap-3 mt-auto pt-2 border-t border-archive-border">

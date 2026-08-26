@@ -1,4 +1,9 @@
-import type { Resource, ResourceType, Difficulty } from "@/lib/types/resource";
+import type {
+  Resource,
+  ResourceFacetMetadata,
+  ResourceType,
+  Difficulty,
+} from "@/lib/types/resource";
 import type { LearningPath, WeeklyPick } from "@/lib/types/learning-path";
 import fs from "fs/promises";
 import path from "path";
@@ -156,6 +161,25 @@ function normalizeResourceType(r: Resource): Resource {
 
 let cachedResources: Resource[] | null = null;
 
+interface ResourceFacetSidecar {
+  records?: Record<string, ResourceFacetMetadata>;
+}
+
+async function loadResourceFacetMetadata(): Promise<
+  Record<string, ResourceFacetMetadata>
+> {
+  try {
+    const filePath = path.join(process.cwd(), "data", "resource-facets.json");
+    const fileContents = await fs.readFile(filePath, "utf8");
+    const parsed = JSON.parse(fileContents) as ResourceFacetSidecar;
+    return parsed.records ?? {};
+  } catch {
+    // The site remains buildable before the optional curated facet sidecar is
+    // generated. Legacy resources simply render without canonical facets.
+    return {};
+  }
+}
+
 export async function getAllResources(): Promise<Resource[]> {
   if (cachedResources) {
     return cachedResources;
@@ -164,8 +188,16 @@ export async function getAllResources(): Promise<Resource[]> {
     const filePath = path.join(process.cwd(), "public", "data", "resources.json");
     const fileContents = await fs.readFile(filePath, "utf8");
     const raw = JSON.parse(fileContents) as Resource[];
+    const facetMetadata = await loadResourceFacetMetadata();
     // Apply conservative collection-level type normalisation at the data seam.
-    cachedResources = raw.map(normalizeResourceType);
+    cachedResources = raw.map((resource) =>
+      normalizeResourceType({
+        ...resource,
+        ...(facetMetadata[resource.id]
+          ? { facet: facetMetadata[resource.id] }
+          : {}),
+      }),
+    );
     return cachedResources;
   } catch (error) {
     console.error("Failed to read resources.json", error);
@@ -232,11 +264,11 @@ export interface GetResourcesOptions {
 
 export async function getResources(options: GetResourcesOptions = {}): Promise<Resource[]> {
   let resources = await getAllResources();
-  
+
   if (options.language) {
     resources = resources.filter((r) => r.language === options.language);
   }
-  
+
   if (options.difficulty) {
     if (options.difficulty === "unrated") {
       resources = resources.filter((r) => !r.difficulty);
@@ -244,7 +276,7 @@ export async function getResources(options: GetResourcesOptions = {}): Promise<R
       resources = resources.filter((r) => r.difficulty === options.difficulty);
     }
   }
-  
+
   return resources;
 }
 

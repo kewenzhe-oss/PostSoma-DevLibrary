@@ -7,7 +7,8 @@ import JsonLd from "@/components/seo/JsonLd";
 import type { Metadata } from "next";
 import BackLink from "@/components/resources/BackLink";
 import { getProviderLabel } from "@/lib/utils/provider";
-import { TYPE_LABELS, generateEditorialData } from "@/lib/utils/resource";
+import { TYPE_LABELS } from "@/lib/utils/resource";
+import { getResourceFacetBreadcrumb } from "@/lib/data/resource-facets";
 import { getGitHubFavoriteForResourceUi } from "@/lib/data/github-favorite-ui";
 import { getGitHubFavoriteCurationForUi } from "@/lib/data/github-curation-ui";
 import {
@@ -58,7 +59,7 @@ export async function generateMetadata({ params }: { params: { id: string } }): 
       url: `/resource/${resource.id}`,
       type: "article",
       siteName: "PostSoma DevLibrary",
-      locale: resource.language === "zh" ? "zh_TW" : "en_US",
+      locale: (resource.facet?.language ?? resource.language) === "zh" ? "zh_TW" : "en_US",
     },
     twitter: {
       card: "summary",
@@ -123,11 +124,15 @@ export default async function ResourceDetailPage({
     }
   }
 
-  // Pre-calculate fallback editorial content to ensure every book, course, docs or tutorial has rich review metadata
-  const editorial = generateEditorialData(resource);
-  const displayDetailSummary = resource.detailSummary || resource.summary || editorial.detailSummary;
-  const displayBestFor = (resource.bestFor && resource.bestFor.length > 0) ? resource.bestFor : editorial.bestFor;
-  const displayAccessNote = resource.accessNote || editorial.accessNote;
+  const displayLanguage = resource.facet?.language ?? resource.language;
+  const displayType = resource.facet?.resourceType ?? resource.type;
+  const facetBreadcrumb = getResourceFacetBreadcrumb(
+    resource,
+    displayLanguage === "zh" ? "zh" : "en",
+  );
+  const displayDetailSummary = resource.detailSummary || resource.summary || null;
+  const displayBestFor = resource.bestFor ?? [];
+  const displayAccessNote = resource.accessNote ?? null;
 
   return (
     <AppShell>
@@ -142,7 +147,7 @@ export default async function ResourceDetailPage({
               "name": `${resource.title} — PostSoma DevLibrary`,
               "description": getResourceMetadataDescription(resource, githubFavorite),
               "isPartOf": { "@id": absoluteSiteUrl("/#website") },
-              "inLanguage": resource.language === "zh" ? "zh-Hant" : "en"
+              "inLanguage": displayLanguage === "zh" ? "zh-Hant" : "en"
             },
             {
               "@type": "BreadcrumbList",
@@ -182,12 +187,12 @@ export default async function ResourceDetailPage({
           <div className="flex items-center gap-3 mb-6 flex-wrap relative z-10">
             <span
               className={
-                resource.language === "zh" ? "lang-badge-zh" : "lang-badge-en"
+                displayLanguage === "zh" ? "lang-badge-zh" : "lang-badge-en"
               }
             >
-              {resource.language === "zh" ? "Chinese" : "English"}
+              {displayLanguage === "zh" ? "Chinese" : "English"}
             </span>
-            <span className="type-badge capitalize">{TYPE_LABELS[resource.type] || resource.type}</span>
+            <span className="type-badge capitalize">{TYPE_LABELS[displayType] || displayType}</span>
             {githubFavorite && <GitHubHealthBadge favorite={githubFavorite} />}
             <span className="font-mono text-xs text-archive-subtle ml-auto">
               ID: {resource.id.slice(0, 8)}
@@ -215,9 +220,15 @@ export default async function ResourceDetailPage({
               <>
                 <div className="bg-archive-bg/40 p-4 border border-archive-border rounded-sm relative overflow-hidden">
                   <div className="absolute top-0 left-0 w-1 h-full bg-archive-accent/40" />
-                  <p className="font-sans text-sm text-archive-subtle leading-relaxed">
-                    {displayDetailSummary}
-                  </p>
+                  {displayDetailSummary ? (
+                    <p className="font-sans text-sm text-archive-subtle leading-relaxed">
+                      {displayDetailSummary}
+                    </p>
+                  ) : (
+                    <p className="font-mono text-[10px] text-archive-subtle/60 leading-relaxed">
+                      Summary not yet curated. Open the original resource for verified details.
+                    </p>
+                  )}
                 </div>
                 {githubFavorite && (
                   <div className="mt-4">
@@ -238,8 +249,7 @@ export default async function ResourceDetailPage({
                   Category
                 </h3>
                 <p className="font-sans text-sm text-archive-text">
-                  {resource.category}
-                  {resource.subcategory && ` / ${resource.subcategory}`}
+                  {facetBreadcrumb.join(" / ")}
                 </p>
               </div>
 

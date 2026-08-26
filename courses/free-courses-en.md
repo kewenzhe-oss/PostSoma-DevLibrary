@@ -125,6 +125,8 @@
 ### 0 - MOOC
 
 * [AI School](https://lillytechsystems.com/ai-school/)
+* [AIMarket Courses](https://alexar76.github.io/aimarket-courses/) - Aleksandr Artamokhov (HTML) (MIT)
+* [CheatGrid](https://www.cheatgrid.com/roadmaps)
 * [class central](https://www.classcentral.com)
 * [Codecademy](https://www.codecademy.com)
 * [Coursera](https://www.coursera.org)
@@ -530,6 +532,7 @@
 * [MIT's Introduction to Computer Science and Programming](https://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-00sc-introduction-to-computer-science-and-programming-spring-2011/) - John Guttag (MIT OpenCourseWare)
 * [MIT's Introduction to Computer Science and Programming in Python](https://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-0001-introduction-to-computer-science-and-programming-in-python-fall-2016/) - Ana Bell, Eric Grimson, John Guttag (MIT OpenCourseWare)
 * [MIT's Mathematics for Computer Science](https://ocw.mit.edu/courses/6-042j-mathematics-for-computer-science-fall-2010/)
+* [The Missing Semester of Your CS Education](https://missing.csail.mit.edu) - Anish Athalye, Jon Gjengset, Jose Javier Gonzalez Ortiz (MIT)
 
 
 ### Cryptography

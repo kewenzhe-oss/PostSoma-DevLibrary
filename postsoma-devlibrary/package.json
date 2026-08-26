@@ -16,6 +16,8 @@
     "pipeline:generate": "tsx scripts/pipeline/generateResources.ts",
     "upstream:diff": "tsx scripts/upstream/diffFreeProgrammingBooks.ts",
     "postpipeline:generate": "npm run github:validate-curation",
+    "resource-facets:preview": "tsx scripts/pipeline/generateResourceFacets.ts",
+    "resource-facets:generate": "tsx scripts/pipeline/generateResourceFacets.ts --write",
     "github:migrate": "tsx scripts/github/migrateGithubFavorites.ts",
     "postgithub:migrate": "npm run github:validate-curation",
     "github:add": "tsx scripts/github/manageGithubFavorites.ts add",
