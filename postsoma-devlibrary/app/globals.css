@@ -147,23 +147,6 @@ body {
   }
 
   /* Button variants */
-  .btn-ghost {
-    @apply text-archive-subtle text-sm font-sans px-3 py-1.5 rounded-sm;
-    @apply border border-transparent;
-    @apply transition-all duration-150;
-  }
-
-  @media (hover: hover) {
-    .btn-ghost:hover {
-      @apply text-archive-text hover:border-archive-border;
-    }
-  }
-
-  .btn-ghost:active {
-    transform: scale(0.97);
-    @apply bg-white/[0.02];
-  }
-
   .btn-accent {
     @apply text-archive-bg text-sm font-sans font-medium px-4 py-2 rounded-sm;
     background: var(--archive-accent);
@@ -198,43 +181,9 @@ body {
     @apply bg-white/[0.02];
   }
 
-  /* Filter chip */
-  .filter-chip {
-    @apply text-xs font-mono px-2.5 py-1 rounded-sm cursor-pointer;
-    @apply border border-archive-border text-archive-subtle;
-    @apply transition-all duration-150;
-  }
-
-  @media (hover: hover) {
-    .filter-chip:hover {
-      @apply border-archive-muted hover:text-archive-text;
-    }
-  }
-
-  .filter-chip:active {
-    transform: scale(0.95);
-    background: rgba(255, 255, 255, 0.03);
-  }
-
-  .filter-chip.active {
-    @apply border-archive-accent-dim text-archive-accent;
-    background: rgba(200, 169, 110, 0.08);
-  }
-
   /* Divider */
   .archive-divider {
     @apply border-t border-archive-border;
-  }
-
-  /* Neon teal highlight (drawer active states) */
-  .neon-teal {
-    color: var(--archive-teal);
-    text-shadow: 0 0 8px rgba(45, 212, 191, 0.4);
-  }
-
-  .neon-teal-border {
-    border-color: rgba(45, 212, 191, 0.25);
-    box-shadow: 0 0 0 1px rgba(45, 212, 191, 0.1), inset 0 0 12px rgba(45, 212, 191, 0.03);
   }
 }
 
@@ -247,11 +196,6 @@ body {
 @keyframes slide-up {
   from { opacity: 0; transform: translateY(10px); }
   to   { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes slide-in-right {
-  from { opacity: 0; transform: translateX(8px); }
-  to   { opacity: 1; transform: translateX(0); }
 }
 
 .animate-fade-in {

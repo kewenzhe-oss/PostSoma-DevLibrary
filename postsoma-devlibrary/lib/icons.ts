@@ -2,8 +2,6 @@ import {
   RiTerminalBoxLine,
   RiFocus3Line,
   RiSearch2Line,
-  RiBookOpenLine,
-  RiBookOpenFill,
   RiRefreshLine,
   RiBookReadLine,
   RiGitRepositoryLine,

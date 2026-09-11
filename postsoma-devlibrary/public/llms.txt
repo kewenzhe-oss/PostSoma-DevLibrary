@@ -1,7 +1,7 @@
 # PostSoma DevLibrary
 
 Canonical site: https://www.205022.xyz
-Catalog generated: 2026-08-25T12:53:54.563Z
+Catalog generated: 2026-09-11T23:50:49.002Z
 
 PostSoma DevLibrary is a bilingual, static archive of free programming learning resources and personally curated open-source references.
 
@@ -16,14 +16,14 @@ PostSoma DevLibrary is a bilingual, static archive of free programming learning 
 
 ## Catalog facts
 
-- Total resources: 5,161
-- English resources: 4,773
+- Total resources: 5,172
+- English resources: 4,784
 - Chinese resources: 388
 - **Books**: 2,818 items
 - **Cheat Sheets**: 318 items
 - **Courses**: 1,347 items
 - **Interactive**: 388 items
-- **Github**: 290 items
+- **Github**: 301 items
 
 ## Recommendation policy
 

@@ -1,26 +1,27 @@
 {
-  "generatedAt": "2026-08-25T12:53:54.563Z",
+  "generatedAt": "2026-09-11T23:50:49.002Z",
   "sourceRepo": "https://github.com/EbookFoundation/free-programming-books.git",
-  "total": 5161,
-  "valid": 5161,
+  "total": 5172,
+  "valid": 5172,
   "invalid": 0,
   "duplicatesRemoved": 96,
   "languages": {
     "zh": 388,
-    "en": 4773
+    "en": 4784
   },
   "collections": {
     "books": 2818,
     "cheat_sheets": 318,
     "courses": 1347,
     "interactive": 388,
-    "github": 290
+    "github": 301
   },
   "categories": {
     ".NET": 1,
     "0 - MOOC": 23,
     "AI": 115,
     "AI & Data": 3,
+    "AI & Data Science": 1,
     "Algorithms": 3,
     "Algorithms & Data Structures": 56,
     "Android": 31,
@@ -67,7 +68,7 @@
     "Deep Learning": 33,
     "Desktop Development": 1,
     "Developer Resources": 1,
-    "Developer Tools": 4,
+    "Developer Tools": 8,
     "Devops": 1,
     "DevOps": 29,
     "DevTools": 27,
@@ -83,10 +84,12 @@
     "Frontend Development": 3,
     "Game Development": 23,
     "GDScript": 1,
+    "General & Meta": 1,
     "Git": 46,
     "GLSL": 1,
     "Go": 31,
     "Graph Theory": 5,
+    "Graphics, Design & Games": 1,
     "GraphQL": 1,
     "Graphs": 7,
     "Gremlin": 1,
@@ -115,7 +118,7 @@
     "MATLAB": 16,
     "Media": 8,
     "Misc": 16,
-    "Mobile Development": 1,
+    "Mobile Development": 2,
     "MongoDB": 3,
     "Multiple Languages": 4,
     "Nest.js": 90,
@@ -159,7 +162,7 @@
     "Security": 54,
     "Selenium": 1,
     "Shell Scripting": 5,
-    "Software Engineering": 6,
+    "Software Engineering": 7,
     "Solidity": 11,
     "Spark": 4,
     "SpringBoot": 2,
@@ -178,7 +181,7 @@
     "VBA": 1,
     "Verilog / VHDL / SystemVerilog": 4,
     "Vim": 2,
-    "Web Development": 32,
+    "Web Development": 34,
     "Web3": 2,
     "Webpack": 1,
     "Windows Phone": 1,
@@ -234,7 +237,7 @@
     "beginner": 1,
     "intermediate": 1,
     "advanced": 0,
-    "unrated": 5159
+    "unrated": 5170
   },
   "paths": 1,
   "weeklyPick": {

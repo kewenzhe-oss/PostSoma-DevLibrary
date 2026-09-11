@@ -10396,6 +10396,374 @@
         "quality": "unchecked",
         "fullSummary": "以 DevOps 工作流方式管理求职申请的自托管工具，支持阶段跟踪、自动化与过程可视化。"
       }
+    },
+    {
+      "id": "07ec6f71825e185b",
+      "githubUrl": "https://github.com/palemoky/chinese-poetry-api",
+      "title": "chinese-poetry-api",
+      "shortSummary": "📜 诗泉：高性能中国古诗词 API 服务",
+      "capabilities": [
+        "Chinese Poetry API",
+        "GraphQL",
+        "High Performance"
+      ],
+      "techStack": [
+        "Go",
+        "GraphQL",
+        "REST API",
+        "Docker"
+      ],
+      "personalNote": "",
+      "whySaved": "High-performance Chinese classical poetry API service supporting GraphQL and REST.",
+      "discoveredAt": "2026-09-11T23:49:26.618Z",
+      "discoveredAtSource": "local-entry",
+      "lastReviewedAt": null,
+      "health": "active",
+      "lastCheckedAt": null,
+      "lastPushedAt": null,
+      "githubArchived": null,
+      "githubDisabled": null,
+      "editorial": {
+        "topic": "Web Development",
+        "resourceType": "app",
+        "quality": "unchecked",
+        "fullSummary": "📜 诗泉：高性能中国古诗词 API 服务"
+      }
+    },
+    {
+      "id": "5fea943ac610558a",
+      "githubUrl": "https://github.com/Nagi-ovo/voyager",
+      "title": "Voyager",
+      "shortSummary": "面向 Gemini、AI Studio、Claude 与 ChatGPT 的增强套件与提示词管理器",
+      "capabilities": [
+        "Browser Extension",
+        "Prompt Management",
+        "LLM UI Suite"
+      ],
+      "techStack": [
+        "TypeScript",
+        "Bun",
+        "WebExtensions",
+        "React"
+      ],
+      "personalNote": "",
+      "whySaved": "Browser extension and prompt manager for Gemini, Claude, and ChatGPT web UIs.",
+      "discoveredAt": "2026-09-11T23:49:30.632Z",
+      "discoveredAtSource": "local-entry",
+      "lastReviewedAt": null,
+      "health": "active",
+      "lastCheckedAt": null,
+      "lastPushedAt": null,
+      "githubArchived": null,
+      "githubDisabled": null,
+      "editorial": {
+        "topic": "Developer Tools",
+        "resourceType": "extension",
+        "quality": "unchecked",
+        "fullSummary": "面向 Gemini、AI Studio、Claude 与 ChatGPT 的增强套件与提示词管理器"
+      }
+    },
+    {
+      "id": "e7fbb726b1647146",
+      "githubUrl": "https://github.com/danielealbano/android-remote-control-mcp",
+      "title": "android-remote-control-mcp",
+      "shortSummary": "An MCP Server for Android running on the phone, supporting file downloads and automated tunneling.",
+      "capabilities": [
+        "MCP Server",
+        "Android Remote Control",
+        "Automated Tunnelling"
+      ],
+      "techStack": [
+        "Kotlin",
+        "Android SDK",
+        "MCP",
+        "Cloudflare Tunnel"
+      ],
+      "personalNote": "",
+      "whySaved": "Android phone remote control MCP server with tunneling support.",
+      "discoveredAt": "2026-09-11T23:49:34.813Z",
+      "discoveredAtSource": "local-entry",
+      "lastReviewedAt": null,
+      "health": "active",
+      "lastCheckedAt": null,
+      "lastPushedAt": null,
+      "githubArchived": null,
+      "githubDisabled": null,
+      "editorial": {
+        "topic": "Developer Tools",
+        "resourceType": "app",
+        "quality": "unchecked",
+        "fullSummary": "An MCP Server for Android running on the phone, supporting file downloads and automated tunneling."
+      }
+    },
+    {
+      "id": "f8061b3da992df8e",
+      "githubUrl": "https://github.com/getagentseal/codeburn",
+      "title": "codeburn",
+      "shortSummary": "Free, local tool to track AI coding token usage and cost across 37 tools and agents.",
+      "capabilities": [
+        "Token Usage Tracking",
+        "Cost Observability",
+        "AI Coding Diagnostics",
+        "CLI Dashboard"
+      ],
+      "techStack": [
+        "TypeScript",
+        "Node.js",
+        "Terminal UI",
+        "CLI"
+      ],
+      "personalNote": "",
+      "whySaved": "Local CLI tool tracking AI coding token usage and cost across 37 coding assistants.",
+      "discoveredAt": "2026-09-11T23:49:38.000Z",
+      "discoveredAtSource": "local-entry",
+      "lastReviewedAt": null,
+      "health": "active",
+      "lastCheckedAt": null,
+      "lastPushedAt": null,
+      "githubArchived": null,
+      "githubDisabled": null,
+      "editorial": {
+        "topic": "Developer Tools",
+        "resourceType": "cli",
+        "quality": "unchecked",
+        "fullSummary": "Free, local tool to track AI coding token usage and cost across 37 tools and agents."
+      }
+    },
+    {
+      "id": "d2f5e026bc59c6e3",
+      "githubUrl": "https://github.com/metasequoiaime/MSIME-Windows",
+      "title": "MSIME-Windows",
+      "shortSummary": "水杉输入法 Windows 产品：TSF、Server、GUI、设置页与安装器",
+      "capabilities": [
+        "Windows IME",
+        "Text Services Framework",
+        "Chinese Input Method"
+      ],
+      "techStack": [
+        "C++",
+        "Windows TSF",
+        "Win32 API"
+      ],
+      "personalNote": "",
+      "whySaved": "Windows Text Services Framework (TSF) native Chinese/Japanese input method.",
+      "discoveredAt": "2026-09-11T23:49:40.730Z",
+      "discoveredAtSource": "local-entry",
+      "lastReviewedAt": null,
+      "health": "active",
+      "lastCheckedAt": null,
+      "lastPushedAt": null,
+      "githubArchived": null,
+      "githubDisabled": null,
+      "editorial": {
+        "topic": "Software Engineering",
+        "resourceType": "app",
+        "quality": "unchecked",
+        "fullSummary": "水杉输入法 Windows 产品：TSF、Server、GUI、设置页与安装器"
+      }
+    },
+    {
+      "id": "8e0001db8f8344fb",
+      "githubUrl": "https://github.com/Alishahryar1/free-claude-code",
+      "title": "free-claude-code",
+      "shortSummary": "Use Claude Code, Codex, and OpenCode from terminal, app, IDE, or phone.",
+      "capabilities": [
+        "Claude Code Wrapper",
+        "Multi-provider Routing",
+        "Coding Agent Terminal"
+      ],
+      "techStack": [
+        "Python",
+        "CLI",
+        "Anthropic API",
+        "OpenAI API"
+      ],
+      "personalNote": "",
+      "whySaved": "Terminal proxy and multi-provider client for Claude Code and coding agents.",
+      "discoveredAt": "2026-09-11T23:49:44.003Z",
+      "discoveredAtSource": "local-entry",
+      "lastReviewedAt": null,
+      "health": "active",
+      "lastCheckedAt": null,
+      "lastPushedAt": null,
+      "githubArchived": null,
+      "githubDisabled": null,
+      "editorial": {
+        "topic": "Developer Tools",
+        "resourceType": "cli",
+        "quality": "unchecked",
+        "fullSummary": "Use Claude Code, Codex, and OpenCode from terminal, app, IDE, or phone."
+      }
+    },
+    {
+      "id": "8922a401463fe248",
+      "githubUrl": "https://github.com/o3de/o3de",
+      "title": "o3de",
+      "shortSummary": "Open 3D Engine (O3DE) is an Apache 2.0-licensed multi-platform 3D engine for AAA games and simulations.",
+      "capabilities": [
+        "3D Game Engine",
+        "Real-time Simulation",
+        "AAA Graphics",
+        "Multi-platform Rendering"
+      ],
+      "techStack": [
+        "C++",
+        "Python",
+        "CMake",
+        "Vulkan",
+        "DirectX 12"
+      ],
+      "personalNote": "",
+      "whySaved": "Open 3D Engine multi-platform AAA game and simulation engine.",
+      "discoveredAt": "2026-09-11T23:49:47.300Z",
+      "discoveredAtSource": "local-entry",
+      "lastReviewedAt": null,
+      "health": "active",
+      "lastCheckedAt": null,
+      "lastPushedAt": null,
+      "githubArchived": null,
+      "githubDisabled": null,
+      "editorial": {
+        "topic": "Graphics, Design & Games",
+        "resourceType": "framework",
+        "quality": "unchecked",
+        "fullSummary": "Open 3D Engine (O3DE) is an Apache 2.0-licensed multi-platform 3D engine for AAA games and simulations."
+      }
+    },
+    {
+      "id": "20703a86e2b01e24",
+      "githubUrl": "https://github.com/calesthio/OpenMontage",
+      "title": "OpenMontage",
+      "shortSummary": "World's first open-source agentic video production system integrating multiple AI pipelines.",
+      "capabilities": [
+        "Agentic Video Production",
+        "Multi-pipeline Rendering",
+        "Video AI",
+        "Automated Video Generation"
+      ],
+      "techStack": [
+        "Python",
+        "Remotion",
+        "FFmpeg",
+        "Agentic AI"
+      ],
+      "personalNote": "",
+      "whySaved": "Agentic open-source video production system integrating multiple AI pipelines.",
+      "discoveredAt": "2026-09-11T23:49:51.586Z",
+      "discoveredAtSource": "local-entry",
+      "lastReviewedAt": null,
+      "health": "active",
+      "lastCheckedAt": null,
+      "lastPushedAt": null,
+      "githubArchived": null,
+      "githubDisabled": null,
+      "editorial": {
+        "topic": "AI & Data Science",
+        "resourceType": "framework",
+        "quality": "unchecked",
+        "fullSummary": "World's first open-source agentic video production system integrating multiple AI pipelines."
+      }
+    },
+    {
+      "id": "680c46789fe0d314",
+      "githubUrl": "https://github.com/bggRGjQaUbCoE/PiliPlus",
+      "title": "PiliPlus",
+      "shortSummary": "第三方全平台 Bilibili 客户端，基于 Flutter 构建。",
+      "capabilities": [
+        "Third-party Bilibili Client",
+        "Cross-platform Media",
+        "Flutter UI",
+        "Video Player"
+      ],
+      "techStack": [
+        "Dart",
+        "Flutter",
+        "REST API"
+      ],
+      "personalNote": "",
+      "whySaved": "Third-party cross-platform Bilibili client application built with Flutter.",
+      "discoveredAt": "2026-09-11T23:49:56.233Z",
+      "discoveredAtSource": "local-entry",
+      "lastReviewedAt": null,
+      "health": "active",
+      "lastCheckedAt": null,
+      "lastPushedAt": null,
+      "githubArchived": null,
+      "githubDisabled": null,
+      "editorial": {
+        "topic": "Mobile Development",
+        "resourceType": "app",
+        "quality": "unchecked",
+        "fullSummary": "第三方全平台 Bilibili 客户端，基于 Flutter 构建。"
+      }
+    },
+    {
+      "id": "6760f4dfbfcc1d03",
+      "githubUrl": "https://github.com/habitrpg/habitica",
+      "title": "Habitica",
+      "shortSummary": "A habit tracker app which treats your goals like a Role Playing Game.",
+      "capabilities": [
+        "Gamified Habit Tracking",
+        "RPG Task Management",
+        "Full-stack Web App"
+      ],
+      "techStack": [
+        "JavaScript",
+        "Vue.js",
+        "Node.js",
+        "Express",
+        "MongoDB"
+      ],
+      "personalNote": "",
+      "whySaved": "Open-source gamified habit tracker and RPG task management application.",
+      "discoveredAt": "2026-09-11T23:49:59.467Z",
+      "discoveredAtSource": "local-entry",
+      "lastReviewedAt": null,
+      "health": "active",
+      "lastCheckedAt": null,
+      "lastPushedAt": null,
+      "githubArchived": null,
+      "githubDisabled": null,
+      "editorial": {
+        "topic": "Web Development",
+        "resourceType": "app",
+        "quality": "unchecked",
+        "fullSummary": "A habit tracker app which treats your goals like a Role Playing Game."
+      }
+    },
+    {
+      "id": "cb2445a2a1682e6b",
+      "githubUrl": "https://github.com/ahpxex/read-aware",
+      "title": "read-aware",
+      "shortSummary": "An ebook reader with a self-evolving agent and plugin architecture.",
+      "capabilities": [
+        "Local-first Ebook Reader",
+        "Reading Memory Agent",
+        "Plugin Architecture",
+        "Cross-platform Reader"
+      ],
+      "techStack": [
+        "TypeScript",
+        "Tauri",
+        "Rust",
+        "SQLite"
+      ],
+      "personalNote": "",
+      "whySaved": "Cross-platform local-first ebook reader with embedded reading memory agent.",
+      "discoveredAt": "2026-09-11T23:50:03.609Z",
+      "discoveredAtSource": "local-entry",
+      "lastReviewedAt": null,
+      "health": "active",
+      "lastCheckedAt": null,
+      "lastPushedAt": null,
+      "githubArchived": null,
+      "githubDisabled": null,
+      "editorial": {
+        "topic": "General & Meta",
+        "resourceType": "app",
+        "quality": "unchecked",
+        "fullSummary": "An ebook reader with a self-evolving agent and plugin architecture."
+      }
     }
   ]
 }

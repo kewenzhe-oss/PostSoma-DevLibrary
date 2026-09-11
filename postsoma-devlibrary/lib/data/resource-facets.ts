@@ -79,7 +79,7 @@ function resourceValue(resource: Resource, dimension: FacetDimension): string | 
   return resource.facet?.resourceType ?? resource.type;
 }
 
-export function resourceMatchesFacetSelection(
+function resourceMatchesFacetSelection(
   resource: Resource,
   selection: ResourceFacetSelection,
   ignore?: FacetDimension,

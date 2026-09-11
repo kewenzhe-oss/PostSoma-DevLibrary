@@ -130,14 +130,12 @@ const EXEMPLARY_EDITORIALS: Record<string, {
 
 // Fallback rule generator for programmatic, non-robotic summaries
 function generateEditorialFields(
-  title: string,
   url: string,
   topic: string,
   subtopics: string[],
   summary: string,
   action: string,
-  primaryAudience: string,
-  repoType: string
+  primaryAudience: string
 ) {
   const urlLower = url.toLowerCase();
   
@@ -232,14 +230,12 @@ export async function loadAndTransformGitHubCsv(csvFilePath: string): Promise<Re
 
       // Auto generate editorial summaries using customized rule engine
       const { cardSummary, detailSummary, bestFor, accessNote } = generateEditorialFields(
-        title,
         url,
         topic,
         tags,
         summary,
         action,
-        primaryAudience,
-        repoType
+        primaryAudience
       );
 
       const resource: Resource = {

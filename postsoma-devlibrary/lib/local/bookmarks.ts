@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback } from "react";
 
 const STORAGE_KEY = "postsoma_bookmarks";
 
-export function getBookmarks(): string[] {
+function getBookmarks(): string[] {
   if (typeof window === "undefined") return [];
   try {
     const data = localStorage.getItem(STORAGE_KEY);
@@ -21,7 +21,7 @@ function setBookmarks(bookmarks: string[]) {
   window.dispatchEvent(new Event("postsoma_bookmarks_changed"));
 }
 
-export function toggleBookmark(resourceId: string): boolean {
+function toggleBookmark(resourceId: string): boolean {
   const current = getBookmarks();
   const index = current.indexOf(resourceId);
   let isBookmarked = false;

@@ -1,5 +1,5 @@
 // Provider Display Name Normalization Map
-export const PROVIDER_MAP: Record<string, string> = {
+const PROVIDER_MAP: Record<string, string> = {
   // Global platforms
   "github.com": "GitHub",
   "raw.githubusercontent.com": "GitHub",

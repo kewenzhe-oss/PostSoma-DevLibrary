@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import Icon from "@/components/ui/Icon";
 
@@ -26,7 +26,7 @@ export default function RandomCurations({ resources }: RandomCurationsProps) {
   const [cards, setCards] = useState<any[]>([]);
   const [rotate, setRotate] = useState(false);
 
-  const shuffle = () => {
+  const shuffle = useCallback(() => {
     if (resources.length === 0) return;
 
     setRotate((prev) => !prev);
@@ -86,12 +86,12 @@ export default function RandomCurations({ resources }: RandomCurationsProps) {
       { slotType: "reference", label: "Reference", icon: "reference" as const, actionLabel: "Open docs", data: referenceItem },
       { slotType: "surprise", label: "Surprise", icon: "surprise" as const, actionLabel: "Discover", data: surpriseItem },
     ]);
-  };
+  }, [resources]);
 
   // Perform initial shuffle on mount
   useEffect(() => {
     shuffle();
-  }, []);
+  }, [shuffle]);
 
   if (cards.length === 0) return null;
 

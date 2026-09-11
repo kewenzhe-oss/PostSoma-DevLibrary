@@ -7,9 +7,6 @@ import type {
   GitHubFavorite,
   GitHubFavoritesCollection,
 } from "../../lib/types/github-favorite";
-import type {
-  GitHubFavoriteCurationCollection,
-} from "../../lib/types/github-curation";
 import type { Resource } from "../../lib/types/resource";
 import {
   executeGitHubFavoriteMutation,

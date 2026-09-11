@@ -1,5 +1,4 @@
 import { notFound } from "next/navigation";
-import Link from "next/link";
 import AppShell from "@/components/layout/AppShell";
 import BookmarkButton from "@/components/resources/BookmarkButton";
 import { getAllResources, getResourceById } from "@/lib/data/resources";

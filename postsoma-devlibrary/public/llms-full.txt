@@ -1,7 +1,7 @@
 # PostSoma DevLibrary
 
 Canonical site: https://www.205022.xyz
-Catalog generated: 2026-08-25T12:53:54.563Z
+Catalog generated: 2026-09-11T23:50:49.002Z
 
 This reference map describes the current static catalog. For individual entries, use the machine-readable catalog rather than inferring missing details.
 
@@ -20,11 +20,11 @@ This reference map describes the current static catalog. For individual entries,
 - **Cheat Sheets**: 318 items
 - **Courses**: 1,347 items
 - **Interactive**: 388 items
-- **Github**: 290 items
+- **Github**: 301 items
 
 ## Language coverage
 
-- English: 4,773 items
+- English: 4,784 items
 - Chinese: 388 items
 
 ## Largest catalog categories

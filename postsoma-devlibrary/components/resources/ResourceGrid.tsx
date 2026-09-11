@@ -143,9 +143,9 @@ export default function ResourceGrid({
   githubMatchReasonsById,
 }: ResourceGridProps) {
   // Client-side grouping of resources by leaf category with dynamic hybrid threshold
-  const { topicCards, standaloneCards } = useMemo(() => {
+  const topicCards = useMemo(() => {
     if (viewMode !== "topics") {
-      return { topicCards: [], standaloneCards: resources };
+      return [];
     }
 
     const clusters = new Map<string, Resource[]>();
@@ -164,11 +164,8 @@ export default function ResourceGrid({
       subcategory?: string;
       resources: Resource[];
     }> = [];
-    
-    const standalones: Resource[] = [];
 
     // Aggregation threshold: if a category has >= 3 resources, cluster them under a TopicCard.
-    // Otherwise, render each resource as a standard ResourceCard directly.
     for (const [topicName, items] of clusters.entries()) {
       if (items.length >= 3) {
         const first = items[0]!;
@@ -179,19 +176,10 @@ export default function ResourceGrid({
           subcategory: first.subcategory,
           resources: items,
         });
-      } else {
-        standalones.push(...items);
       }
     }
 
-    // Sort standalone elements to keep layout predictable
-    standalones.sort(
-      (a, b) =>
-        a.category.localeCompare(b.category) ||
-        a.title.localeCompare(b.title),
-    );
-
-    return { topicCards: topics, standaloneCards: standalones };
+    return topics;
   }, [resources, viewMode]);
 
   if (viewMode === "topics") {

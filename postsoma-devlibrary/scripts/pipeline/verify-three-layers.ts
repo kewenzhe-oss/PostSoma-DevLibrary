@@ -16,7 +16,6 @@ async function verifyThreeLayers() {
   const collectionsPath = path.join(APP_DIR, "public/data/collections.json");
   const sitemapTsPath = path.join(APP_DIR, "app/sitemap.ts");
   const sitemapXmlPath = path.join(APP_DIR, "out/sitemap.xml");
-  const robotsPath = path.join(APP_DIR, "out/robots.txt");
   const llmsPath = path.join(APP_DIR, "public/llms.txt");
   const llmsFullPath = path.join(APP_DIR, "public/llms-full.txt");
   const fixturesPath = path.join(REPO_ROOT, "docs/delivery/recommend-fixtures.json");

@@ -16,6 +16,10 @@
     "count": 3
   },
   {
+    "name": "AI & Data Science",
+    "count": 1
+  },
+  {
     "name": "Algorithms",
     "count": 3
   },
@@ -201,7 +205,7 @@
   },
   {
     "name": "Developer Tools",
-    "count": 4
+    "count": 8
   },
   {
     "name": "Devops",
@@ -264,6 +268,10 @@
     "count": 1
   },
   {
+    "name": "General & Meta",
+    "count": 1
+  },
+  {
     "name": "Git",
     "count": 46
   },
@@ -278,6 +286,10 @@
   {
     "name": "Graph Theory",
     "count": 5
+  },
+  {
+    "name": "Graphics, Design & Games",
+    "count": 1
   },
   {
     "name": "GraphQL",
@@ -393,7 +405,7 @@
   },
   {
     "name": "Mobile Development",
-    "count": 1
+    "count": 2
   },
   {
     "name": "MongoDB",
@@ -569,7 +581,7 @@
   },
   {
     "name": "Software Engineering",
-    "count": 6
+    "count": 7
   },
   {
     "name": "Solidity",
@@ -645,7 +657,7 @@
   },
   {
     "name": "Web Development",
-    "count": 32
+    "count": 34
   },
   {
     "name": "Web3",

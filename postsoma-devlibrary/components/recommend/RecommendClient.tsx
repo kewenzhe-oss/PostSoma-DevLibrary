@@ -4,7 +4,7 @@ import { useState, useEffect, useTransition } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { matchAndRecommend } from "@/lib/data/recommend";
-import type { RecommendationResult, RecommendationPick } from "@/lib/data/recommend";
+import type { RecommendationResult } from "@/lib/data/recommend";
 import type { Resource, Difficulty } from "@/lib/types/resource";
 import Icon from "@/components/ui/Icon";
 import { SITE_URL } from "@/lib/config/site";
@@ -94,8 +94,6 @@ export default function RecommendClient({ resources, presets }: RecommendClientP
   // Copy AI Prompt
   const handleCopyLink = () => {
     if (typeof window !== "undefined" && result) {
-      const siteUrl = window.location.href;
-
       const picksText = result.picks.map((pick, index) => {
         return `${index + 1}. **${pick.title}**
    - URL: ${pick.url}

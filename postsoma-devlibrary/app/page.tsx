@@ -3,7 +3,7 @@ import AppShell from "@/components/layout/AppShell";
 import { getManifest, getAllResources } from "@/lib/data/resources";
 import RandomCurations from "@/components/recommend/RandomCurations";
 import JsonLd from "@/components/seo/JsonLd";
-import Icon, { IconName } from "@/components/ui/Icon";
+import Icon from "@/components/ui/Icon";
 import { absoluteSiteUrl, SITE_HOSTNAME } from "@/lib/config/site";
 import type { Metadata } from "next";
 

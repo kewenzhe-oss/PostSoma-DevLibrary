@@ -6,7 +6,7 @@ import type { Resource } from "@/lib/types/resource";
 
 export type GitHubBrowseMode = "topic" | "recall";
 export type GitHubFacetField = "capabilities" | "techStack";
-export type GitHubMatchKind =
+type GitHubMatchKind =
   | "capability"
   | "techStack"
   | "health"

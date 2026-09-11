@@ -6,21 +6,29 @@ This project transforms the massive `free-programming-books` Markdown repository
 
 ## Architecture
 
-- **Content Pipeline**: A Node.js script suite (`scripts/pipeline`) that reads the upstream Markdown files, parses them, filters for target languages (EN/ZH), deduplicates URLs, validates entries, and outputs static JSON.
+- **Active Web Application**: The Next.js 14 App Router application resides in `./postsoma-devlibrary`.
+- **Content Pipeline**: A Node.js script suite (`postsoma-devlibrary/scripts/pipeline`) that reads the upstream Markdown files from the repository root, parses them, filters for target languages (EN/ZH), deduplicates URLs, validates entries, and outputs static JSON.
 - **Frontend Explorer**: A Next.js 14 App Router application that consumes the static JSON to provide lightning-fast fuzzy search (via MiniSearch) and directory-first filtering.
 - **Local Storage Library**: My Library stores saved resources locally in your browser using `localStorage`. No account is required. Clearing browser data will remove saved resources. Cloud sync is intentionally out of scope for v1.
 
 ## Local Development
 
+Commands can be run directly from the repository root (via root delegator scripts) or inside `postsoma-devlibrary/`:
+
 ```bash
-# Install dependencies
-npm install
+# Install dependencies (in postsoma-devlibrary)
+cd postsoma-devlibrary && npm install && cd ..
+# Or from root:
+npm run install:app
 
 # Run the content pipeline to generate public/data/*.json
 npm run pipeline:generate
 
 # Run tests
-npm run test
+npm test
+
+# Run linter
+npm run lint
 
 # Start the development server
 npm run dev

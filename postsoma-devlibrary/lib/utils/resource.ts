@@ -17,7 +17,7 @@ export const TYPE_LABELS: Record<Resource["type"], string> = {
   unknown: "resource",
 };
 
-export function getCleanCategory(category: string, isZh: boolean = false): string {
+function getCleanCategory(category: string, isZh: boolean = false): string {
   const upper = category.toUpperCase().trim();
   
   if (upper === "BY PROGRAMMING LANGUAGE") {
@@ -250,7 +250,7 @@ function getHash(str: string): number {
   return Math.abs(hash);
 }
 
-export function generateEditorialData(resource: Resource): EditorialData {
+function generateEditorialData(resource: Resource): EditorialData {
   // If the resource already has manually polished editorial fields, return immediately
   if (resource.cardSummary && resource.detailSummary && resource.bestFor && resource.accessNote) {
     return {
@@ -473,7 +473,7 @@ export function generateEditorialData(resource: Resource): EditorialData {
   }
 }
 
-export function generateDescription(resource: Resource, uiLanguage: "all" | "zh" | "en" = "all"): string {
+export function generateDescription(resource: Resource): string {
   if (resource.cardSummary) {
     return resource.cardSummary;
   }

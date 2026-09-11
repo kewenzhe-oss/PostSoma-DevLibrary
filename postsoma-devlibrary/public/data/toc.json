@@ -15270,6 +15270,17 @@
         "children": []
       },
       {
+        "id": "en:AI & Data Science",
+        "label": "AI & Data Science",
+        "language": "en",
+        "level": 1,
+        "path": [
+          "AI & Data Science"
+        ],
+        "resourceCount": 1,
+        "children": []
+      },
+      {
         "id": "en:Automation",
         "label": "Automation",
         "language": "en",
@@ -15490,7 +15501,7 @@
         "path": [
           "Developer Tools"
         ],
-        "resourceCount": 4,
+        "resourceCount": 8,
         "children": []
       },
       {
@@ -15634,6 +15645,28 @@
         "children": []
       },
       {
+        "id": "en:General & Meta",
+        "label": "General & Meta",
+        "language": "en",
+        "level": 1,
+        "path": [
+          "General & Meta"
+        ],
+        "resourceCount": 1,
+        "children": []
+      },
+      {
+        "id": "en:Graphics, Design & Games",
+        "label": "Graphics, Design & Games",
+        "language": "en",
+        "level": 1,
+        "path": [
+          "Graphics, Design & Games"
+        ],
+        "resourceCount": 1,
+        "children": []
+      },
+      {
         "id": "en:Infra",
         "label": "Infra",
         "language": "en",
@@ -15749,7 +15782,7 @@
         "path": [
           "Mobile Development"
         ],
-        "resourceCount": 1,
+        "resourceCount": 2,
         "children": []
       },
       {
@@ -16053,6 +16086,17 @@
         ]
       },
       {
+        "id": "en:Software Engineering",
+        "label": "Software Engineering",
+        "language": "en",
+        "level": 1,
+        "path": [
+          "Software Engineering"
+        ],
+        "resourceCount": 1,
+        "children": []
+      },
+      {
         "id": "en:System Development",
         "label": "System Development",
         "language": "en",
@@ -16071,7 +16115,7 @@
         "path": [
           "Web Development"
         ],
-        "resourceCount": 4,
+        "resourceCount": 6,
         "children": []
       }
     ],
@@ -16253,6 +16297,17 @@
           "AI & Data"
         ],
         "resourceCount": 3,
+        "children": []
+      },
+      {
+        "id": "all:AI & Data Science",
+        "label": "AI & Data Science",
+        "language": "all",
+        "level": 1,
+        "path": [
+          "AI & Data Science"
+        ],
+        "resourceCount": 1,
         "children": []
       },
       {
@@ -16476,7 +16531,7 @@
         "path": [
           "Developer Tools"
         ],
-        "resourceCount": 4,
+        "resourceCount": 8,
         "children": []
       },
       {
@@ -16620,6 +16675,28 @@
         "children": []
       },
       {
+        "id": "all:General & Meta",
+        "label": "General & Meta",
+        "language": "all",
+        "level": 1,
+        "path": [
+          "General & Meta"
+        ],
+        "resourceCount": 1,
+        "children": []
+      },
+      {
+        "id": "all:Graphics, Design & Games",
+        "label": "Graphics, Design & Games",
+        "language": "all",
+        "level": 1,
+        "path": [
+          "Graphics, Design & Games"
+        ],
+        "resourceCount": 1,
+        "children": []
+      },
+      {
         "id": "all:Infra",
         "label": "Infra",
         "language": "all",
@@ -16735,7 +16812,7 @@
         "path": [
           "Mobile Development"
         ],
-        "resourceCount": 1,
+        "resourceCount": 2,
         "children": []
       },
       {
@@ -17039,6 +17116,17 @@
         ]
       },
       {
+        "id": "all:Software Engineering",
+        "label": "Software Engineering",
+        "language": "all",
+        "level": 1,
+        "path": [
+          "Software Engineering"
+        ],
+        "resourceCount": 1,
+        "children": []
+      },
+      {
         "id": "all:System Development",
         "label": "System Development",
         "language": "all",
@@ -17057,7 +17145,7 @@
         "path": [
           "Web Development"
         ],
-        "resourceCount": 4,
+        "resourceCount": 6,
         "children": []
       }
     ]

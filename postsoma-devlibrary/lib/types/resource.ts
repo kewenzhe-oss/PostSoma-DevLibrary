@@ -47,7 +47,7 @@ export type CanonicalTopicId =
   | "career-professional"
   | "general-meta";
 
-export interface ResourceFacetSubcategory {
+interface ResourceFacetSubcategory {
   id: string;
   labelEn: string;
   labelZh: string | null;
@@ -66,7 +66,7 @@ export interface ResourceFacetMetadata {
   reviewStatus: "pending" | "approved";
 }
 
-export interface ResourceTaxonomy {
+interface ResourceTaxonomy {
   root: string;
   section?: string;
   subsection?: string;
@@ -113,12 +113,4 @@ export interface Resource {
   facet?: ResourceFacetMetadata;
 }
 
-export interface ResourceManifest {
-  generatedAt: string;
-  sourceRepo: string;
-  sourceCommit?: string;
-  total: number;
-  languages: Record<ResourceLanguage, number>;
-  categories: Record<string, number>;
-  invalidCount?: number;
-}
+

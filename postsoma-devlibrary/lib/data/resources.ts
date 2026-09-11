@@ -2,9 +2,7 @@ import type {
   Resource,
   ResourceFacetMetadata,
   ResourceType,
-  Difficulty,
 } from "@/lib/types/resource";
-import type { LearningPath, WeeklyPick } from "@/lib/types/learning-path";
 import fs from "fs/promises";
 import path from "path";
 
@@ -211,20 +209,6 @@ export async function getResourceById(id: string): Promise<Resource | undefined>
   return resources.find((r) => r.id === id);
 }
 
-export async function getResourcesByLanguage(
-  language: "zh" | "en",
-): Promise<Resource[]> {
-  const resources = await getAllResources();
-  return resources.filter((r) => r.language === language);
-}
-
-export async function getAllCategories(): Promise<string[]> {
-  const resources = await getAllResources();
-  return [...new Set(resources.map((r) => r.category))].sort((a, b) =>
-    a.localeCompare(b),
-  );
-}
-
 export async function getManifest() {
   try {
     const filePath = path.join(process.cwd(), "public", "data", "manifest.json");
@@ -255,65 +239,3 @@ export async function getCollections() {
   }
 }
 
-// ─── Extended Curation / Reading APIs ──────────────────────────────────────────
-
-export interface GetResourcesOptions {
-  language?: "zh" | "en";
-  difficulty?: Difficulty | "unrated";
-}
-
-export async function getResources(options: GetResourcesOptions = {}): Promise<Resource[]> {
-  let resources = await getAllResources();
-
-  if (options.language) {
-    resources = resources.filter((r) => r.language === options.language);
-  }
-
-  if (options.difficulty) {
-    if (options.difficulty === "unrated") {
-      resources = resources.filter((r) => !r.difficulty);
-    } else {
-      resources = resources.filter((r) => r.difficulty === options.difficulty);
-    }
-  }
-
-  return resources;
-}
-
-let cachedPaths: LearningPath[] | null = null;
-let cachedWeekly: WeeklyPick[] | WeeklyPick | null = null;
-
-export async function getLearningPaths(): Promise<LearningPath[]> {
-  if (cachedPaths) {
-    return cachedPaths;
-  }
-  try {
-    const filePath = path.join(process.cwd(), "public", "data", "paths.json");
-    const fileContents = await fs.readFile(filePath, "utf8");
-    cachedPaths = JSON.parse(fileContents) as LearningPath[];
-    return cachedPaths;
-  } catch (error) {
-    console.error("Failed to read paths.json", error);
-    return [];
-  }
-}
-
-export async function getLearningPathBySlug(slug: string): Promise<LearningPath | undefined> {
-  const paths = await getLearningPaths();
-  return paths.find((p) => p.slug === slug);
-}
-
-export async function getWeeklyPick(): Promise<WeeklyPick | null> {
-  if (cachedWeekly) {
-    return cachedWeekly as WeeklyPick;
-  }
-  try {
-    const filePath = path.join(process.cwd(), "public", "data", "weekly.json");
-    const fileContents = await fs.readFile(filePath, "utf8");
-    cachedWeekly = JSON.parse(fileContents) as WeeklyPick;
-    return cachedWeekly;
-  } catch (error) {
-    console.error("Failed to read weekly.json", error);
-    return null;
-  }
-}

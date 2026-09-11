@@ -1,6 +1,6 @@
 import type { Difficulty } from "./resource";
 
-export interface LearningPathStep {
+interface LearningPathStep {
   id: string;
   title: string;
   titleZh?: string;

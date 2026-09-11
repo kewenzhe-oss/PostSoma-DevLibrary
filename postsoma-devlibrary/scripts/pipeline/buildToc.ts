@@ -1,4 +1,4 @@
-import type { Resource, ResourceTocNode, ResourceCollection } from "../../lib/types/resource";
+import type { Resource, ResourceTocNode } from "../../lib/types/resource";
 
 export function buildResourceToc(resources: Resource[]): Record<string, Record<string, ResourceTocNode[]>> {
   // First, group resources by collection

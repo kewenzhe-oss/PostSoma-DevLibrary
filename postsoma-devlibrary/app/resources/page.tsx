@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 import AppShell from "@/components/layout/AppShell";
 import ResourceExplorer from "@/components/resources/ResourceExplorer";
-import { getAllResources, getAllCategories, getToc, getCollections } from "@/lib/data/resources";
+import { getAllResources, getToc, getCollections } from "@/lib/data/resources";
 import { getGitHubFavoritesForUi } from "@/lib/data/github-favorite-ui";
 import JsonLd from "@/components/seo/JsonLd";
 import { absoluteSiteUrl } from "@/lib/config/site";
@@ -31,9 +31,8 @@ export const metadata: Metadata = {
 };
 
 export default async function ResourcesPage() {
-  const [resources, categories, tocNodes, collections, githubFavorites] = await Promise.all([
+  const [resources, tocNodes, collections, githubFavorites] = await Promise.all([
     getAllResources(),
-    getAllCategories(),
     getToc(),
     getCollections(),
     getGitHubFavoritesForUi(),
@@ -90,7 +89,6 @@ export default async function ResourcesPage() {
       <Suspense fallback={<div className="font-mono text-sm text-archive-subtle animate-pulse">Loading archive...</div>}>
         <ResourceExplorer 
           resources={resources} 
-          categories={categories} 
           tocNodes={tocNodes} 
           collections={collections} 
           githubFavorites={githubFavorites}

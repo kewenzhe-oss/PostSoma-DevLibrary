@@ -8,7 +8,7 @@ export interface RecommendOptions {
   apiKey?: string;
 }
 
-export interface PickExplanation {
+interface PickExplanation {
   whyMatch: string;
   relativeAdvantage: string;
   knownLimitations: string;
@@ -42,7 +42,7 @@ export interface RecommendationResult {
 }
 
 // Calculate evidence status based on Catalog Contract rules
-export function getEvidenceStatus(res: Resource): "high" | "medium" | "low" {
+function getEvidenceStatus(res: Resource): "high" | "medium" | "low" {
   const hasDesc = !!(res.summary || res.cardSummary || res.detailSummary);
   const hasDiff = !!res.difficulty;
   const hasNote = !!res.editorNote;
@@ -59,7 +59,7 @@ export function getEvidenceStatus(res: Resource): "high" | "medium" | "low" {
 }
 
 // Heuristic rule generator for pick explanation text
-export function generateHeuristicExplanation(
+function generateHeuristicExplanation(
   res: Resource,
   alternativeRes: Resource | null,
   langPref: "zh" | "en" | "all"
