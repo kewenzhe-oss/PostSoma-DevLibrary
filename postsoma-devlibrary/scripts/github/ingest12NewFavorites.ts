@@ -268,12 +268,14 @@ async function main() {
     newFavorites.push(favorite);
 
     if (item.curationOverride) {
-      newCurations.push({
-        favoriteId: id,
-        belongsTo: item.curationOverride.belongsTo,
-        relatedLearningResourceIds: [],
-        boundaryReason: item.curationOverride.boundaryReason,
-      });
+      if (!curation.records.some((r) => r.favoriteId === id)) {
+        newCurations.push({
+          favoriteId: id,
+          belongsTo: item.curationOverride.belongsTo,
+          relatedLearningResourceIds: [],
+          boundaryReason: item.curationOverride.boundaryReason,
+        });
+      }
     }
   }
 

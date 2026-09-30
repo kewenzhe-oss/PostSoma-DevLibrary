@@ -10764,6 +10764,376 @@
         "quality": "unchecked",
         "fullSummary": "An ebook reader with a self-evolving agent and plugin architecture."
       }
+    },
+    {
+      "id": "965e8e23dd9577fe",
+      "githubUrl": "https://github.com/KKKKhazix/AIHOT",
+      "title": "AIHOT",
+      "shortSummary": "自主抓取行业信源并自动排版生成每日热点与日报的网站框架。支持替换数据源与精选标准搭建垂直领域站点，内置 MCP 扩展与 RSS 订阅。",
+      "capabilities": [
+        "content-creation",
+        "automation",
+        "workflow",
+        "self-hosted"
+      ],
+      "techStack": [
+        "TypeScript",
+        "Node.js"
+      ],
+      "personalNote": "",
+      "whySaved": "",
+      "discoveredAt": "2026-09-30T22:45:47.951Z",
+      "discoveredAtSource": "local-entry",
+      "lastReviewedAt": null,
+      "health": "active",
+      "lastCheckedAt": null,
+      "lastPushedAt": null,
+      "githubArchived": null,
+      "githubDisabled": null,
+      "editorial": {
+        "topic": "Web Development",
+        "resourceType": "app",
+        "quality": "standard",
+        "fullSummary": "自主抓取行业信源并自动排版生成每日热点与日报的网站框架。支持替换数据源与精选标准搭建垂直领域站点，内置 MCP 扩展与 RSS 订阅。"
+      }
+    },
+    {
+      "id": "0dea75af00c4df4a",
+      "githubUrl": "https://github.com/Tencent-Hunyuan/AuK",
+      "title": "AuK",
+      "shortSummary": "腾讯混元开源的基础语音生成与编辑大模型，支持零样本文本转语音（Zero-shot TTS）、声音克隆、目标人声提取与音频修复增强。",
+      "capabilities": [
+        "speech",
+        "tts",
+        "llm"
+      ],
+      "techStack": [
+        "Python",
+        "PyTorch"
+      ],
+      "personalNote": "",
+      "whySaved": "",
+      "discoveredAt": "2026-09-30T22:45:47.951Z",
+      "discoveredAtSource": "local-entry",
+      "lastReviewedAt": null,
+      "health": "active",
+      "lastCheckedAt": null,
+      "lastPushedAt": null,
+      "githubArchived": null,
+      "githubDisabled": null,
+      "editorial": {
+        "topic": "AI & Data",
+        "resourceType": "library",
+        "quality": "standard",
+        "fullSummary": "腾讯混元开源的基础语音生成与编辑大模型，支持零样本文本转语音（Zero-shot TTS）、声音克隆、目标人声提取与音频修复增强。"
+      }
+    },
+    {
+      "id": "2e1213361ebcaec6",
+      "githubUrl": "https://github.com/HammingDev/haiming-app-monetization",
+      "title": "haiming-app-monetization",
+      "shortSummary": "独立开发者 App 商业化实战规范集合，系统覆盖新用户 onboarding 流程设计、付费墙（Paywall）策略、应用内购买选项与竞品调研方法论。",
+      "capabilities": [
+        "developer-tooling",
+        "workflow",
+        "knowledge-base"
+      ],
+      "techStack": [
+        "Markdown"
+      ],
+      "personalNote": "",
+      "whySaved": "",
+      "discoveredAt": "2026-09-30T22:45:47.951Z",
+      "discoveredAtSource": "local-entry",
+      "lastReviewedAt": null,
+      "health": "active",
+      "lastCheckedAt": null,
+      "lastPushedAt": null,
+      "githubArchived": null,
+      "githubDisabled": null,
+      "editorial": {
+        "topic": "Developer Resources",
+        "resourceType": "collection",
+        "quality": "standard",
+        "fullSummary": "独立开发者 App 商业化实战规范集合，系统覆盖新用户 onboarding 流程设计、付费墙（Paywall）策略、应用内购买选项与竞品调研方法论。"
+      }
+    },
+    {
+      "id": "92509c4f30bfa957",
+      "githubUrl": "https://github.com/Donchitos/Claude-Code-Game-Studios",
+      "title": "Claude-Code-Game-Studios",
+      "shortSummary": "将 Claude Code 转化为完整多智能体游戏开发工作室的协调编排框架，内置 49 个专业 Agent 与 72 个技能定义，复现真实游戏工作室架构。",
+      "capabilities": [
+        "agents",
+        "coding-assistant",
+        "workflow",
+        "developer-tooling"
+      ],
+      "techStack": [
+        "Shell",
+        "Python"
+      ],
+      "personalNote": "",
+      "whySaved": "",
+      "discoveredAt": "2026-09-30T22:45:47.951Z",
+      "discoveredAtSource": "local-entry",
+      "lastReviewedAt": null,
+      "health": "active",
+      "lastCheckedAt": null,
+      "lastPushedAt": null,
+      "githubArchived": null,
+      "githubDisabled": null,
+      "editorial": {
+        "topic": "Developer Tools",
+        "resourceType": "framework",
+        "quality": "standard",
+        "fullSummary": "将 Claude Code 转化为完整多智能体游戏开发工作室的协调编排框架，内置 49 个专业 Agent 与 72 个技能定义，复现真实游戏工作室架构。"
+      }
+    },
+    {
+      "id": "27c5f67e9073b607",
+      "githubUrl": "https://github.com/rockbenben/scrcpy-helper",
+      "title": "scrcpy-helper",
+      "shortSummary": "开箱即用的 Android 设备投屏图形化辅助工具，免去 scrcpy 繁琐命令行参数，支持无线投屏、低延迟录屏及将手机摄像头接入 Windows。",
+      "capabilities": [
+        "developer-tooling",
+        "cli"
+      ],
+      "techStack": [
+        "PowerShell",
+        "WinForms"
+      ],
+      "personalNote": "",
+      "whySaved": "",
+      "discoveredAt": "2026-09-30T22:45:47.951Z",
+      "discoveredAtSource": "local-entry",
+      "lastReviewedAt": null,
+      "health": "active",
+      "lastCheckedAt": null,
+      "lastPushedAt": null,
+      "githubArchived": null,
+      "githubDisabled": null,
+      "editorial": {
+        "topic": "Desktop Development",
+        "resourceType": "app",
+        "quality": "standard",
+        "fullSummary": "开箱即用的 Android 设备投屏图形化辅助工具，免去 scrcpy 繁琐命令行参数，支持无线投屏、低延迟录屏及将手机摄像头接入 Windows。"
+      }
+    },
+    {
+      "id": "e1d0688c7c784be0",
+      "githubUrl": "https://github.com/yuliskov/SmartTube",
+      "title": "SmartTube",
+      "shortSummary": "专为 Android TV 与机顶盒设计的第三方开源媒体播放客户端，支持 4K/8K 播放、画中画，深度集成 SponsorBlock 赞助片段与广告过滤规则。",
+      "capabilities": [
+        "local-first",
+        "privacy",
+        "media"
+      ],
+      "techStack": [
+        "Java",
+        "Kotlin",
+        "Android SDK"
+      ],
+      "personalNote": "",
+      "whySaved": "",
+      "discoveredAt": "2026-09-30T22:45:47.951Z",
+      "discoveredAtSource": "local-entry",
+      "lastReviewedAt": null,
+      "health": "active",
+      "lastCheckedAt": null,
+      "lastPushedAt": null,
+      "githubArchived": null,
+      "githubDisabled": null,
+      "editorial": {
+        "topic": "Mobile Development",
+        "resourceType": "app",
+        "quality": "standard",
+        "fullSummary": "专为 Android TV 与机顶盒设计的第三方开源媒体播放客户端，支持 4K/8K 播放、画中画，深度集成 SponsorBlock 赞助片段与广告过滤规则。"
+      }
+    },
+    {
+      "id": "dfb2b054dfbbfa17",
+      "githubUrl": "https://github.com/shilapi/xcertplay",
+      "title": "xcertplay",
+      "shortSummary": "在 Android 车机系统上原生实现 Apple CarPlay 互联协议的开源探索方案，支持板载 MFi 芯片直通或通过 CH341 USB 芯片进行桥接。",
+      "capabilities": [
+        "developer-tooling"
+      ],
+      "techStack": [
+        "Kotlin",
+        "C++",
+        "Android SDK"
+      ],
+      "personalNote": "",
+      "whySaved": "",
+      "discoveredAt": "2026-09-30T22:45:47.951Z",
+      "discoveredAtSource": "local-entry",
+      "lastReviewedAt": null,
+      "health": "active",
+      "lastCheckedAt": null,
+      "lastPushedAt": null,
+      "githubArchived": null,
+      "githubDisabled": null,
+      "editorial": {
+        "topic": "System Development",
+        "resourceType": "library",
+        "quality": "standard",
+        "fullSummary": "在 Android 车机系统上原生实现 Apple CarPlay 互联协议的开源探索方案，支持板载 MFi 芯片直通或通过 CH341 USB 芯片进行桥接。"
+      }
+    },
+    {
+      "id": "36658e9715c9c5a3",
+      "githubUrl": "https://github.com/Lin-arm/GKD_subscription",
+      "title": "GKD_subscription",
+      "shortSummary": "Android 自动化无障碍点击应用 GKD 的高质量第三方广告规则订阅集，基于无障碍节点匹配自动跳过移动应用开屏广告与弹窗。",
+      "capabilities": [
+        "automation",
+        "privacy"
+      ],
+      "techStack": [
+        "TypeScript"
+      ],
+      "personalNote": "",
+      "whySaved": "",
+      "discoveredAt": "2026-09-30T22:45:47.951Z",
+      "discoveredAtSource": "local-entry",
+      "lastReviewedAt": null,
+      "health": "active",
+      "lastCheckedAt": null,
+      "lastPushedAt": null,
+      "githubArchived": null,
+      "githubDisabled": null,
+      "editorial": {
+        "topic": "Mobile Development",
+        "resourceType": "collection",
+        "quality": "standard",
+        "fullSummary": "Android 自动化无障碍点击应用 GKD 的高质量第三方广告规则订阅集，基于无障碍节点匹配自动跳过移动应用开屏广告与弹窗。"
+      }
+    },
+    {
+      "id": "a1c53171e88c65ac",
+      "githubUrl": "https://github.com/listen1/listen1_chrome_extension",
+      "title": "listen1_chrome_extension",
+      "shortSummary": "聚合多家主流音乐平台音频资源的一站式浏览器听歌插件，支持多平台统一歌单、跨源播放与播放列表导入导出，兼容 Chrome 与 Firefox。",
+      "capabilities": [
+        "browser-extension",
+        "search"
+      ],
+      "techStack": [
+        "JavaScript",
+        "HTML",
+        "CSS"
+      ],
+      "personalNote": "",
+      "whySaved": "",
+      "discoveredAt": "2026-09-30T22:45:47.951Z",
+      "discoveredAtSource": "local-entry",
+      "lastReviewedAt": null,
+      "health": "active",
+      "lastCheckedAt": null,
+      "lastPushedAt": null,
+      "githubArchived": null,
+      "githubDisabled": null,
+      "editorial": {
+        "topic": "Frontend Development",
+        "resourceType": "extension",
+        "quality": "standard",
+        "fullSummary": "聚合多家主流音乐平台音频资源的一站式浏览器听歌插件，支持多平台统一歌单、跨源播放与播放列表导入导出，兼容 Chrome 与 Firefox。"
+      }
+    },
+    {
+      "id": "8bf09ca6d2000a77",
+      "githubUrl": "https://github.com/CopilotKit/openmuse",
+      "title": "openmuse",
+      "shortSummary": "基于 CopilotKit 与 AG-UI 构建的个人全自主 AI Agent，配备浏览器自动化沙箱、命令行终端与文件读写能力，可执行长周期连续任务。",
+      "capabilities": [
+        "agents",
+        "browser-automation",
+        "workflow",
+        "coding-assistant"
+      ],
+      "techStack": [
+        "TypeScript",
+        "React"
+      ],
+      "personalNote": "",
+      "whySaved": "",
+      "discoveredAt": "2026-09-30T22:45:47.951Z",
+      "discoveredAtSource": "local-entry",
+      "lastReviewedAt": null,
+      "health": "active",
+      "lastCheckedAt": null,
+      "lastPushedAt": null,
+      "githubArchived": null,
+      "githubDisabled": null,
+      "editorial": {
+        "topic": "AI & Data",
+        "resourceType": "framework",
+        "quality": "standard",
+        "fullSummary": "基于 CopilotKit 与 AG-UI 构建的个人全自主 AI Agent，配备浏览器自动化沙箱、命令行终端与文件读写能力，可执行长周期连续任务。"
+      }
+    },
+    {
+      "id": "8ad931cc2079dd18",
+      "githubUrl": "https://github.com/ntfargo/Relapse-Exploit",
+      "title": "Relapse-Exploit",
+      "shortSummary": "针对 PlayStation 5 固件版本 7.00 - 13.60 的完整内核利用链研究资料，串联 WebKit 用户态漏洞与内核特权提升机制，供安全研究员审计。",
+      "capabilities": [
+        "security",
+        "developer-tooling"
+      ],
+      "techStack": [
+        "JavaScript",
+        "C"
+      ],
+      "personalNote": "",
+      "whySaved": "",
+      "discoveredAt": "2026-09-30T22:45:47.951Z",
+      "discoveredAtSource": "local-entry",
+      "lastReviewedAt": null,
+      "health": "active",
+      "lastCheckedAt": null,
+      "lastPushedAt": null,
+      "githubArchived": null,
+      "githubDisabled": null,
+      "editorial": {
+        "topic": "Security",
+        "resourceType": "app",
+        "quality": "standard",
+        "fullSummary": "针对 PlayStation 5 固件版本 7.00 - 13.60 的完整内核利用链研究资料，串联 WebKit 用户态漏洞与内核特权提升机制，供安全研究员审计。"
+      }
+    },
+    {
+      "id": "b14d9fb54940c818",
+      "githubUrl": "https://github.com/nsfw-filter/nsfw-filter",
+      "title": "nsfw-filter",
+      "shortSummary": "基于 TensorFlow.js 的隐私安全型浏览器扩展，在用户浏览器本地直接运行轻量级卷积网络，实时识别并阻断网页中的不适宜图像。",
+      "capabilities": [
+        "browser-extension",
+        "privacy",
+        "local-first"
+      ],
+      "techStack": [
+        "TypeScript",
+        "TensorFlow.js"
+      ],
+      "personalNote": "",
+      "whySaved": "",
+      "discoveredAt": "2026-09-30T22:45:47.951Z",
+      "discoveredAtSource": "local-entry",
+      "lastReviewedAt": null,
+      "health": "active",
+      "lastCheckedAt": null,
+      "lastPushedAt": null,
+      "githubArchived": null,
+      "githubDisabled": null,
+      "editorial": {
+        "topic": "Frontend Development",
+        "resourceType": "extension",
+        "quality": "standard",
+        "fullSummary": "基于 TensorFlow.js 的隐私安全型浏览器扩展，在用户浏览器本地直接运行轻量级卷积网络，实时识别并阻断网页中的不适宜图像。"
+      }
     }
   ]
 }
