@@ -32,6 +32,7 @@ import {
   filterResourcesByFacets,
   getCanonicalTopicLabel,
   getResourceFacetBreadcrumb,
+  humanizeId,
   type ResourceFacetSelection,
 } from "@/lib/data/resource-facets";
 import {
@@ -230,7 +231,7 @@ export default function ResourceExplorer({
   const searchParams = useSearchParams();
 
   // ── State: single source of truth for all dimensions ──────────────────────
-  const [query, setQuery] = useState("");
+  const [query, setQuery] = useState(() => searchParams.get("q") || "");
   const [language, setLanguage] = useState<"all" | "zh" | "en">("all");
   const [selectedCollection, setSelectedCollection] = useState<string>("books");
   const [selectedTocPath, setSelectedTocPath] = useState<string[] | null>(null);
@@ -557,10 +558,7 @@ export default function ResourceExplorer({
     () => ({
       topics: selectedTopics,
       subcategories: selectedSubcategories,
-      languages:
-        language === "all"
-          ? (["en", "zh"] as ResourceLanguage[])
-          : [language],
+      languages: language === "all" ? [] : [language],
       resourceTypes: selectedResourceTypes,
     }),
     [language, selectedResourceTypes, selectedSubcategories, selectedTopics],
@@ -597,7 +595,7 @@ export default function ResourceExplorer({
           techStack: githubTechStack,
           health: githubHealth,
           mode: githubBrowseMode,
-          limit: 300,
+          limit: githubFavoriteLinks.resources.length,
         },
       );
     }
@@ -900,12 +898,13 @@ export default function ResourceExplorer({
               value={query}
               onChange={handleQueryChange}
               resultCount={results.length}
+              totalCount={resources.length}
             />
           </div>
-          {showPublicFacets && (
+          {(showPublicFacets || selectedCollection === "github") && (
             <button
               onClick={() => setIsFilterDrawerOpen(true)}
-              className="lg:hidden h-11 px-3.5 border border-archive-border bg-archive-surface rounded-sm text-archive-subtle hover:text-archive-text flex items-center justify-center gap-1.5 active:scale-95 active:bg-archive-muted/40 transition-all shrink-0"
+              className="lg:hidden h-11 px-3.5 border border-archive-border bg-archive-surface rounded-sm text-archive-subtle hover:text-archive-text flex items-center justify-center gap-1.5 active:scale-95 active:bg-archive-muted/40 transition-all shrink-0 cursor-pointer"
               title="Open resource filters"
             >
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} className="w-5 h-5">
@@ -942,129 +941,135 @@ export default function ResourceExplorer({
         )}
 
         {selectedCollection === "github" && (
-          <GitHubBrowseControls
-            mode={githubBrowseMode}
-            onModeChange={handleGitHubModeChange}
-            capabilityOptions={githubCapabilityOptions}
-            techStackOptions={githubTechStackOptions}
-            healthCounts={githubHealthCounts}
-            selectedCapability={githubCapability}
-            selectedTechStack={githubTechStack}
-            selectedHealth={githubHealth}
-            localEntryCount={githubTimelineCounts.localEntries}
-            manualReviewCount={githubTimelineCounts.manualReviews}
-            onCapabilityChange={handleGitHubCapabilityChange}
-            onTechStackChange={handleGitHubTechStackChange}
-            onHealthChange={handleGitHubHealthChange}
-          />
+          <div className="hidden lg:block">
+            <GitHubBrowseControls
+              mode={githubBrowseMode}
+              onModeChange={handleGitHubModeChange}
+              capabilityOptions={githubCapabilityOptions}
+              techStackOptions={githubTechStackOptions}
+              healthCounts={githubHealthCounts}
+              selectedCapability={githubCapability}
+              selectedTechStack={githubTechStack}
+              selectedHealth={githubHealth}
+              localEntryCount={githubTimelineCounts.localEntries}
+              manualReviewCount={githubTimelineCounts.manualReviews}
+              onCapabilityChange={handleGitHubCapabilityChange}
+              onTechStackChange={handleGitHubTechStackChange}
+              onHealthChange={handleGitHubHealthChange}
+            />
+          </div>
         )}
 
-        {/* Active Filter Chips */}
-        <div className="flex items-center gap-3 flex-wrap min-h-[20px] empty:hidden">
-          {/* Path breadcrumb pill */}
-          {showPublicFacets &&
-            selectedTocPath &&
-            selectedTocPath.length > 0 && (
-              <PathPill
-                path={selectedTocPath}
-                onClear={() => handleSelectTocPath(null)}
+        {/* Active Filter Chips - only rendered when activeFilterCount > 0 */}
+        {activeFilterCount > 0 && (
+          <div className="flex items-center gap-2.5 flex-wrap min-h-[28px] empty:hidden py-1">
+            <span className="font-mono text-[11px] text-archive-accent/90 select-none shrink-0 font-medium">
+              Active filters:
+            </span>
+
+            {/* Path breadcrumb pill */}
+            {showPublicFacets &&
+              selectedTocPath &&
+              selectedTocPath.length > 0 && (
+                <PathPill
+                  path={selectedTocPath}
+                  onClear={() => handleSelectTocPath(null)}
+                />
+              )}
+
+            {/* Language pill (shown when not "all") */}
+            {language !== "all" && (
+              <div className="inline-flex items-center gap-1.5 rounded-full border border-archive-border/60 bg-archive-surface/80 px-3 py-1 text-xs animate-fade-in">
+                <span className="font-mono text-[9px] uppercase tracking-wider text-archive-subtle/60">
+                  Language
+                </span>
+                <span className="font-sans text-archive-text font-medium">
+                  {language === "zh" ? "中文" : "EN"}
+                </span>
+                <button
+                  type="button"
+                  onClick={() => handleLanguageChange("all")}
+                  className="ml-0.5 shrink-0 font-mono text-xs font-bold text-archive-subtle transition-colors hover:text-archive-accent"
+                  aria-label="Clear language filter"
+                >
+                  ×
+                </button>
+              </div>
+            )}
+
+            {showPublicFacets &&
+              selectedTopics.map((topic) => (
+                <PublicFilterPill
+                  key={topic}
+                  label="Topic"
+                  value={getCanonicalTopicLabel(topic, "en")}
+                  onClear={() => handleTopicToggle(topic)}
+                />
+              ))}
+
+            {showPublicFacets &&
+              selectedSubcategories.map((subcategory) => {
+                const option = resourceFacetModel.subcategories.find(
+                  (candidate) => candidate.value === subcategory,
+                );
+                return (
+                  <PublicFilterPill
+                    key={subcategory}
+                    label="Category"
+                    value={option?.labelEn ?? humanizeId(subcategory)}
+                    onClear={() => handleSubcategoryToggle(subcategory)}
+                  />
+                );
+              })}
+
+            {showPublicFacets &&
+              selectedResourceTypes.map((resourceType) => {
+                const option = resourceFacetModel.resourceTypes.find(
+                  (candidate) => candidate.value === resourceType,
+                );
+                return (
+                  <PublicFilterPill
+                    key={resourceType}
+                    label="Format"
+                    value={option?.labelEn ?? humanizeId(resourceType)}
+                    onClear={() => handleResourceTypeToggle(resourceType)}
+                  />
+                );
+              })}
+
+            {selectedCollection === "github" && githubCapability && (
+              <GitHubFilterPill
+                label="Capability"
+                value={formatGitHubFacetLabel(githubCapability)}
+                onClear={() => handleGitHubCapabilityChange("")}
               />
             )}
 
-          {/* Language pill (shown when not "all") */}
-          {language !== "all" && (
-            <div className="inline-flex items-center gap-1.5 bg-archive-border/20 border border-archive-border/40 rounded-full px-3 py-1 text-xs animate-fade-in">
-              <span className="font-mono text-[10px] text-archive-subtle mr-0.5">lang:</span>
-              <span className="font-sans text-archive-text font-medium">
-                {language === "zh" ? "中文" : "English"}
-              </span>
-              <button
-                onClick={() => handleLanguageChange("all")}
-                className="text-archive-subtle hover:text-archive-accent transition-colors font-mono font-bold text-xs ml-0.5 shrink-0"
-              >
-                ×
-              </button>
-            </div>
-          )}
-
-          {showPublicFacets &&
-            selectedTopics.map((topic) => (
-              <PublicFilterPill
-                key={topic}
-                label="Topic"
-                value={getCanonicalTopicLabel(topic, language === "zh" ? "zh" : "en")}
-                onClear={() => handleTopicToggle(topic)}
+            {selectedCollection === "github" && githubTechStack && (
+              <GitHubFilterPill
+                label="Stack"
+                value={formatGitHubFacetLabel(githubTechStack)}
+                onClear={() => handleGitHubTechStackChange("")}
               />
-            ))}
+            )}
 
-          {showPublicFacets &&
-            selectedSubcategories.map((subcategory) => {
-              const option = resourceFacetModel.subcategories.find(
-                (candidate) => candidate.value === subcategory,
-              );
-              return (
-                <PublicFilterPill
-                  key={subcategory}
-                  label="Subcategory"
-                  value={
-                    language === "zh"
-                      ? option?.labelZh ?? option?.labelEn ?? subcategory
-                      : option?.labelEn ?? subcategory
-                  }
-                  onClear={() => handleSubcategoryToggle(subcategory)}
-                />
-              );
-            })}
+            {selectedCollection === "github" && githubHealth && (
+              <GitHubFilterPill
+                label="Health"
+                value={formatGitHubFacetLabel(githubHealth)}
+                onClear={() => handleGitHubHealthChange("")}
+              />
+            )}
 
-          {showPublicFacets &&
-            selectedResourceTypes.map((resourceType) => {
-              const option = resourceFacetModel.resourceTypes.find(
-                (candidate) => candidate.value === resourceType,
-              );
-              return (
-                <PublicFilterPill
-                  key={resourceType}
-                  label="Format"
-                  value={option?.labelEn ?? resourceType}
-                  onClear={() => handleResourceTypeToggle(resourceType)}
-                />
-              );
-            })}
-
-          {selectedCollection === "github" && githubCapability && (
-            <GitHubFilterPill
-              label="capability"
-              value={formatGitHubFacetLabel(githubCapability)}
-              onClear={() => handleGitHubCapabilityChange("")}
-            />
-          )}
-
-          {selectedCollection === "github" && githubTechStack && (
-            <GitHubFilterPill
-              label="stack"
-              value={formatGitHubFacetLabel(githubTechStack)}
-              onClear={() => handleGitHubTechStackChange("")}
-            />
-          )}
-
-          {selectedCollection === "github" && githubHealth && (
-            <GitHubFilterPill
-              label="health"
-              value={formatGitHubFacetLabel(githubHealth)}
-              onClear={() => handleGitHubHealthChange("")}
-            />
-          )}
-
-          {/* Clear all */}
-          {hasActiveFilters && (
+            {/* Clear all */}
             <button
               onClick={handleClear}
-              className="ml-auto font-mono text-xs text-archive-subtle hover:text-archive-text transition-colors"
+              className="ml-auto font-mono text-xs text-archive-accent hover:text-archive-accent-glow hover:underline transition-colors shrink-0 cursor-pointer"
             >
               Clear all ×
             </button>
-          )}
-        </div>
+          </div>
+        )}
       </div>
 
       {/* ── Results Count ────────────────────────────────────────────────── */}
@@ -1076,18 +1081,13 @@ export default function ResourceExplorer({
           <span className="text-archive-text font-semibold tabular-nums">
             {results.length.toLocaleString()}
           </span>{" "}
-          resource{results.length !== 1 ? "s" : ""}
-          {hasActiveFilters && " found"}
+          resources
+          {hasActiveFilters && " (matched)"}
         </span>
         {/* Active collection badge */}
         <span className="font-mono text-[10px] text-archive-subtle opacity-50 border border-archive-border/40 px-2 py-0.5 rounded-full">
           {displayCollections.find((c) => c.id === selectedCollection)?.label ?? selectedCollection}
         </span>
-        {showPublicFacets && (
-          <span className="ml-auto hidden font-mono text-[9px] text-archive-subtle/45 sm:inline">
-            {resourceFacetModel.classifiedCount.toLocaleString()} classified in this view
-          </span>
-        )}
       </div>
 
       {/* ── Faceted archive + resource grid ─────────────────────────────── */}
@@ -1097,6 +1097,8 @@ export default function ResourceExplorer({
             <ResourceFacetPanel
               model={resourceFacetModel}
               selection={publicFacetSelection}
+              language={language}
+              onLanguageChange={handleLanguageChange}
               onTopicToggle={handleTopicToggle}
               onSubcategoryToggle={handleSubcategoryToggle}
               onLanguageToggle={handleLanguageFacetToggle}
@@ -1125,9 +1127,9 @@ export default function ResourceExplorer({
                 <div ref={sentinelRef} className="py-8 flex justify-center w-full">
                   <button
                     onClick={() => setVisibleCount((prev) => Math.min(prev + 24, results.length))}
-                    className="px-6 py-2.5 rounded border border-archive-border hover:border-archive-muted text-xs font-mono text-archive-subtle hover:text-archive-text bg-archive-surface active:scale-95 transition-all"
+                    className="px-6 py-2.5 rounded border border-archive-border hover:border-archive-muted text-xs font-mono text-archive-subtle hover:text-archive-text bg-archive-surface active:scale-95 transition-all cursor-pointer"
                   >
-                    Load More (showing {visibleCount} of {results.length})
+                    Load more (showing {visibleCount} of {results.length})
                   </button>
                 </div>
               )}
@@ -1138,10 +1140,10 @@ export default function ResourceExplorer({
               title="No resources found"
               description={
                 query
-                  ? `No results for "${query}". Try a broader search or different filters.`
-                  : "No resources match the current filters."
+                  ? `No resources matching "${query}". Try broadening your search or resetting filters.`
+                  : "No resources match the current filter selection. Try resetting filters."
               }
-              action={{ label: "Clear all filters", onClick: handleClear }}
+              action={{ label: "Clear all filters ×", onClick: handleClear }}
             />
           )}
         </div>
@@ -1160,17 +1162,50 @@ export default function ResourceExplorer({
         />
       )}
 
-      {showPublicFacets && (
+      {(showPublicFacets || selectedCollection === "github") && (
         <FilterDrawer
           isOpen={isFilterDrawerOpen}
           onClose={() => setIsFilterDrawerOpen(false)}
+          isGitHub={selectedCollection === "github"}
+          githubControls={
+            <GitHubBrowseControls
+              mode={githubBrowseMode}
+              onModeChange={handleGitHubModeChange}
+              capabilityOptions={githubCapabilityOptions}
+              techStackOptions={githubTechStackOptions}
+              healthCounts={githubHealthCounts}
+              selectedCapability={githubCapability}
+              selectedTechStack={githubTechStack}
+              selectedHealth={githubHealth}
+              localEntryCount={githubTimelineCounts.localEntries}
+              manualReviewCount={githubTimelineCounts.manualReviews}
+              onCapabilityChange={handleGitHubCapabilityChange}
+              onTechStackChange={handleGitHubTechStackChange}
+              onHealthChange={handleGitHubHealthChange}
+            />
+          }
           model={resourceFacetModel}
           selection={publicFacetSelection}
+          language={language}
+          onLanguageChange={handleLanguageChange}
           onTopicToggle={handleTopicToggle}
           onSubcategoryToggle={handleSubcategoryToggle}
           onLanguageToggle={handleLanguageFacetToggle}
           onResourceTypeToggle={handleResourceTypeToggle}
-          onClear={handleClearPublicFacets}
+          onClear={
+            selectedCollection === "github"
+              ? () => {
+                  setGithubCapability("");
+                  setGithubTechStack("");
+                  setGithubHealth("");
+                  syncToUrl(query, language, "github", selectedTocPath, {
+                    capability: "",
+                    techStack: "",
+                    health: "",
+                  });
+                }
+              : handleClearPublicFacets
+          }
           resultCount={results.length}
         />
       )}
@@ -1183,8 +1218,12 @@ export default function ResourceExplorer({
 interface FilterDrawerProps {
   isOpen: boolean;
   onClose: () => void;
+  isGitHub?: boolean;
+  githubControls?: React.ReactNode;
   model: ReturnType<typeof buildResourceFacetModel>;
   selection: ResourceFacetSelection;
+  language?: "all" | "zh" | "en";
+  onLanguageChange?: (lang: "all" | "zh" | "en") => void;
   onTopicToggle: (value: CanonicalTopicId) => void;
   onSubcategoryToggle: (value: string) => void;
   onLanguageToggle: (value: ResourceLanguage) => void;
@@ -1196,8 +1235,12 @@ interface FilterDrawerProps {
 function FilterDrawer({
   isOpen,
   onClose,
+  isGitHub = false,
+  githubControls,
   model,
   selection,
+  language,
+  onLanguageChange,
   onTopicToggle,
   onSubcategoryToggle,
   onLanguageToggle,
@@ -1300,12 +1343,12 @@ function FilterDrawer({
 
         {/* Header */}
         <div className="flex items-center justify-between px-5 pb-3 border-b border-archive-border/60 shrink-0">
-          <h3 className="font-mono text-xs uppercase tracking-widest text-archive-subtle font-semibold">
-            Refine resources
+          <h3 className="font-mono text-xs uppercase tracking-widest text-archive-accent font-semibold">
+            {"// REFINE ARCHIVE"}
           </h3>
           <button
             onClick={onClose}
-            className="w-11 h-11 flex items-center justify-center rounded-full border border-archive-border text-archive-subtle hover:text-archive-text hover:bg-archive-border/50 transition-all text-lg font-mono"
+            className="w-9 h-9 flex items-center justify-center rounded-full border border-archive-border text-archive-subtle hover:text-archive-text hover:bg-archive-border/50 transition-all text-base font-mono cursor-pointer"
             aria-label="Close filters"
           >
             ×
@@ -1314,32 +1357,38 @@ function FilterDrawer({
 
         {/* Scrollable contents */}
         <div className="flex-1 overflow-y-auto px-5 py-4 drawer-scroll">
-          <ResourceFacetPanel
-            compact
-            model={model}
-            selection={selection}
-            onTopicToggle={onTopicToggle}
-            onSubcategoryToggle={onSubcategoryToggle}
-            onLanguageToggle={onLanguageToggle}
-            onResourceTypeToggle={onResourceTypeToggle}
-            onClear={onClear}
-          />
+          {isGitHub ? (
+            githubControls
+          ) : (
+            <ResourceFacetPanel
+              compact
+              model={model}
+              selection={selection}
+              language={language}
+              onLanguageChange={onLanguageChange}
+              onTopicToggle={onTopicToggle}
+              onSubcategoryToggle={onSubcategoryToggle}
+              onLanguageToggle={onLanguageToggle}
+              onResourceTypeToggle={onResourceTypeToggle}
+              onClear={onClear}
+            />
+          )}
         </div>
 
         {/* Footer actions */}
-        <div className="border-t border-archive-border/60 bg-archive-bg/30 p-4 shrink-0 flex gap-2 pb-safe">
+        <div className="border-t border-archive-border/60 bg-archive-bg/90 p-4 shrink-0 flex gap-2.5 pb-safe">
           <button
             type="button"
             onClick={onClear}
-            className="h-12 rounded border border-archive-border px-4 font-mono text-xs text-archive-subtle transition-colors hover:text-archive-text"
+            className="h-11 rounded border border-archive-border/80 px-4 font-mono text-xs text-archive-subtle transition-colors hover:text-archive-accent hover:border-archive-accent/50 cursor-pointer"
           >
-            Reset
+            Reset all ↺
           </button>
           <button
             onClick={onClose}
-            className="flex h-12 flex-1 items-center justify-center rounded bg-teal-500 font-sans text-sm font-semibold text-archive-bg transition-all hover:opacity-90 active:scale-[0.98]"
+            className="flex h-11 flex-1 items-center justify-center rounded bg-archive-accent hover:bg-archive-accent-glow font-mono text-xs font-semibold text-archive-bg transition-all active:scale-[0.98] cursor-pointer shadow-sm"
           >
-            Show {resultCount.toLocaleString()} Resource{resultCount !== 1 ? "s" : ""}
+            View {resultCount.toLocaleString()} resources →
           </button>
         </div>
       </div>

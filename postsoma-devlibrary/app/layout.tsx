@@ -18,24 +18,38 @@ export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: "PostSoma DevLibrary — Bilingual Programming Archive",
   description:
-    "A curated bilingual (EN/ZH) archive of free programming books, courses, tutorials, and documentation. Search-first, dark mode, no noise.",
+    "A curated bilingual (EN/ZH) archive of 5,000+ free programming books, courses, tutorials, and documentation. Search-first, dark mode, no noise.",
   keywords: ["programming", "books", "tutorials", "free", "bilingual", "Chinese", "English"],
+  icons: {
+    icon: [
+      { url: "/favicon.ico?v=2" },
+      { url: "/icon.png?v=2", sizes: "512x512", type: "image/png" },
+    ],
+    apple: [{ url: "/icon.png?v=2", sizes: "512x512", type: "image/png" }],
+    shortcut: ["/favicon.ico?v=2"],
+  },
   alternates: {
     canonical: "/",
   },
   openGraph: {
     title: "PostSoma DevLibrary — Bilingual Programming Archive",
     description:
-      "A curated bilingual (EN/ZH) archive of free programming books, courses, tutorials, and documentation. Search-first, dark mode, no noise.",
+      "A curated bilingual (EN/ZH) archive of 5,000+ free programming books, courses, tutorials, and documentation. Search-first, dark mode, no noise.",
     url: "/",
     siteName: "PostSoma DevLibrary",
     type: "website",
     images: [
       {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "PostSoma DevLibrary — 5,000+ Curated Free Programming Resources",
+      },
+      {
         url: "/og-image.svg",
         width: 1200,
         height: 630,
-        alt: "PostSoma DevLibrary — Bilingual Programming Archive",
+        alt: "PostSoma DevLibrary — 5,000+ Curated Free Programming Resources",
       },
     ],
   },
@@ -43,8 +57,8 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "PostSoma DevLibrary — Bilingual Programming Archive",
     description:
-      "A curated bilingual (EN/ZH) archive of free programming books, courses, tutorials, and documentation. Search-first, dark mode, no noise.",
-    images: ["/og-image.svg"],
+      "A curated bilingual (EN/ZH) archive of 5,000+ free programming books, courses, tutorials, and documentation. Search-first, dark mode, no noise.",
+    images: ["/og-image.png"],
   },
 };
 

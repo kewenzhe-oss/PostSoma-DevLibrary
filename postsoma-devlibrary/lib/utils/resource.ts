@@ -17,7 +17,21 @@ export const TYPE_LABELS: Record<Resource["type"], string> = {
   unknown: "resource",
 };
 
-function getCleanCategory(category: string, isZh: boolean = false): string {
+export function getResourceDomain(url?: string): string {
+  if (!url) return "";
+  try {
+    const cleanUrl = url.trim();
+    if (!cleanUrl || cleanUrl.startsWith("/") || !cleanUrl.includes("://")) {
+      return "";
+    }
+    const parsed = new URL(cleanUrl);
+    return parsed.hostname.replace(/^www\./, "");
+  } catch {
+    return "";
+  }
+}
+
+export function getCleanCategory(category: string, isZh: boolean = false): string {
   const upper = category.toUpperCase().trim();
   
   if (upper === "BY PROGRAMMING LANGUAGE") {

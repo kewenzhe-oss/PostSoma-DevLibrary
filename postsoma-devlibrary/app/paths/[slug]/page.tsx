@@ -10,6 +10,15 @@ export const metadata: Metadata = {
     index: false,
     follow: true,
   },
+  openGraph: {
+    title: "Learning Path Redirect — PostSoma DevLibrary",
+    images: ["/og-image.png"],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Learning Path Redirect — PostSoma DevLibrary",
+    images: ["/og-image.png"],
+  },
 };
 
 export async function generateStaticParams() {

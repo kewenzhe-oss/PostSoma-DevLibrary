@@ -114,25 +114,25 @@ body {
     background: rgba(200, 169, 110, 0.02);
   }
 
-  /* Language badge */
+  /* Language badge - subdued neutral */
   .lang-badge-en {
-    @apply text-xs font-mono px-1.5 py-0.5 rounded-sm;
-    background: rgba(74, 127, 165, 0.15);
-    color: #7ab3d4;
-    border: 1px solid rgba(74, 127, 165, 0.25);
+    @apply text-[10px] font-mono px-1.5 py-0.5 rounded-sm;
+    background: rgba(255, 255, 255, 0.04);
+    color: var(--archive-subtle);
+    border: 1px solid var(--archive-border);
   }
 
   .lang-badge-zh {
-    @apply text-xs font-mono px-1.5 py-0.5 rounded-sm;
-    background: rgba(165, 90, 74, 0.15);
-    color: #d4836e;
-    border: 1px solid rgba(165, 90, 74, 0.25);
+    @apply text-[10px] font-mono px-1.5 py-0.5 rounded-sm;
+    background: rgba(255, 255, 255, 0.04);
+    color: var(--archive-subtle);
+    border: 1px solid var(--archive-border);
   }
 
-  /* Type badge */
+  /* Type badge - subdued neutral */
   .type-badge {
-    @apply text-xs font-mono px-1.5 py-0.5 rounded-sm;
-    background: rgba(44, 51, 62, 0.8);
+    @apply text-[10px] font-mono px-1.5 py-0.5 rounded-sm;
+    background: rgba(255, 255, 255, 0.03);
     color: var(--archive-subtle);
     border: 1px solid var(--archive-border);
   }

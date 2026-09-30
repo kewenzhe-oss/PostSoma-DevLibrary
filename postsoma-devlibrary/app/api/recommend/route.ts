@@ -26,8 +26,6 @@ export async function GET(request: NextRequest) {
     | "tutorial"
     | "documentation"
     | "interactive";
-  const apiKey = searchParams.get("apiKey") || undefined;
-
   try {
     const all = await getAllResources();
     const result = await matchAndRecommend(all, {
@@ -35,7 +33,6 @@ export async function GET(request: NextRequest) {
       difficulty,
       language,
       format,
-      apiKey,
     });
     return NextResponse.json(result);
   } catch (error: any) {

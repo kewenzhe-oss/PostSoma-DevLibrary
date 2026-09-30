@@ -8,25 +8,34 @@ import { absoluteSiteUrl } from "@/lib/config/site";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Browse Resources — PostSoma DevLibrary",
+  title: "Full Archive — PostSoma DevLibrary",
   description:
-    "Search the PostSoma DevLibrary archive of free programming books, courses, cheat sheets, interactive learning tools, and curated GitHub projects.",
+    "5,184 free programming books, courses, cheat sheets and hand-picked open-source repos. No black-box ranking. Search, filter, go straight to the source.",
   alternates: {
     canonical: "/resources",
   },
   openGraph: {
-    title: "Browse Resources — PostSoma DevLibrary",
+    title: "Full Archive — PostSoma DevLibrary",
     description:
-      "Search the PostSoma DevLibrary archive of free programming books, courses, cheat sheets, interactive learning tools, and curated GitHub projects.",
+      "5,184 free programming books, courses, cheat sheets and hand-picked open-source repos. No black-box ranking. Search, filter, go straight to the source.",
     url: "/resources",
     siteName: "PostSoma DevLibrary",
     type: "website",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "Full Archive — PostSoma DevLibrary",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Browse Resources — PostSoma DevLibrary",
+    title: "Full Archive — PostSoma DevLibrary",
     description:
-      "Search the PostSoma DevLibrary archive of free programming books, courses, cheat sheets, interactive learning tools, and curated GitHub projects.",
+      "5,184 free programming books, courses, cheat sheets and hand-picked open-source repos. No black-box ranking. Search, filter, go straight to the source.",
+    images: ["/og-image.png"],
   },
 };
 
@@ -48,8 +57,8 @@ export default async function ResourcesPage() {
               "@type": "CollectionPage",
               "@id": absoluteSiteUrl("/resources#collection"),
               "url": absoluteSiteUrl("/resources"),
-              "name": "Resource Archive — PostSoma DevLibrary",
-              "description": "Search and filter the complete collection of free programming books, courses, tutorials, cheat sheets, and documentation.",
+              "name": "Full Archive — PostSoma DevLibrary",
+              "description": `${resources.length.toLocaleString()} free programming books, courses, cheat sheets and hand-picked open-source repos. No black-box ranking. Search, filter, go straight to the source.`,
               "isPartOf": { "@id": absoluteSiteUrl("/#website") }
             },
             {
@@ -75,14 +84,13 @@ export default async function ResourcesPage() {
       />
       <div className="mb-4 md:mb-8 animate-fade-in">
         <p className="mb-2 font-mono text-[10px] uppercase tracking-[0.2em] text-archive-accent-dim">
-          Learn → Practice → Build
+          Read · Practice · Explore
         </p>
         <h1 className="font-display text-2xl md:text-3xl text-archive-text mb-1 md:mb-2">
-          Resource Archive
+          Full Archive
         </h1>
         <p className="max-w-2xl font-sans text-xs leading-relaxed text-archive-subtle md:text-sm">
-          Learn with books and courses, practice with quick references and interactive tools,
-          then bring proven open-source projects back into your build.
+          {resources.length.toLocaleString()} free programming books, courses, cheat sheets and hand-picked open-source repos. No black-box ranking. Search, filter, go straight to the source.
         </p>
       </div>
 

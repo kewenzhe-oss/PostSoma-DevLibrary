@@ -101,5 +101,36 @@ describe("public resource facets", () => {
     expect(model.resourceTypes.find((option) => option.value === "book")?.count).toBe(1);
     expect(model.resourceTypes.find((option) => option.value === "course")?.count).toBe(1);
     expect(model.classifiedCount).toBe(3);
+    expect(model.totalCount).toBe(4);
+  });
+
+  it("handles language facet mapping: empty array (全部) does not filter language, single selection filters strictly", () => {
+    // When languages is [] ("全部" = 不传语言维度), both en and zh are retained
+    const allResult = filterResourcesByFacets(resources, {
+      topics: [],
+      subcategories: [],
+      languages: [],
+      resourceTypes: [],
+    });
+    expect(allResult.length).toBe(4);
+
+    // When languages is ["zh"], only zh resources are returned
+    const zhResult = filterResourcesByFacets(resources, {
+      topics: [],
+      subcategories: [],
+      languages: ["zh"],
+      resourceTypes: [],
+    });
+    expect(zhResult.map((r) => r.id)).toEqual(["vue-course"]);
+
+    // When languages is ["en"], only en resources are returned
+    const enResult = filterResourcesByFacets(resources, {
+      topics: [],
+      subcategories: [],
+      languages: ["en"],
+      resourceTypes: [],
+    });
+    expect(enResult.map((r) => r.id)).toEqual(["react-book", "python-book", "legacy"]);
   });
 });
+

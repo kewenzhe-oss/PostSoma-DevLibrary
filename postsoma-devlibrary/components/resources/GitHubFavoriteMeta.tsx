@@ -15,26 +15,26 @@ const HEALTH_META: Record<
   active: {
     label: "Active",
     description: "Recently maintained",
-    dotClassName: "bg-teal-400",
-    textClassName: "text-teal-300/80",
+    dotClassName: "bg-emerald-500/60",
+    textClassName: "text-archive-subtle/70",
   },
   quiet: {
     label: "Quiet",
     description: "No push within the quiet threshold",
-    dotClassName: "bg-amber-400",
-    textClassName: "text-amber-300/80",
+    dotClassName: "bg-amber-500/50",
+    textClassName: "text-archive-subtle/60",
   },
   archived: {
     label: "Archived",
     description: "Archived by its GitHub owner",
-    dotClassName: "bg-archive-subtle",
-    textClassName: "text-archive-subtle",
+    dotClassName: "bg-archive-subtle/40",
+    textClassName: "text-archive-subtle/50",
   },
   unavailable: {
     label: "Unavailable",
     description: "Disabled or no longer reachable",
-    dotClassName: "bg-rose-400",
-    textClassName: "text-rose-300/80",
+    dotClassName: "bg-rose-500/40",
+    textClassName: "text-archive-subtle/50",
   },
 };
 

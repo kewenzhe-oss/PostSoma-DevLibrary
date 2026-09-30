@@ -48,6 +48,10 @@ function GitHubRecallContext({ favorite }: { favorite: GitHubFavorite }) {
       ? formatTimelineDate(favorite.lastReviewedAt)
       : null;
 
+  if (!trustedDiscoveryDate && !trustedReviewDate && !favorite.personalNote) {
+    return null;
+  }
+
   return (
     <div className="mb-1.5 flex flex-wrap items-center gap-x-3 gap-y-1 px-3 font-mono text-[9px] text-archive-subtle/65">
       {trustedDiscoveryDate && (
@@ -58,30 +62,22 @@ function GitHubRecallContext({ favorite }: { favorite: GitHubFavorite }) {
           </span>
         </span>
       )}
-      <span>
-        Review history ·{" "}
-        <span
-          className={
-            trustedReviewDate
-              ? "text-archive-subtle"
-              : "italic text-archive-subtle/55"
-          }
-        >
-          {trustedReviewDate
-            ? `Reviewed ${trustedReviewDate}`
-            : "Not established"}
+      {trustedReviewDate && (
+        <span>
+          Review history ·{" "}
+          <span className="text-archive-subtle">
+            Reviewed {trustedReviewDate}
+          </span>
         </span>
-      </span>
-      <span
-        className={`min-w-0 basis-full truncate sm:basis-auto ${
-          favorite.personalNote
-            ? "text-archive-text/75"
-            : "italic text-archive-subtle/45"
-        }`}
-        title={favorite.personalNote || "No personal note added yet."}
-      >
-        Personal note · {favorite.personalNote || "Not added yet"}
-      </span>
+      )}
+      {favorite.personalNote && (
+        <span
+          className="min-w-0 basis-full truncate sm:basis-auto text-archive-text/75"
+          title={favorite.personalNote}
+        >
+          Personal note · {favorite.personalNote}
+        </span>
+      )}
     </div>
   );
 }
@@ -182,6 +178,23 @@ export default function ResourceGrid({
     return topics;
   }, [resources, viewMode]);
 
+  const capabilityFrequency = useMemo(() => {
+    const map = new Map<string, number>();
+    const source = githubFavoritesByResourceId ?? githubFavoritesById;
+    if (!source) return map;
+    for (const fav of source.values()) {
+      const seen = new Set(
+        fav.capabilities
+          .map((c) => c.normalize("NFKC").trim().toLocaleLowerCase())
+          .filter(Boolean),
+      );
+      for (const c of seen) {
+        map.set(c, (map.get(c) ?? 0) + 1);
+      }
+    }
+    return map;
+  }, [githubFavoritesById, githubFavoritesByResourceId]);
+
   if (viewMode === "topics") {
     // If no aggregated topics are available, provide a clean fallback with redirection action
     if (topicCards.length === 0) {
@@ -261,6 +274,7 @@ export default function ResourceGrid({
               language={language}
               onPreview={onPreview}
               githubFavorite={githubFavorite}
+              capabilityFrequency={capabilityFrequency}
             />
           );
         }
@@ -279,6 +293,7 @@ export default function ResourceGrid({
               language={language}
               onPreview={onPreview}
               githubFavorite={githubFavorite}
+              capabilityFrequency={capabilityFrequency}
             />
             {githubFavorite && <GitHubMatchReasons reasons={matchReasons} />}
           </div>

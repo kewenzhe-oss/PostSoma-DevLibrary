@@ -25,6 +25,7 @@ export interface ResourceFacetModel {
   languages: ResourceFacetOption<ResourceLanguage>[];
   resourceTypes: ResourceFacetOption<ResourceType>[];
   classifiedCount: number;
+  totalCount: number;
 }
 
 export const CANONICAL_TOPIC_LABELS: ReadonlyArray<{
@@ -207,6 +208,7 @@ export function buildResourceFacetModel(
     languages,
     resourceTypes,
     classifiedCount: resources.filter((resource) => Boolean(resource.facet)).length,
+    totalCount: resources.length,
   };
 }
 
@@ -237,4 +239,22 @@ export function getResourceFacetBreadcrumb(
         : subcategory.labelEn
       : null,
   ].filter((value): value is string => Boolean(value));
+}
+
+export function humanizeId(value: string): string {
+  return value
+    .split("-")
+    .filter(Boolean)
+    .map((part) => {
+      if (["ai", "api", "css", "html", "iot", "sql", "ui", "ux"].includes(part)) {
+        return part.toUpperCase();
+      }
+      if (part === "js") return "JS";
+      return part.charAt(0).toUpperCase() + part.slice(1);
+    })
+    .join(" ");
+}
+
+export function getResourceTypeLabel(type: ResourceType): string {
+  return RESOURCE_TYPE_LABELS[type] ?? humanizeId(type);
 }

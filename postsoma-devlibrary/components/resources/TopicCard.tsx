@@ -141,7 +141,7 @@ export default function TopicCard({
           }}
           className="flex-1 md:flex-initial h-11 md:h-auto bg-archive-accent text-archive-bg rounded font-sans text-xs font-semibold flex items-center justify-center transition-all duration-150 active:scale-[0.98] md:active:scale-100 md:bg-transparent md:border-none md:text-archive-subtle md:hover:text-archive-text md:font-mono md:text-xs select-none"
         >
-          {language === "zh" ? "查看主题 →" : "View Topic →"}
+          View Topic →
         </button>
         <span className="font-mono text-[10px] text-archive-subtle opacity-40 select-none">
           {resources.some((r) => r.language === "zh") ? "ZH / EN" : "EN"}

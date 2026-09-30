@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   buildGitHubFacetOptions,
+  getPrimaryCapability,
   searchGitHubFavorites,
 } from "../../lib/data/github-search";
 import type { GitHubFavorite } from "../../lib/types/github-favorite";
@@ -209,5 +210,18 @@ describe("GitHub structured client search", () => {
       "old",
       "unknown",
     ]);
+  });
+
+  it("determines the primary capability by highest global frequency with acronym formatting", () => {
+    const freq = new Map<string, number>([
+      ["llm", 35],
+      ["cli", 12],
+      ["automation", 8],
+    ]);
+
+    expect(getPrimaryCapability(["cli", "llm", "automation"], freq)).toBe("LLM");
+    expect(getPrimaryCapability(["automation", "cli"], freq)).toBe("CLI");
+    expect(getPrimaryCapability(["automation"])).toBe("Automation");
+    expect(getPrimaryCapability([])).toBeNull();
   });
 });

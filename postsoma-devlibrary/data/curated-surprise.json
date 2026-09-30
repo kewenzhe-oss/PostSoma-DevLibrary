@@ -1,0 +1,106 @@
+[
+  {
+    "resourceId": "5a2b846d931cdd65",
+    "curatorNote": "学习 Git 分支的终极可视化沙盒，在拖拽与关卡演练中把树状提交图刻进肌肉记忆。"
+  },
+  {
+    "resourceId": "991a50059b50403a",
+    "curatorNote": "硬核编程练兵场：从零手写编译器、OS与微型数据库，亲手剥开复杂系统黑盒。"
+  },
+  {
+    "resourceId": "5ac266dea35b19db",
+    "curatorNote": "编程语言实现现代杰作，图文并茂带你用 Java 与 C 从零打造双架构解释器与虚拟机。"
+  },
+  {
+    "resourceId": "ed50ab6f2869f30c",
+    "curatorNote": "MIT 经典遗珠课：补齐课堂从不教、但写代码每天必用的 Shell、Vim 与调试心智。"
+  },
+  {
+    "resourceId": "a9d9fc5a89bc93d3",
+    "curatorNote": "官方出品最详尽的 Git 中文圣经，从底层对象存储到企业级分支策略，读透再无翻车。"
+  },
+  {
+    "resourceId": "fba6bafcc81eae22",
+    "curatorNote": "命令行解构神器：粘贴任意复合 Shell 命令，即可层级可视化拆解每个参数的具体含义。"
+  },
+  {
+    "resourceId": "2b578e877a1feeb3",
+    "curatorNote": "用写代码喂青蛙的趣味互动通关游戏，24 个精巧关卡助你轻松搞懂 CSS Flexbox 弹性排版。"
+  },
+  {
+    "resourceId": "4f64caee4fbbe162",
+    "curatorNote": "边种胡萝卜边学 CSS Grid 的交互式小游戏，通过直观视觉反馈彻底攻克网格布局难点。"
+  },
+  {
+    "resourceId": "c6bea20e97c0820e",
+    "curatorNote": "自由软件的数字军火库：数千个可自主托管的轻量开源应用，打造完全掌控的个人私有云。"
+  },
+  {
+    "resourceId": "e9f89d8d87f1544c",
+    "curatorNote": "讲解 Linux 终端交互最扎实的启蒙读物，清晰呈现重定向、权限管理与任务编排的底层美感。"
+  },
+  {
+    "resourceId": "0b176fd6af8552c3",
+    "curatorNote": "赫尔辛基大学王牌全栈课程，深入 React、Node、GraphQL 与 CI/CD 工业级工程实践。"
+  },
+  {
+    "resourceId": "a107670dd18e4604",
+    "curatorNote": "极高信息密度的语法代码块速查站，几分钟扫清任何主流编程语言的核心表达模式。"
+  },
+  {
+    "resourceId": "7e47ca4e0d345b4f",
+    "curatorNote": "业内最系统全面的大模型提示词工程手册，覆盖少样本提示、思考链与自主 Agent 设计。"
+  },
+  {
+    "resourceId": "cc73cd96aacf2dfb",
+    "curatorNote": "实用主义 Python 启蒙经典，教你用轻量脚本自动操作 Excel、批量整理文件并解放重复劳动。"
+  },
+  {
+    "resourceId": "02b897b27663cd7f",
+    "curatorNote": "计算机科学传世公认第一圣经 SICP，从抽象与复合数据建立真正穿透时代的技术洞察力。"
+  },
+  {
+    "resourceId": "af923c800ffd5af8",
+    "curatorNote": "官方经典范例中文教程，通过丰富可编译的高质量示例，亲身感受所有权与生命周期的魅力。"
+  },
+  {
+    "resourceId": "c989fa052c72254e",
+    "curatorNote": "设计模式视觉化巅峰之作 Refactoring.Guru 中文版，生动拆解坏味道并给出优雅改造重构示范。"
+  },
+  {
+    "resourceId": "01a8c0faecd0b7ca",
+    "curatorNote": "围绕虚拟化、并发与持久化展开的操作系统通识名作 OSTEP 中文版，风趣深刻直击底层运行机制。"
+  },
+  {
+    "resourceId": "f07803e74edb13a9",
+    "curatorNote": "国内口碑极高的 Docker 开源实战指南，从容器原理到 Dockerfile 编写与多容器编排一网打尽。"
+  },
+  {
+    "resourceId": "e66b65017337e00f",
+    "curatorNote": "手绘漫画风格的超萌 Git 中文入门，用亲切图解拆除版本控制心理门槛，零压力快速上手。"
+  },
+  {
+    "resourceId": "a29c741973826116",
+    "curatorNote": "极具启发性的 GitHub 高级进阶手册，整理了大量鲜为人知的快捷键、搜索语法与团队协作利器。"
+  },
+  {
+    "resourceId": "224bca22f3a47f3a",
+    "curatorNote": "国内 Go 圈公认的硬核进阶好书，深入 CGO、RPC、Web 框架设计及分布式系统的 Go 语言实践。"
+  },
+  {
+    "resourceId": "511c915060fbd31b",
+    "curatorNote": "黄健宏整理的 Redis 全命令中文速查辞典，时间复杂度与应用场景随手翻阅，案头必备参考。"
+  },
+  {
+    "resourceId": "e7098223f5735510",
+    "curatorNote": "直接在网页中练习 Vim 键位光标移动与模式切换，通过沉浸式交互克服最初的陡峭学习曲线。"
+  },
+  {
+    "resourceId": "7011165b98f932f9",
+    "curatorNote": "以生动漫画故事拆解加密通信握手流程，五分钟看懂对称密钥协商、证书机构与中间人防御。"
+  },
+  {
+    "resourceId": "ae46b82cf8d154fd",
+    "curatorNote": "经典深邃的 Bash 进阶实战手册，涵盖进程替换、陷阱捕获与健壮脚本工程的最佳实践技巧。"
+  }
+]

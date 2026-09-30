@@ -9,6 +9,15 @@ export const metadata: Metadata = {
     index: false,
     follow: true,
   },
+  openGraph: {
+    title: "My Library — PostSoma DevLibrary",
+    images: ["/og-image.png"],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "My Library — PostSoma DevLibrary",
+    images: ["/og-image.png"],
+  },
 };
 
 export default async function LibraryPage() {

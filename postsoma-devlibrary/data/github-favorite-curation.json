@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-07-28T15:00:00.000Z",
+  "updatedAt": "2026-09-30T21:45:12.307Z",
   "source": "manual-curation",
   "records": [
     {
@@ -189,6 +189,30 @@
       "belongsTo": "agent-skills-hub",
       "relatedLearningResourceIds": [],
       "boundaryReason": "A purpose-built social-media agent tool belongs in Agent Skills Hub."
+    },
+    {
+      "favoriteId": "2e1213361ebcaec6",
+      "belongsTo": "devlibrary",
+      "relatedLearningResourceIds": [],
+      "boundaryReason": "人工决策覆盖：作为独立开发者商业化与付费体系参考保留在 DevLibrary"
+    },
+    {
+      "favoriteId": "92509c4f30bfa957",
+      "belongsTo": "devlibrary",
+      "relatedLearningResourceIds": [],
+      "boundaryReason": "人工决策覆盖：作为游戏工作室多 Agent 协调架构参考保留在 DevLibrary"
+    },
+    {
+      "favoriteId": "8bf09ca6d2000a77",
+      "belongsTo": "devlibrary",
+      "relatedLearningResourceIds": [],
+      "boundaryReason": "人工决策覆盖：作为 CopilotKit 自主 Agent 参考实现保留在 DevLibrary"
+    },
+    {
+      "favoriteId": "e7fbb726b1647146",
+      "belongsTo": "devlibrary",
+      "relatedLearningResourceIds": [],
+      "boundaryReason": "人工决策覆盖：作为 Android 远程控制与自动化工具保留在 DevLibrary"
     }
   ]
 }

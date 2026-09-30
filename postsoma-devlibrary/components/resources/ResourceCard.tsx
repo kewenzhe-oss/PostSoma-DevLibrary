@@ -1,21 +1,31 @@
 import Link from "next/link";
-import { useSearchParams, useRouter } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import type { Resource } from "@/lib/types/resource";
 import BookmarkButton from "@/components/resources/BookmarkButton";
-import { TYPE_LABELS } from "@/lib/utils/resource";
-import { getResourceFacetBreadcrumb } from "@/lib/data/resource-facets";
+import { TYPE_LABELS, getResourceDomain } from "@/lib/utils/resource";
 import type { GitHubFavorite } from "@/lib/types/github-favorite";
-import {
-  getCompactGitHubSummary,
-  GitHubCapabilityTags,
-  GitHubHealthBadge,
-} from "./GitHubFavoriteMeta";
+import { GitHubHealthBadge } from "./GitHubFavoriteMeta";
+import { getPrimaryCapability } from "@/lib/data/github-search";
 
 interface ResourceCardProps {
   resource: Resource;
   language?: "all" | "zh" | "en";
   onPreview?: (resource: Resource) => void;
   githubFavorite?: GitHubFavorite;
+  capabilityFrequency?: ReadonlyMap<string, number>;
+}
+
+function extractRepoIdentity(rawUrl: string): string {
+  try {
+    const url = new URL(rawUrl);
+    const parts = url.pathname.split("/").filter(Boolean);
+    if (parts.length >= 2) {
+      return `${parts[0]}/${parts[1].replace(/\.git$/i, "")}`;
+    }
+    return parts[0] || "";
+  } catch {
+    return "";
+  }
 }
 
 export default function ResourceCard({
@@ -23,9 +33,9 @@ export default function ResourceCard({
   language = "all",
   onPreview,
   githubFavorite,
+  capabilityFrequency,
 }: ResourceCardProps) {
   const searchParams = useSearchParams();
-  const router = useRouter();
 
   const handleCardClick = () => {
     if (typeof sessionStorage !== "undefined") {
@@ -38,152 +48,173 @@ export default function ResourceCard({
   const detailUrl = `/resource/${resource.id}${queryString ? "?" + queryString : ""}`;
   const displayLanguage = resource.facet?.language ?? resource.language;
   const displayType = resource.facet?.resourceType ?? resource.type;
-  const facetBreadcrumb = getResourceFacetBreadcrumb(
-    resource,
-    displayLanguage === "zh" ? "zh" : "en",
-  );
-  const evidenceSummary = resource.cardSummary ?? resource.summary ?? null;
+  const domain = getResourceDomain(resource.url);
 
-  const isDirectOutbound = resource.collection === "cheat_sheets" || resource.collection === "interactive";
-
-  const handleTitleClick = (e: React.MouseEvent) => {
-    if (isDirectOutbound) {
-      e.preventDefault();
-      window.open(resource.url, "_blank", "noopener,noreferrer");
-    } else if (onPreview) {
-      e.preventDefault();
-      onPreview(resource);
-    } else {
-      handleCardClick();
-    }
-  };
-
-  const handleCardBodyClick = (e: React.MouseEvent) => {
-    const target = e.target as HTMLElement;
-    // Don't trigger if clicked element is interactive
-    if (target.closest("button") || target.closest("a")) {
-      return;
-    }
-
-    if (isDirectOutbound) {
-      window.open(resource.url, "_blank", "noopener,noreferrer");
-    } else if (onPreview) {
-      onPreview(resource);
-    } else {
-      handleCardClick();
-      router.push(detailUrl);
-    }
-  };
-
+  // ── GitHub Row Variant (Curated open-source projects) ─────────────────────────
   if (githubFavorite) {
+    const curatedNote =
+      githubFavorite.whySaved?.trim() ||
+      githubFavorite.editorial?.topic ||
+      "Curated open-source project";
+
+    const isHandwrittenChineseNote =
+      Boolean(githubFavorite.whySaved && /[\u4e00-\u9fa5]/.test(githubFavorite.whySaved));
+
+    const isSharedWithBooks =
+      resource.url.includes("The-Accidental-CTO") ||
+      resource.sourcePath === "books/free-programming-books-subjects.md" ||
+      (Boolean(githubFavorite) && resource.id !== githubFavorite.id);
+
+    const repoIdentity = extractRepoIdentity(resource.url);
+
+    const primaryCapability = githubFavorite.capabilities?.length
+      ? getPrimaryCapability(githubFavorite.capabilities, capabilityFrequency)
+      : null;
+
     return (
       <article
         id={`resource-card-${resource.id}`}
-        onClick={handleCardBodyClick}
-        className="archive-card px-3.5 py-3 md:px-4 group animate-fade-in transition-all duration-200 cursor-pointer active:bg-white/[0.01]"
+        className="archive-card relative px-3.5 py-3 md:px-4 group animate-fade-in transition-all duration-200 hover:border-archive-border-hover active:bg-white/[0.01]"
       >
-        <div className="flex items-start gap-3">
+        <div className="flex items-start justify-between gap-3">
           <div className="min-w-0 flex-1">
-            <div className="flex items-start gap-3">
-              <Link
-                href={detailUrl}
-                onClick={handleTitleClick}
-                className="min-w-0 flex-1"
-              >
-                <h2 className="font-display text-[15px] md:text-base text-archive-text leading-snug group-hover:text-archive-accent-glow transition-colors duration-150 line-clamp-1">
+            {/* Row 1: Main Title (Clean Project Name) + Prominent Status Badges */}
+            <div className="flex items-center gap-2 flex-wrap">
+              <h2 className="font-display text-[15px] md:text-base text-archive-text leading-snug group-hover:text-archive-accent transition-colors duration-150 line-clamp-1">
+                <a
+                  href={resource.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="focus:outline-none focus-visible:ring-1 focus-visible:ring-archive-accent rounded-sm after:absolute after:inset-0"
+                  title={`Open GitHub repository: ${resource.title}`}
+                >
                   {resource.title}
-                </h2>
-              </Link>
-              <div className="shrink-0 pt-0.5">
-                <GitHubHealthBadge favorite={githubFavorite} />
+                </a>
+              </h2>
+
+              {githubFavorite.health === "unavailable" && (
+                <span className="relative z-10 font-mono text-[9px] px-1.5 py-0.5 rounded border border-rose-500/40 bg-rose-500/10 text-rose-300 select-none">
+                  Unavailable / 404
+                </span>
+              )}
+              {githubFavorite.health === "archived" && (
+                <span className="relative z-10 font-mono text-[9px] px-1.5 py-0.5 rounded border border-amber-500/40 bg-amber-500/10 text-amber-300 select-none">
+                  Archived
+                </span>
+              )}
+              {isSharedWithBooks && (
+                <span className="relative z-10 font-mono text-[9px] px-1.5 py-0.5 rounded border border-archive-accent/40 bg-archive-accent/10 text-archive-accent select-none">
+                  Also in Books
+                </span>
+              )}
+
+              <div className="relative z-10 shrink-0">
+                <GitHubHealthBadge favorite={githubFavorite} showLabel={false} />
               </div>
             </div>
 
-            <p className="font-sans text-[11px] md:text-xs text-archive-subtle/80 line-clamp-2 leading-relaxed mt-1.5 max-w-4xl">
-              {getCompactGitHubSummary(githubFavorite.shortSummary)}
-            </p>
+            {/* Row 2: Subtitle (owner/repo · language) + Primary Capability Pill */}
+            <div className="flex items-center gap-2 mt-1 select-none flex-wrap">
+              <p className="font-mono text-[11px] text-archive-subtle/70 truncate">
+                {repoIdentity ? (
+                  <span className="text-archive-subtle/85 font-mono">{repoIdentity}</span>
+                ) : (
+                  "repo"
+                )}
+                {" · "}
+                {displayLanguage === "zh" ? "中文" : "EN"}
+              </p>
 
-            <div className="flex items-end justify-between gap-3 mt-2.5">
-              <GitHubCapabilityTags
-                capabilities={githubFavorite.capabilities}
-                maxVisible={4}
-              />
-              <span className="hidden sm:inline font-mono text-[9px] text-archive-subtle/45 shrink-0">
-                Details →
-              </span>
+              {primaryCapability && (
+                <span className="font-mono text-[9px] text-teal-400/80 bg-teal-500/10 border border-teal-500/25 px-1.5 py-0.5 rounded tracking-tight select-none">
+                  {primaryCapability}
+                </span>
+              )}
             </div>
+
+            {/* Row 3: Human curated reason (whySaved) / Summary */}
+            <p className="font-sans text-[11px] md:text-xs text-archive-subtle/85 leading-relaxed mt-2 line-clamp-2 select-text">
+              {isHandwrittenChineseNote ? (
+                <span className="font-mono text-[10px] text-archive-accent/80 mr-1.5 select-none font-medium">
+                  PostSoma&apos;s note:
+                </span>
+              ) : (
+                <span className="font-mono text-[10px] text-archive-subtle/60 mr-1.5 select-none">
+                  Intro:
+                </span>
+              )}
+              {curatedNote}
+            </p>
           </div>
 
-          <div className="flex flex-col items-center gap-1.5 shrink-0 -mt-1">
+          {/* Right action column: Quiet star on top, quiet detail link on bottom */}
+          <div className="relative z-10 flex flex-col items-end justify-between self-stretch shrink-0 pl-1">
             <BookmarkButton resourceId={resource.id} variant="icon" />
-            <a
-              href={resource.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              id={`resource-open-${resource.id}`}
-              className="w-8 h-8 flex items-center justify-center rounded-sm border border-transparent text-archive-accent-dim hover:text-archive-accent hover:border-archive-border transition-colors font-mono text-xs"
-              title={`Open ${resource.title} on GitHub`}
-              aria-label={`Open ${resource.title} on GitHub`}
+            <Link
+              href={detailUrl}
+              onClick={(e) => {
+                e.stopPropagation();
+                if (onPreview) {
+                  e.preventDefault();
+                  onPreview(resource);
+                } else {
+                  handleCardClick();
+                }
+              }}
+              className="font-mono text-[10px] text-archive-subtle/50 hover:text-archive-accent transition-colors mt-auto pt-2"
+              title={`View details for ${resource.title}`}
             >
-              ↗
-            </a>
+              Details →
+            </Link>
           </div>
         </div>
       </article>
     );
   }
 
+  // ── Large Catalog Card Variant (Books, Courses, Docs, Interactive, etc.) ──────
   return (
     <article
       id={`resource-card-${resource.id}`}
-      onClick={handleCardBodyClick}
-      className="archive-card p-4 flex flex-col gap-3 group animate-fade-in transition-all duration-300 cursor-pointer active:bg-white/[0.01] md:active:bg-transparent"
+      className="archive-card relative p-4 flex flex-col justify-between group animate-fade-in transition-all duration-200 hover:border-archive-border-hover min-h-[112px] active:bg-white/[0.01]"
     >
-      {/* Row 1: badges & bookmark */}
-      <div className="flex items-center justify-between mb-1">
-        <div className="flex items-center gap-2 flex-wrap">
-          <span
-            className={displayLanguage === "zh" ? "lang-badge-zh" : "lang-badge-en"}
-          >
-            {displayLanguage === "zh" ? "中文" : "EN"}
-          </span>
-          <span className="type-badge">{TYPE_LABELS[displayType]}</span>
+      <div>
+        {/* Row 1: Title (Dictator focus, <a> stretches over whole card) + Bookmark */}
+        <div className="flex items-start justify-between gap-3">
+          <h2 className="font-display text-[15px] md:text-base text-archive-text leading-snug group-hover:text-archive-accent transition-colors duration-150 line-clamp-2">
+            <a
+              href={resource.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="focus:outline-none focus-visible:ring-1 focus-visible:ring-archive-accent rounded-sm after:absolute after:inset-0"
+              title={`Open resource: ${resource.title}`}
+            >
+              {resource.title}
+            </a>
+          </h2>
+          <div className="relative z-10 shrink-0 -mt-0.5">
+            <BookmarkButton resourceId={resource.id} variant="icon" />
+          </div>
         </div>
-        <BookmarkButton resourceId={resource.id} variant="icon" />
+
+        {/* Row 2: Whisper line (type · language · domain) */}
+        <p className="font-mono text-[11px] text-archive-subtle/70 mt-2 truncate select-none">
+          {TYPE_LABELS[displayType] || displayType} · {displayLanguage === "zh" ? "中文" : "EN"}
+          {domain && (
+            <>
+              {" · "}
+              <span>{domain}</span>
+            </>
+          )}
+        </p>
       </div>
 
-      {/* Row 2: Title */}
-      <Link href={detailUrl} onClick={handleTitleClick}>
-        <h2 className="font-display text-base text-archive-text leading-snug group-hover:text-archive-accent-glow transition-colors duration-150 line-clamp-2">
-          {resource.title}
-        </h2>
-      </Link>
-
-      {/* Row 3: Category breadcrumb */}
-      <p className="font-mono text-[11px] text-archive-subtle truncate">
-        {facetBreadcrumb.map((segment, index) => (
-          <span key={`${segment}-${index}`}>
-            {index > 0 && <span className="mx-1 opacity-40">/</span>}
-            {segment}
-          </span>
-        ))}
-      </p>
-
-      {/* Only show evidence-backed copy. Missing summaries remain visibly absent
-          instead of being replaced by a category template. */}
-      {evidenceSummary && (
-        <p className="font-sans text-xs text-archive-subtle/85 line-clamp-2 md:line-clamp-3 leading-relaxed">
-          {evidenceSummary}
-        </p>
-      )}
-
-      {/* Row 5: Footer Actions */}
-      <div className="flex items-center justify-between gap-3 mt-auto pt-2 border-t border-archive-border">
+      {/* Row 3: Subdued footer detail link */}
+      <div className="flex justify-end mt-3 pt-1 border-t border-archive-border/30">
         <Link
           href={detailUrl}
-          className="flex-1 md:flex-initial h-11 md:h-auto bg-archive-accent text-archive-bg rounded font-sans text-xs font-semibold flex items-center justify-center transition-all duration-150 active:scale-[0.98] md:active:scale-100 md:bg-transparent md:border-none md:text-archive-subtle md:hover:text-archive-text md:font-mono md:text-xs"
-          id={`resource-detail-${resource.id}`}
           onClick={(e) => {
+            e.stopPropagation();
             if (onPreview) {
               e.preventDefault();
               onPreview(resource);
@@ -191,22 +222,11 @@ export default function ResourceCard({
               handleCardClick();
             }
           }}
+          className="relative z-10 font-mono text-[10px] text-archive-subtle/50 hover:text-archive-accent transition-colors"
+          title={`View details for ${resource.title}`}
         >
-          {language === "zh" ? "查看详情 →" : "View Details →"}
+          Details →
         </Link>
-        <a
-          href={resource.url}
-          target="_blank"
-          rel="noopener noreferrer"
-          id={`resource-open-${resource.id}`}
-          className="w-11 h-11 md:w-auto md:h-auto shrink-0 border border-archive-border rounded bg-archive-surface text-archive-subtle flex items-center justify-center transition-all duration-150 active:scale-[0.98] md:active:scale-100 md:border-none md:bg-transparent md:text-archive-accent-dim md:hover:text-archive-accent md:font-mono md:text-xs"
-          title={`Open ${resource.title}`}
-        >
-          <span>↗</span>
-          <span className="hidden md:inline ml-1">
-            {language === "zh" ? "打开" : "Open"}
-          </span>
-        </a>
       </div>
     </article>
   );

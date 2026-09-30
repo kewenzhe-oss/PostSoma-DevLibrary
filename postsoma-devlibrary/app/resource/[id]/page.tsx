@@ -59,11 +59,20 @@ export async function generateMetadata({ params }: { params: { id: string } }): 
       type: "article",
       siteName: "PostSoma DevLibrary",
       locale: (resource.facet?.language ?? resource.language) === "zh" ? "zh_TW" : "en_US",
+      images: [
+        {
+          url: "/og-image.png",
+          width: 1200,
+          height: 630,
+          alt: `${resource.title} — PostSoma DevLibrary`,
+        },
+      ],
     },
     twitter: {
-      card: "summary",
+      card: "summary_large_image",
       title: `${resource.title} — PostSoma DevLibrary`,
       description,
+      images: ["/og-image.png"],
     },
   };
 }

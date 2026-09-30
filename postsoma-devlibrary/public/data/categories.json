@@ -13,7 +13,7 @@
   },
   {
     "name": "AI & Data",
-    "count": 3
+    "count": 5
   },
   {
     "name": "AI & Data Science",
@@ -197,15 +197,15 @@
   },
   {
     "name": "Desktop Development",
-    "count": 1
+    "count": 2
   },
   {
     "name": "Developer Resources",
-    "count": 1
+    "count": 2
   },
   {
     "name": "Developer Tools",
-    "count": 8
+    "count": 9
   },
   {
     "name": "Devops",
@@ -257,7 +257,7 @@
   },
   {
     "name": "Frontend Development",
-    "count": 3
+    "count": 5
   },
   {
     "name": "Game Development",
@@ -405,7 +405,7 @@
   },
   {
     "name": "Mobile Development",
-    "count": 2
+    "count": 4
   },
   {
     "name": "MongoDB",
@@ -569,7 +569,7 @@
   },
   {
     "name": "Security",
-    "count": 54
+    "count": 55
   },
   {
     "name": "Selenium",
@@ -613,7 +613,7 @@
   },
   {
     "name": "System Development",
-    "count": 1
+    "count": 2
   },
   {
     "name": "TensorFlow",
@@ -657,7 +657,7 @@
   },
   {
     "name": "Web Development",
-    "count": 34
+    "count": 35
   },
   {
     "name": "Web3",

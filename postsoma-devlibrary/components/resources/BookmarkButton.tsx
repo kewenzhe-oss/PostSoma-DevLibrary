@@ -19,6 +19,7 @@ export default function BookmarkButton({ resourceId, variant = "icon" }: Bookmar
 
   const handleClick = (e: React.MouseEvent) => {
     e.preventDefault(); // Prevent navigation if inside a Link
+    e.stopPropagation();
     toggleBookmark(resourceId);
   };
 

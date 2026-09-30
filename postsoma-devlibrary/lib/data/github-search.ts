@@ -100,6 +100,34 @@ export function buildGitHubFacetOptions(
   );
 }
 
+/**
+ * Deterministically picks the single capability with the highest global
+ * frequency in the collection. Formatted with acronym preservation.
+ */
+export function getPrimaryCapability(
+  capabilities: string[],
+  capabilityFrequency?: ReadonlyMap<string, number>,
+): string | null {
+  if (!capabilities || capabilities.length === 0) return null;
+  if (!capabilityFrequency || capabilityFrequency.size === 0) {
+    return formatGitHubFacetLabel(capabilities[0]!);
+  }
+
+  let top = capabilities[0]!;
+  let maxCount = capabilityFrequency.get(normalize(top)) ?? 0;
+
+  for (let i = 1; i < capabilities.length; i++) {
+    const current = capabilities[i]!;
+    const count = capabilityFrequency.get(normalize(current)) ?? 0;
+    if (count > maxCount) {
+      maxCount = count;
+      top = current;
+    }
+  }
+
+  return formatGitHubFacetLabel(top);
+}
+
 function includesNormalized(value: string, needle: string): boolean {
   return normalize(value).includes(needle);
 }
@@ -307,7 +335,7 @@ export function searchGitHubFavorites(
   // than real discovery/review events, so sorting by them would imply a
   // personal timeline that the collection does not yet have.
 
-  const limit = input.limit ?? 300;
+  const limit = input.limit ?? matched.length;
   const visible = matched.slice(0, limit);
   return {
     resources: visible.map(({ resource }) => resource),

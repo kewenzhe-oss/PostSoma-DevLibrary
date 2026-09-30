@@ -22,12 +22,21 @@ export const metadata: Metadata = {
     url: "/recommend",
     siteName: "PostSoma DevLibrary",
     type: "website",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "Shortlist Recommendations — PostSoma DevLibrary",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "Shortlist Recommendations — PostSoma DevLibrary",
     description:
       "Create an explainable three-resource programming learning shortlist from the published PostSoma DevLibrary catalog.",
+    images: ["/og-image.png"],
   },
 };
 
@@ -161,7 +170,7 @@ export default async function RecommendPage() {
                 <div key={pick.resourceId} className="pick-card">
                   <h3>{pick.title}</h3>
                   <p>Resource URL: {pick.url}</p>
-                  <p>Medium Type: {pick.type} | Take: {pick.take} | Review Level: {pick.explanation.evidenceStatus}</p>
+                  <p>Medium Type: {pick.type} | Take: {pick.take} | Meta Status: {pick.explanation.evidenceStatus === "high" ? "Complete" : pick.explanation.evidenceStatus === "medium" ? "Indexed" : "Basic"}</p>
                   <p><strong>Why Match:</strong> {pick.explanation.whyMatch}</p>
                   <p><strong>Advantage:</strong> {pick.explanation.relativeAdvantage}</p>
                   <p><strong>Limitations:</strong> {pick.explanation.knownLimitations}</p>

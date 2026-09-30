@@ -6,6 +6,7 @@ interface ResourceSearchProps {
   value: string;
   onChange: (value: string, options?: ResourceSearchChangeOptions) => void;
   resultCount?: number;
+  totalCount?: number;
   isSearching?: boolean;
 }
 
@@ -18,18 +19,22 @@ export default function ResourceSearch({
   value,
   onChange,
   resultCount,
+  totalCount = 5184,
   isSearching = false,
 }: ResourceSearchProps) {
   const inputRef = useRef<HTMLInputElement>(null);
   const isComposingRef = useRef(false);
-  const [placeholder, setPlaceholder] = useState("Search resources… (⌘K)");
+  const countStr = totalCount.toLocaleString();
+  const [placeholder, setPlaceholder] = useState(`Search ${countStr} resources… (⌘K)`);
 
   // Remove keyboard shortcut hint from placeholder on mobile screens
   useEffect(() => {
     if (typeof window !== "undefined" && window.innerWidth < 768) {
-      setPlaceholder("Search resources…");
+      setPlaceholder(`Search ${countStr} resources…`);
+    } else {
+      setPlaceholder(`Search ${countStr} resources… (⌘K)`);
     }
-  }, []);
+  }, [countStr]);
 
   // Keyboard shortcut: Cmd+K / Ctrl+K
   useEffect(() => {

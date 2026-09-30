@@ -15266,7 +15266,7 @@
         "path": [
           "AI & Data"
         ],
-        "resourceCount": 3,
+        "resourceCount": 5,
         "children": []
       },
       {
@@ -15479,7 +15479,7 @@
         "path": [
           "Desktop Development"
         ],
-        "resourceCount": 1,
+        "resourceCount": 2,
         "children": []
       },
       {
@@ -15490,7 +15490,7 @@
         "path": [
           "Developer Resources"
         ],
-        "resourceCount": 1,
+        "resourceCount": 2,
         "children": []
       },
       {
@@ -15501,7 +15501,7 @@
         "path": [
           "Developer Tools"
         ],
-        "resourceCount": 8,
+        "resourceCount": 9,
         "children": []
       },
       {
@@ -15641,7 +15641,7 @@
         "path": [
           "Frontend Development"
         ],
-        "resourceCount": 3,
+        "resourceCount": 5,
         "children": []
       },
       {
@@ -15782,7 +15782,7 @@
         "path": [
           "Mobile Development"
         ],
-        "resourceCount": 2,
+        "resourceCount": 4,
         "children": []
       },
       {
@@ -15985,7 +15985,7 @@
         "path": [
           "Security"
         ],
-        "resourceCount": 30,
+        "resourceCount": 31,
         "children": [
           {
             "id": "en:Security:automation",
@@ -16104,7 +16104,7 @@
         "path": [
           "System Development"
         ],
-        "resourceCount": 1,
+        "resourceCount": 2,
         "children": []
       },
       {
@@ -16115,7 +16115,7 @@
         "path": [
           "Web Development"
         ],
-        "resourceCount": 6,
+        "resourceCount": 7,
         "children": []
       }
     ],
@@ -16296,7 +16296,7 @@
         "path": [
           "AI & Data"
         ],
-        "resourceCount": 3,
+        "resourceCount": 5,
         "children": []
       },
       {
@@ -16509,7 +16509,7 @@
         "path": [
           "Desktop Development"
         ],
-        "resourceCount": 1,
+        "resourceCount": 2,
         "children": []
       },
       {
@@ -16520,7 +16520,7 @@
         "path": [
           "Developer Resources"
         ],
-        "resourceCount": 1,
+        "resourceCount": 2,
         "children": []
       },
       {
@@ -16531,7 +16531,7 @@
         "path": [
           "Developer Tools"
         ],
-        "resourceCount": 8,
+        "resourceCount": 9,
         "children": []
       },
       {
@@ -16671,7 +16671,7 @@
         "path": [
           "Frontend Development"
         ],
-        "resourceCount": 3,
+        "resourceCount": 5,
         "children": []
       },
       {
@@ -16812,7 +16812,7 @@
         "path": [
           "Mobile Development"
         ],
-        "resourceCount": 2,
+        "resourceCount": 4,
         "children": []
       },
       {
@@ -17015,7 +17015,7 @@
         "path": [
           "Security"
         ],
-        "resourceCount": 30,
+        "resourceCount": 31,
         "children": [
           {
             "id": "all:Security:automation",
@@ -17134,7 +17134,7 @@
         "path": [
           "System Development"
         ],
-        "resourceCount": 1,
+        "resourceCount": 2,
         "children": []
       },
       {
@@ -17145,7 +17145,7 @@
         "path": [
           "Web Development"
         ],
-        "resourceCount": 6,
+        "resourceCount": 7,
         "children": []
       }
     ]

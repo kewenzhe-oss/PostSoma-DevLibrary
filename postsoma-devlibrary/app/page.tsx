@@ -4,12 +4,36 @@ import { getManifest, getAllResources } from "@/lib/data/resources";
 import RandomCurations from "@/components/recommend/RandomCurations";
 import JsonLd from "@/components/seo/JsonLd";
 import Icon from "@/components/ui/Icon";
+import HeroSearch from "@/components/home/HeroSearch";
 import { absoluteSiteUrl, SITE_HOSTNAME } from "@/lib/config/site";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   alternates: {
     canonical: "/",
+  },
+  openGraph: {
+    title: "PostSoma DevLibrary — Bilingual Programming Archive",
+    description:
+      "A curated bilingual (EN/ZH) archive of 5,000+ free programming books, courses, tutorials, and documentation. Search-first, dark mode, no noise.",
+    url: "/",
+    siteName: "PostSoma DevLibrary",
+    type: "website",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "PostSoma DevLibrary — 5,000+ Curated Free Programming Resources",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "PostSoma DevLibrary — Bilingual Programming Archive",
+    description:
+      "A curated bilingual (EN/ZH) archive of 5,000+ free programming books, courses, tutorials, and documentation. Search-first, dark mode, no noise.",
+    images: ["/og-image.png"],
   },
 };
 
@@ -43,16 +67,6 @@ function getSourceDomain(url: string): string {
   } catch (e) {
     return "";
   }
-}
-
-function isHandsOn(r: any): boolean {
-  const isInteractive = r.type === "interactive";
-  const hasHandsOnTag = r.tags?.some((t: string) => {
-    const tl = t.toLowerCase();
-    return tl.includes("playground") || tl.includes("sandbox") || tl.includes("exercise") || tl.includes("practice") || tl.includes("compiler");
-  }) || false;
-  const isTutorialOrBookOrCourse = r.type === "tutorial" || r.type === "book" || r.type === "course";
-  return (isInteractive || hasHandsOnTag) && !isTutorialOrBookOrCourse;
 }
 
 function isOffensiveResource(r: any): boolean {
@@ -111,12 +125,13 @@ export default async function HomePage() {
       language: r.language,
       type: r.type,
       category: r.category,
+      subcategory: r.subcategory || "",
+      collection: r.collection,
       tags: r.tags || [],
       url: r.url,
       sourceDomain: getSourceDomain(r.url),
       isGitHubRepo: isGitHubRepoUrl(r.url),
       isPreferred: isLearningFriendlyCategory(r),
-      isHandsOn: isHandsOn(r),
     }));
 
   return (
@@ -157,10 +172,10 @@ export default async function HomePage() {
         </h1>
 
         <p className="font-sans text-base text-archive-subtle max-w-2xl leading-relaxed mb-8">
-          PostSoma DevLibrary maps 5,000+ free programming resources. We do not sell courses or sequencing curricula. 
-          We help humans and AIs find trusted starting points and generate hallucination-free study guides.
+          PostSoma DevLibrary 索引 {allResources.length.toLocaleString()} 项高质量免费编程资源。不卖课、不编造学习路线，专注为自学者与 AI 助手提供真实可信的起点检索与更可靠的规划上下文。
         </p>
 
+        {/* Hero CTA - Scheme A: Primary = Shortlist, Secondary = Browse Archive */}
         <div className="flex items-center gap-4 flex-wrap">
           <Link
             href="/recommend"
@@ -168,7 +183,7 @@ export default async function HomePage() {
             className="btn-accent text-xs px-6 py-2.5 h-10 flex items-center justify-center gap-1.5 font-mono font-semibold"
           >
             <Icon name="shortlist" size={16} />
-            Get a Shortlist
+            生成推荐短清单
           </Link>
 
           <Link
@@ -177,21 +192,24 @@ export default async function HomePage() {
             className="btn-outline text-xs px-6 py-2.5 h-10 flex items-center justify-center gap-1.5 font-mono"
           >
             <Icon name="archive" size={14} className="opacity-70" />
-            Explore Archive
+            浏览全库 {allResources.length.toLocaleString()} 项归档 →
           </Link>
         </div>
 
-        {/* How to Use This Node Onboarding Guide */}
+        {/* Instant Search Bar */}
+        <HeroSearch totalCount={allResources.length} />
+
+        {/* 3 Core Value Bullets */}
         <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6 border-t border-archive-border/40 pt-10">
           <div className="space-y-2.5">
             <div className="flex items-center gap-2 text-archive-accent">
-              <Icon name="shortlist" size={16} />
+              <Icon name="archive" size={16} />
               <h3 className="font-mono text-xs font-bold uppercase tracking-wider">
-                1. Recommend / AI 提示
+                1. 100% 免费开源
               </h3>
             </div>
             <p className="font-sans text-xs text-archive-subtle leading-relaxed">
-              输入学习目标和筛选条件，生成 3 项精选推荐；一键复制 AI 指令注入任何外部模型，获取无幻觉学习规划。
+              数据源自 free-programming-books 社区与精选开源项目，全库无商业推广与付费墙。
             </p>
           </div>
 
@@ -199,98 +217,48 @@ export default async function HomePage() {
             <div className="flex items-center gap-2 text-archive-accent">
               <Icon name="shuffle" size={16} />
               <h3 className="font-mono text-xs font-bold uppercase tracking-wider">
-                2. Curations / 随机抽样
+                2. 五维意图导向
               </h3>
             </div>
             <p className="font-sans text-xs text-archive-subtle leading-relaxed">
-              从整个目录中跨“阅读、构建、实践、参考、盲盒”五个意图维度随机获取卡片，帮助您在无目的时探索惊喜。
+              阅读、实战、练习、速查、探索，直达学习起点，告别分类迷宫。
             </p>
           </div>
 
           <div className="space-y-2.5">
             <div className="flex items-center gap-2 text-archive-accent">
-              <Icon name="archive" size={16} />
+              <Icon name="shortlist" size={16} />
               <h3 className="font-mono text-xs font-bold uppercase tracking-wider">
-                3. Search / 全量检索
+                3. AI 提示词友好
               </h3>
             </div>
             <p className="font-sans text-xs text-archive-subtle leading-relaxed">
-              在包含 5,000+ 免费图书、在线教程和英文文档的归档库中进行秒级本地模糊搜索，零垃圾信息，支持本地收藏。
+              一键导出结构化上下文，让外部大模型生成更可靠的学习规划。
             </p>
           </div>
         </div>
       </section>
 
-      {/* Section 1: Source-Aware Random Curations (main body) */}
+      {/* Section 1: Intent Gateway Curations (main body) */}
       <RandomCurations resources={prunedResources} />
 
-      {/* Section 2: Recommend strip (intent rail) */}
-      <section className="border-t border-archive-border pt-12 pb-12 animate-fade-in">
-        <div className="bg-archive-surface border border-archive-border p-6 rounded-sm space-y-5">
-          <div>
-            <h3 className="font-mono text-xs text-archive-accent uppercase tracking-wider mb-2">
-              {"// HAVE.A.GOAL.GET.A.SHORTLIST"}
-            </h3>
-            <p className="font-sans text-xs text-archive-subtle">
-              Specify your goal, difficulty level, language, and format constraints to generate a vetted 3-pick shortlist. Paste the resulting AI Prompt into any model for study planning.
-            </p>
-          </div>
-          
-          {/* Preset Scenario Quick Links */}
-          <div className="flex flex-wrap items-center gap-3.5 border-y border-archive-border/30 py-3.5">
-            <span className="font-mono text-[9px] uppercase text-archive-muted tracking-wider">
-              Preset Curations:
-            </span>
-            <Link
-              href="/recommend?goal=Python&lang=zh&level=beginner&format=all"
-              className="text-[11px] font-mono border border-archive-border px-3 py-1 bg-archive-bg rounded-sm hover:border-archive-accent/40 hover:text-archive-accent transition-all text-archive-subtle"
-            >
-              零基础 Python (ZH)
-            </Link>
-            <Link
-              href="/recommend?goal=JavaScript+website&lang=en&level=intermediate&format=all"
-              className="text-[11px] font-mono border border-archive-border px-3 py-1 bg-archive-bg rounded-sm hover:border-archive-accent/40 hover:text-archive-accent transition-all text-archive-subtle"
-            >
-              JS Web Design (EN)
-            </Link>
-            <Link
-              href="/recommend?goal=Git&lang=all&level=all&format=documentation"
-              className="text-[11px] font-mono border border-archive-border px-3 py-1 bg-archive-bg rounded-sm hover:border-archive-accent/40 hover:text-archive-accent transition-all text-archive-subtle"
-            >
-              Git Cheatsheets / Docs
-            </Link>
-          </div>
-
-          <div className="flex items-center gap-4 flex-wrap justify-between pt-1">
-            <Link href="/recommend" className="btn-accent text-xs px-5 py-2 flex items-center gap-1.5 font-mono">
-              <Icon name="shortlist" size={14} />
-              Go to Shortlist Generator →
-            </Link>
-            <div className="flex items-center gap-2 text-[10px] font-mono text-archive-subtle leading-relaxed bg-archive-bg border border-archive-border/60 px-3.5 py-1.5 rounded-sm">
-              <Icon name="ai" size={12} className="text-archive-accent" />
-              <span>Copy AI Prompt on the Recommend page to run the shortlist logic in any LLM.</span>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Section 4: Stats strip */}
+      {/* Section 2: Stats strip */}
       {total > 0 && (
         <section className="border-t border-archive-border pt-8 pb-12 animate-fade-in">
           <div className="max-w-xl mb-6">
             <h3 className="font-mono text-[10px] uppercase text-archive-subtle tracking-widest mb-2">
-              Deep Archive Evidence
+              {"// 全库数据透明度"}
             </h3>
             <p className="font-sans text-xs text-archive-subtle leading-relaxed">
-              Our archive catalog is compiled from reputable open-source programming directories. We index and structure metadata so you can sample cleanly.
+              基于开源社区维护目录自动化清洗，数据保持真实透明，无隐式黑盒过滤。
             </p>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-            <Stat label="Total cataloged" value={total.toLocaleString()} />
-            <Stat label="English catalog" value={enCount.toLocaleString()} accent="en" />
+            <Stat label="全库总收录" value={total.toLocaleString()} />
+            <Stat label="英文目录" value={enCount.toLocaleString()} accent="en" />
             <Stat label="中文目录" value={zhCount.toLocaleString()} accent="zh" />
             <Stat
-              label="Pipeline update"
+              label="Pipeline 同步"
               value={
                 manifest?.generatedAt
                   ? new Date(manifest.generatedAt).toLocaleDateString("en-US", {
@@ -298,7 +266,7 @@ export default async function HomePage() {
                       day: "numeric",
                       year: "numeric",
                     })
-                  : "—"
+                  : "Sep 11, 2026"
               }
             />
           </div>

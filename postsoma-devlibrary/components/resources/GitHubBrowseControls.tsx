@@ -1,6 +1,6 @@
 "use client";
 
-import type { ReactNode } from "react";
+import { useMemo, useState } from "react";
 import {
   GITHUB_FAVORITE_HEALTH_VALUES,
   type GitHubFavoriteHealth,
@@ -9,11 +9,10 @@ import type {
   GitHubBrowseMode,
   GitHubFacetOption,
 } from "@/lib/data/github-search";
-import { formatGitHubFacetLabel } from "@/lib/data/github-search";
 
 interface GitHubBrowseControlsProps {
   mode: GitHubBrowseMode;
-  onModeChange: (mode: GitHubBrowseMode) => void;
+  onModeChange?: (mode: GitHubBrowseMode) => void;
   capabilityOptions: GitHubFacetOption[];
   techStackOptions: GitHubFacetOption[];
   healthCounts: ReadonlyMap<GitHubFavoriteHealth, number>;
@@ -27,37 +26,242 @@ interface GitHubBrowseControlsProps {
   onHealthChange: (value: GitHubFavoriteHealth | "") => void;
 }
 
-function FacetSelect({
-  label,
-  value,
-  onChange,
-  children,
-}: {
+const HEALTH_SEGMENTS: Array<{
+  value: GitHubFavoriteHealth | "";
   label: string;
-  value: string;
-  onChange: (value: string) => void;
-  children: ReactNode;
+}> = [
+  { value: "", label: "All" },
+  { value: "active", label: "Active" },
+  { value: "quiet", label: "Quiet" },
+  { value: "archived", label: "Archived" },
+  { value: "unavailable", label: "Unavailable" },
+];
+
+function HealthSegmentedControl({
+  selectedHealth,
+  healthCounts,
+  onHealthChange,
+}: {
+  selectedHealth: GitHubFavoriteHealth | "";
+  healthCounts: ReadonlyMap<GitHubFavoriteHealth, number>;
+  onHealthChange: (value: GitHubFavoriteHealth | "") => void;
 }) {
+  const allCount = GITHUB_FAVORITE_HEALTH_VALUES.reduce(
+    (sum, h) => sum + (healthCounts.get(h) ?? 0),
+    0,
+  );
+
   return (
-    <label className="flex min-w-0 flex-1 items-center gap-2 sm:flex-none">
-      <span className="shrink-0 font-mono text-[9px] uppercase tracking-widest text-archive-subtle/65">
-        {label}
-      </span>
-      <select
-        value={value}
-        onChange={(event) => onChange(event.target.value)}
-        className="h-8 min-w-0 flex-1 rounded border border-archive-border/70 bg-archive-bg/65 px-2.5 font-mono text-[10px] text-archive-text outline-none transition-colors hover:border-archive-muted focus:border-teal-500/60 sm:w-44"
-        aria-label={`Filter GitHub projects by ${label}`}
-      >
-        {children}
-      </select>
-    </label>
+    <div className="flex flex-col gap-2">
+      <div className="flex items-center justify-between">
+        <span className="font-mono text-[10px] font-semibold uppercase tracking-[0.16em] text-archive-subtle">
+          HEALTH
+        </span>
+        {selectedHealth && (
+          <button
+            type="button"
+            onClick={() => onHealthChange("")}
+            className="font-mono text-[10px] text-teal-400 hover:text-teal-300 transition-colors cursor-pointer"
+          >
+            Reset ×
+          </button>
+        )}
+      </div>
+      <div className="grid grid-cols-5 gap-1 rounded bg-archive-bg/80 p-1 border border-archive-border/70 font-mono text-xs">
+        {HEALTH_SEGMENTS.map(({ value, label }) => {
+          const count = value === "" ? allCount : healthCounts.get(value) ?? 0;
+          const isActive = selectedHealth === value;
+
+          return (
+            <button
+              key={value}
+              type="button"
+              disabled={count === 0}
+              onClick={() =>
+                onHealthChange(isActive && value !== "" ? "" : value)
+              }
+              className={`flex flex-col items-center justify-center py-1.5 px-1 rounded transition-all duration-150 cursor-pointer ${
+                isActive
+                  ? "bg-teal-500/20 text-teal-200 font-semibold shadow-sm border border-teal-500/40"
+                  : count === 0
+                    ? "opacity-30 cursor-not-allowed text-archive-subtle"
+                    : "text-archive-subtle hover:text-archive-text hover:bg-white/[0.04]"
+              }`}
+            >
+              <span className="text-[11px] sm:text-xs">{label}</span>
+              <span className="text-[10px] opacity-75 tabular-nums">
+                {count.toLocaleString()}
+              </span>
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+function GitHubFacetChipSection({
+  title,
+  placeholder,
+  options,
+  selectedValue,
+  onChange,
+}: {
+  title: string;
+  placeholder: string;
+  options: GitHubFacetOption[];
+  selectedValue: string;
+  onChange: (value: string) => void;
+}) {
+  const [search, setSearch] = useState("");
+
+  // Top 8 chips + currently selected item if not in top 8
+  const topChips = useMemo(() => {
+    const chips: GitHubFacetOption[] = [];
+    const selectedOpt = options.find(
+      (opt) => opt.value.toLowerCase() === selectedValue.toLowerCase(),
+    );
+
+    // If selected, always include selected option first
+    if (selectedOpt) {
+      chips.push(selectedOpt);
+    }
+
+    // Fill up to 8 with highest count options
+    for (const opt of options) {
+      if (
+        chips.some(
+          (c) => c.value.toLowerCase() === opt.value.toLowerCase(),
+        )
+      ) {
+        continue;
+      }
+      chips.push(opt);
+      if (chips.length >= 8) break;
+    }
+    return chips;
+  }, [options, selectedValue]);
+
+  // Filtered list when user types in search
+  const filteredOptions = useMemo(() => {
+    const term = search.trim().toLowerCase();
+    if (!term) return [];
+    return options.filter((opt) => {
+      const label = opt.label.toLowerCase();
+      const val = opt.value.toLowerCase();
+      return label.includes(term) || val.includes(term);
+    });
+  }, [options, search]);
+
+  return (
+    <div className="flex flex-col gap-2">
+      <div className="flex items-center justify-between gap-2">
+        <span className="font-mono text-[10px] font-semibold uppercase tracking-[0.16em] text-archive-subtle">
+          {title}
+        </span>
+        {selectedValue && (
+          <button
+            type="button"
+            onClick={() => onChange("")}
+            className="font-mono text-[10px] text-teal-400 hover:text-teal-300 transition-colors cursor-pointer"
+          >
+            Reset ×
+          </button>
+        )}
+      </div>
+
+      {/* Top 8 Chips */}
+      <div className="flex flex-wrap gap-1.5 min-h-[32px] items-center">
+        {topChips.map((option) => {
+          const isSelected =
+            selectedValue.toLowerCase() === option.value.toLowerCase();
+          return (
+            <button
+              key={option.value}
+              type="button"
+              onClick={() => onChange(isSelected ? "" : option.value)}
+              className={`inline-flex items-center gap-1 px-2 py-1 rounded text-xs font-sans transition-all duration-150 active:scale-95 cursor-pointer ${
+                isSelected
+                  ? "border border-teal-500/60 bg-teal-500/15 text-teal-300 font-medium shadow-[inset_0_0_0_1px_rgba(20,184,166,0.3)]"
+                  : "border border-archive-border/60 bg-archive-surface/40 text-archive-subtle hover:border-teal-500/40 hover:bg-white/[0.04] hover:text-archive-text"
+              }`}
+            >
+              <span>{option.label}</span>
+              {isSelected ? (
+                <span className="font-mono text-xs font-bold ml-0.5 opacity-80">
+                  ×
+                </span>
+              ) : (
+                <span className="font-mono text-[10px] opacity-60 tabular-nums">
+                  {option.count}
+                </span>
+              )}
+            </button>
+          );
+        })}
+      </div>
+
+      {/* Inline Search Input */}
+      <div className="relative">
+        <input
+          type="text"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          placeholder={placeholder}
+          className="w-full bg-archive-bg/90 border border-archive-border/70 rounded px-2.5 py-1.5 text-xs text-archive-text font-sans placeholder:text-archive-subtle/50 focus:outline-none focus:border-teal-500/60 transition-colors"
+        />
+        {search && (
+          <button
+            type="button"
+            onClick={() => setSearch("")}
+            className="absolute right-2 top-1/2 -translate-y-1/2 text-archive-subtle hover:text-archive-text font-mono text-xs px-1 cursor-pointer"
+          >
+            ×
+          </button>
+        )}
+      </div>
+
+      {/* Instant Search Results Dropdown/List */}
+      {search.trim() && (
+        <div className="max-h-48 overflow-y-auto drawer-scroll rounded border border-archive-border/80 bg-archive-bg/95 p-1 space-y-0.5 shadow-lg">
+          {filteredOptions.length === 0 ? (
+            <div className="py-2.5 text-center font-mono text-[11px] text-archive-subtle/60">
+              No matches found
+            </div>
+          ) : (
+            filteredOptions.map((option) => {
+              const isSelected =
+                selectedValue.toLowerCase() === option.value.toLowerCase();
+              return (
+                <button
+                  key={option.value}
+                  type="button"
+                  onClick={() => {
+                    onChange(isSelected ? "" : option.value);
+                    setSearch("");
+                  }}
+                  className={`flex w-full items-center justify-between px-2.5 py-1.5 rounded text-xs text-left transition-colors cursor-pointer ${
+                    isSelected
+                      ? "bg-teal-500/15 text-teal-300 font-medium"
+                      : "text-archive-subtle hover:bg-white/[0.04] hover:text-archive-text"
+                  }`}
+                >
+                  <span className="truncate mr-2">{option.label}</span>
+                  <span className="font-mono text-[10px] tabular-nums shrink-0 opacity-60">
+                    {option.count}
+                  </span>
+                </button>
+              );
+            })
+          )}
+        </div>
+      )}
+    </div>
   );
 }
 
 export default function GitHubBrowseControls({
   mode,
-  onModeChange,
   capabilityOptions,
   techStackOptions,
   healthCounts,
@@ -74,101 +278,52 @@ export default function GitHubBrowseControls({
 
   return (
     <section
-      className="rounded-md border border-archive-border/55 bg-archive-surface/45 p-2.5 sm:p-3"
+      className="rounded-md border border-archive-border/55 bg-archive-surface/45 p-3 sm:p-4 flex flex-col gap-4"
       aria-label="GitHub collection browsing controls"
     >
-      <div className="flex flex-col gap-2.5 sm:flex-row sm:items-center sm:justify-between">
-        <div
-          className="grid grid-cols-2 rounded border border-archive-border bg-archive-bg/60 p-0.5"
-          role="tablist"
-          aria-label="GitHub browse mode"
-        >
-          {(
-            [
-              ["topic", "按主题查找"],
-              ["recall", "时光回顾"],
-            ] as const
-          ).map(([value, label]) => {
-            const isActive = mode === value;
-            return (
-              <button
-                key={value}
-                type="button"
-                role="tab"
-                aria-selected={isActive}
-                onClick={() => onModeChange(value)}
-                className={`min-h-8 rounded px-3 text-[11px] font-medium transition-all ${
-                  isActive
-                    ? "bg-archive-border/70 text-teal-300 shadow-sm"
-                    : "text-archive-subtle hover:text-archive-text"
-                }`}
-              >
-                {label}
-              </button>
-            );
-          })}
-        </div>
-      </div>
-
+      {/* Recall mode notification - only rendered if mode === "recall" */}
       {mode === "recall" && (
         <div
-          className="mt-2.5 rounded border border-amber-400/15 bg-amber-400/[0.035] px-3 py-2"
+          className="rounded border border-amber-400/20 bg-amber-400/[0.04] px-3.5 py-2.5"
           aria-label="Personal timeline status"
         >
-          <p className="font-mono text-[9px] uppercase tracking-widest text-amber-200/75">
+          <p className="font-mono text-[9px] uppercase tracking-widest text-amber-200/85 font-medium">
             {hasTrustedTimeline
-              ? "个人时间线正在建立"
-              : "个人时间线尚未建立"}
+              ? "Timeline in progress"
+              : "Timeline not established"}
           </p>
-          <p className="mt-1 font-sans text-[10px] leading-relaxed text-archive-subtle/75 sm:text-[11px]">
+          <p className="mt-1 font-sans text-[11px] leading-relaxed text-archive-subtle/80">
             {hasTrustedTimeline
-              ? `已有 ${localEntryCount} 条真实本地收藏时间、${manualReviewCount} 条人工复查记录。历史批次仍不参与时间排序，当前继续按稳定库顺序展示。`
-              : "历史时间来自同一批 AI 处理，不代表真实发现或个人复查。时间排序已暂停，当前按稳定库顺序展示。"}
+              ? `${localEntryCount} local timestamps and ${manualReviewCount} manual reviews. Order continues by stable repository index.`
+              : "Historical timestamps originate from bulk import and do not reflect personal discovery. Order continues by stable repository index."}
           </p>
         </div>
       )}
 
-      <div className="mt-2.5 flex flex-col gap-2 border-t border-archive-border/40 pt-2.5 sm:flex-row sm:flex-wrap sm:items-center">
-        <FacetSelect
-          label="Capability"
-          value={selectedCapability}
+      {/* 1. 健康状态 Segmented Switch */}
+      <HealthSegmentedControl
+        selectedHealth={selectedHealth}
+        healthCounts={healthCounts}
+        onHealthChange={onHealthChange}
+      />
+
+      {/* 2 & 3. 能力 + 技术栈 Chips & Inline Search */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-1 border-t border-archive-border/40">
+        <GitHubFacetChipSection
+          title="CAPABILITIES"
+          placeholder="Search all capabilities…"
+          options={capabilityOptions}
+          selectedValue={selectedCapability}
           onChange={onCapabilityChange}
-        >
-          <option value="">All capabilities</option>
-          {capabilityOptions.map((option) => (
-            <option key={option.value} value={option.value}>
-              {option.label} ({option.count})
-            </option>
-          ))}
-        </FacetSelect>
+        />
 
-        <FacetSelect
-          label="Stack"
-          value={selectedTechStack}
+        <GitHubFacetChipSection
+          title="TECH STACK"
+          placeholder="Search all stacks…"
+          options={techStackOptions}
+          selectedValue={selectedTechStack}
           onChange={onTechStackChange}
-        >
-          <option value="">All tech stacks</option>
-          {techStackOptions.map((option) => (
-            <option key={option.value} value={option.value}>
-              {option.label} ({option.count})
-            </option>
-          ))}
-        </FacetSelect>
-
-        <FacetSelect
-          label="Health"
-          value={selectedHealth}
-          onChange={(value) =>
-            onHealthChange(value as GitHubFavoriteHealth | "")
-          }
-        >
-          <option value="">All health states</option>
-          {GITHUB_FAVORITE_HEALTH_VALUES.map((health) => (
-            <option key={health} value={health}>
-              {formatGitHubFacetLabel(health)} ({healthCounts.get(health) ?? 0})
-            </option>
-          ))}
-        </FacetSelect>
+        />
       </div>
     </section>
   );

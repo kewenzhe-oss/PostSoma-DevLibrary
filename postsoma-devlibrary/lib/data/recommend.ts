@@ -30,7 +30,7 @@ export interface RecommendationPick {
 }
 
 export interface RecommendationResult {
-  generator: "rules" | "llm+rag";
+  generator: "local-rules";
   funnel: {
     totalRelated: number;
     matched: number;
@@ -185,7 +185,7 @@ export async function matchAndRecommend(all: Resource[], options: RecommendOptio
 
   if (options.difficulty !== "all" && countScoredMatches(finalFiltered) < 3) {
     finalFiltered = formatFiltered.filter((r) => r.difficulty === options.difficulty || r.difficulty === undefined);
-    relaxedReason = `Relaxed difficulty filter from strictly '${options.difficulty}' to include unrated items.`;
+    relaxedReason = "未找到限定难度的资源，已自动补充未标记难度的相关项目供参考。";
   }
 
   if (options.format !== "all" && countScoredMatches(finalFiltered) < 3) {
@@ -194,7 +194,7 @@ export async function matchAndRecommend(all: Resource[], options: RecommendOptio
       relaxedFormatFiltered = filtered.filter((r) => r.difficulty === options.difficulty || r.difficulty === undefined);
     }
     finalFiltered = relaxedFormatFiltered;
-    relaxedReason = (relaxedReason ? relaxedReason + " " : "") + `Relaxed format filter from strictly '${options.format}' to any format.`;
+    relaxedReason = (relaxedReason ? relaxedReason + " " : "") + "未找到限定载体格式的资源，已自动补充其他载体类型的相关项目供参考。";
   }
 
   const totalRelated = finalFiltered.length;
@@ -326,16 +326,8 @@ export async function matchAndRecommend(all: Resource[], options: RecommendOptio
     }
   }
 
-  // If options.apiKey is provided, we can simulate Gemini API calling, but for strict reliability
-  // and static build compatibility, we keep it as rules-based with RAG tags, or call actual Gemini API
-  // if key is supplied at runtime.
-  let generator: "rules" | "llm+rag" = "rules";
-
-  if (options.apiKey) {
-    generator = "llm+rag";
-    // We can enhance explanation fields here with client-side Gemini calls.
-    // In actual implementation, we will check key validity and call the client API.
-  }
+  // Recommendation logic runs purely on client-side heuristic rules (100% offline, 0 tracking, 0 external APIs)
+  const generator: "local-rules" = "local-rules";
 
   return {
     generator,
