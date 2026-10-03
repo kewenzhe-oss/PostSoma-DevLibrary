@@ -1,6 +1,7 @@
 import Link from "next/link";
 import AppHeader from "./AppHeader";
 import Icon from "@/components/ui/Icon";
+import DevLibraryMascot from "./DevLibraryMascot";
 
 export default function AppShell({
   children,
@@ -55,6 +56,7 @@ export default function AppShell({
           </div>
         </div>
       </footer>
+      <DevLibraryMascot />
     </div>
   );
 }
