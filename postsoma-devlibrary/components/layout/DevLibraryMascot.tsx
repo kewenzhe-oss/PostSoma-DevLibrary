@@ -37,9 +37,16 @@ export default function DevLibraryMascot() {
 
     let interval: number | undefined;
     let intersecting = true;
+    let canSensePointer = true;
     const step = () => {
       engine.tick(Date.now(), pendingRef.current.splice(0), motionQuery.matches);
-      if (engine.consumeChanged()) setSnapshot(engine.snapshot());
+      if (engine.consumeChanged()) {
+        const next = engine.snapshot();
+        canSensePointer = !["guarded", "shy_hide", "shy_wait"].includes(next.mode);
+        setSnapshot(previous => previous.mode === next.mode && previous.behavior === next.behavior &&
+          previous.xPercent === next.xPercent && previous.transitionMs === next.transitionMs &&
+          previous.actionMs === next.actionMs ? previous : next);
+      }
     };
     const onVisibility = () => {
       setRenderPaused(document.hidden || !intersecting);
@@ -60,6 +67,7 @@ export default function DevLibraryMascot() {
         pendingRef.current.push({ type: "busy", value: false });
     };
     const onScroll = () => {
+      if (document.hidden) return;
       const next = window.scrollY;
       if (Math.abs(next - lastScrollY) >= mascotConfig.scheduler.scrollThresholdPx) {
         pendingRef.current.push({ type: "scroll" });
@@ -68,7 +76,7 @@ export default function DevLibraryMascot() {
     };
     const onPointerMove = (event: globalThis.PointerEvent) => {
       const now = Date.now();
-      if (document.hidden || now - lastPointerSampleAt < mascotConfig.scheduler.tickMs) return;
+      if (document.hidden || !intersecting || !canSensePointer || now - lastPointerSampleAt < mascotConfig.scheduler.tickMs) return;
       lastPointerSampleAt = now;
       const current = { x: event.clientX, y: event.clientY, at: Date.now() };
       if (current.at - lastActivityAt >= 1_000) {
@@ -78,7 +86,8 @@ export default function DevLibraryMascot() {
       const elapsed = current.at - lastPointer.at;
       if (lastPointer.at && elapsed > 0) {
         const speed = Math.hypot(current.x - lastPointer.x, current.y - lastPointer.y) / elapsed * 1000;
-        const box = buttonRef.current?.getBoundingClientRect();
+        const box = speed >= mascotConfig.scheduler.rapidPointerSpeedPxPerSecond
+          ? buttonRef.current?.getBoundingClientRect() : undefined;
         const distance = box ? Math.hypot(current.x - (box.left + box.width / 2),
           current.y - (box.top + box.height / 2)) : Infinity;
         if (speed >= mascotConfig.scheduler.rapidPointerSpeedPxPerSecond &&
@@ -159,14 +168,7 @@ export default function DevLibraryMascot() {
               top: mascotConfig.slots.codingSlate.top,
               width: mascotConfig.slots.codingSlate.width,
               transformOrigin: mascotConfig.slots.codingSlate.pivot,
-            }}><Image src={mascotConfig.slots.codingSlate.src} alt="" width={1057} height={668} sizes="74px" unoptimized /></span>
-            <span className="dl-mascot-screen-glow" />
-            <span className="dl-mascot-glyph" style={{
-              left: mascotConfig.slots.codeGlyph.left,
-              top: mascotConfig.slots.codeGlyph.top,
-              width: mascotConfig.slots.codeGlyph.width,
-              transformOrigin: mascotConfig.slots.codeGlyph.pivot,
-            }}><Image src={mascotConfig.slots.codeGlyph.src} alt="" width={1216} height={756} sizes="20px" unoptimized /></span>
+            }}><Image src={mascotConfig.slots.codingSlate.src} alt="" width={180} height={136} sizes="61px" unoptimized /></span>
             <span className="dl-mascot-eyes">
               {mascotConfig.core.eyes.map((eye, index) => {
                 const extent = eye.haloRadius + 6.5;

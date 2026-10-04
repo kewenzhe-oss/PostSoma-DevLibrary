@@ -15,3 +15,7 @@ Actual GPU utilization remains unmeasured.
 - `tests/ui/mascotEngine.test.ts`: passed, including intermediate shy-hide tick.
 - `git diff --check`: passed.
 - Production build could not be verified: locked native SWC dependency download was incomplete, so Next could not load the binary. Slow dependency installation was stopped; no browser verification or successful build claimed.
+
+## Follow-up · 2026-10-04
+
+Drive-only snapshots retain React identity. Pointer layout queries stop while offscreen/guarded/fully hiding and are only taken for high-speed samples; background scroll processing returns immediately. Paused layers release will-change reservations. Foreground hide recovery continues. Terminal accessory positioning retained. Browser computed dimensions verified desktop1440×900:132×145, mobile390×844:118×129; compact mobile CSS also retains118×129. Typecheck and mascot engine regression pass. GPU utilization unmeasured.

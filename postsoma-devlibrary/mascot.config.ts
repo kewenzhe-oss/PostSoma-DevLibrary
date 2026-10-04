@@ -21,13 +21,10 @@ export const mascotConfig = {
   },
   slots: {
     codingSlate: {
-      src: "/mascot/optimized/coding-slate.webp",
-      left: "24%", top: "70%", width: "56%", pivot: "42% 80%",
+      src: "/mascot/optimized/terminal_dark-ink.webp",
+      left: "55%", top: "66%", width: "34%", pivot: "42% 80%",
     },
-    codeGlyph: {
-      src: "/mascot/optimized/brackets_clean.webp",
-      left: "39%", top: "77%", width: "15%", pivot: "50% 50%",
-    },
+
   },
   behaviorWheel: [
     { id: "sprout_sway", weight: 40, durationMs: 3_500 },

@@ -1,5 +1,5 @@
 {
-  "version": "1.2.0",
+  "version": "1.3.0",
   "situation": "dev-library",
   "core": {
     "plate": "core/plate_dark.png",
@@ -10,22 +10,18 @@
   "slots": [
     {
       "id": "coding-slate",
-      "src": "skins/dev-library/coding-slate.png",
-      "anchor": { "left": "24%", "top": "70%", "width": "56%", "transform_origin": "42% 80%", "z_index": 3 },
+      "src": "optimized/terminal_dark-ink.webp",
+      "anchor": {
+        "left": "55%",
+        "top": "66%",
+        "width": "34%",
+        "transform_origin": "42% 80%",
+        "z_index": 3
+      },
       "behavior": {
         "on_click": "small lift and input-like tilt alongside the hop",
         "on_shock": "short recoil",
         "antic": "quiet study motion"
-      }
-    },
-    {
-      "id": "code-glyph",
-      "src": "skins/dev-library/brackets_clean.png",
-      "anchor": { "left": "39%", "top": "77%", "width": "15%", "transform_origin": "50% 50%", "z_index": 5 },
-      "behavior": {
-        "on_click": "brief typing pulse on the slate",
-        "on_shock": "small bounce",
-        "antic": "brief code pulse"
       }
     }
   ],
@@ -46,5 +42,6 @@
     "format": "RGBA PNG",
     "cleanup": "four-corner alpha flood denoise",
     "corners_alpha": 0
-  }
+  },
+  "design": "One ink terminal accessory; code marks are baked into the terminal rather than floating separately."
 }
