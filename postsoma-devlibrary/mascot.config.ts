@@ -24,7 +24,10 @@ export const mascotConfig = {
       src: "/mascot/optimized/terminal_dark-ink.webp",
       left: "55%", top: "66%", width: "34%", pivot: "42% 80%",
     },
-
+    codeMark: {
+      src: "/mascot/skins/dev-library/brackets_clean.png",
+      left: "61%", top: "19%", width: "22%",
+    },
   },
   behaviorWheel: [
     { id: "sprout_sway", weight: 40, durationMs: 3_500 },

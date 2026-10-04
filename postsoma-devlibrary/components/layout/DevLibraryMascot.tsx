@@ -169,6 +169,11 @@ export default function DevLibraryMascot() {
               width: mascotConfig.slots.codingSlate.width,
               transformOrigin: mascotConfig.slots.codingSlate.pivot,
             }}><Image src={mascotConfig.slots.codingSlate.src} alt="" width={180} height={136} sizes="61px" unoptimized /></span>
+            <span className="dl-mascot-code-mark" style={{
+              left: mascotConfig.slots.codeMark.left,
+              top: mascotConfig.slots.codeMark.top,
+              width: mascotConfig.slots.codeMark.width,
+            }}><Image src={mascotConfig.slots.codeMark.src} alt="" width={1216} height={756} sizes="30px" unoptimized /></span>
             <span className="dl-mascot-eyes">
               {mascotConfig.core.eyes.map((eye, index) => {
                 const extent = eye.haloRadius + 6.5;
