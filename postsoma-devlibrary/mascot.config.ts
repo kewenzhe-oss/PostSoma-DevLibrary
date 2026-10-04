@@ -3,11 +3,11 @@ export const mascotConfig = {
   version: "3.0.0-dev-library",
   storageKey: "postsoma-devlibrary-mascot-v3",
   core: {
-    plate: "/mascot/core/plate_dark.png",
+    plate: "/mascot/optimized/plate_dark.webp",
     width: 1122,
     height: 1228,
     sprout: {
-      src: "/mascot/core/sprout_dark.png",
+      src: "/mascot/optimized/sprout_dark.webp",
       left: "43.94%",
       top: "0%",
       displayWidth: "12.03%",
@@ -21,11 +21,11 @@ export const mascotConfig = {
   },
   slots: {
     codingSlate: {
-      src: "/mascot/skins/dev-library/coding-slate.png",
+      src: "/mascot/optimized/coding-slate.webp",
       left: "24%", top: "70%", width: "56%", pivot: "42% 80%",
     },
     codeGlyph: {
-      src: "/mascot/skins/dev-library/brackets_clean.png",
+      src: "/mascot/optimized/brackets_clean.webp",
       left: "39%", top: "77%", width: "15%", pivot: "50% 50%",
     },
   },
@@ -46,9 +46,9 @@ export const mascotConfig = {
     minimumAlertGapMs: 1_800, anticCooldownMs: 20_000,
   },
   motion: {
-    stage: { mobile: { width: 108, height: 120 }, desktop: { width: 122, height: 135 }, compactMobile: { width: 48, height: 52 } },
+    stage: { mobile: { width: 118, height: 129 }, desktop: { width: 132, height: 145 }, compactMobile: { width: 118, height: 129 } },
     bottomPx: { mobile: 82, desktop: 8, compactMobile: 64 },
-    restOffsetPercent: { mobile: 68, desktop: 60, compactMobile: 54 },
+    restOffsetPercent: { mobile: 54, desktop: 60, compactMobile: 54 },
     peekOffsetPercent: { mobile: 56, desktop: 46, compactMobile: 30 },
     hiddenOffsetPercent: { mobile: 145, desktop: 125, compactMobile: 135 },
     minHorizontalPercent: 16, maxHorizontalPercent: 84,

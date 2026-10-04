@@ -81,46 +81,43 @@ body {
 
 /* DevLibrary mascot: shared core cadence, local study equipment. */
 .dl-mascot-dock {
-  --dl-rest: var(--dl-mobile-rest, 68%);
+  --dl-rest: var(--dl-mobile-rest, 54%);
   --dl-peek: var(--dl-mobile-peek, 56%);
   --dl-hidden: var(--dl-mobile-hidden, 145%);
   position: fixed;
   z-index: 49;
   bottom: calc(var(--dl-mobile-bottom, 82px) + env(safe-area-inset-bottom, 0px));
-  width: 108px;
-  height: 120px;
+  width: 118px;
+  height: 129px;
   pointer-events: none;
   user-select: none;
-  transform: translate3d(-50%, var(--dl-rest), 0);
-  transition: left var(--dl-travel-ms, 650ms) cubic-bezier(.22,.72,.22,1),
-    transform var(--dl-transition-ms, 700ms) cubic-bezier(.22,.72,.22,1);
+  transform: translate3d(calc(-50% + var(--dl-x, 0vw)), var(--dl-rest), 0);
+  transition: transform var(--dl-transition-ms, 700ms) cubic-bezier(.22,.72,.22,1);
   will-change: transform;
 }
 .dl-mascot-dock[data-mode="peek"], .dl-mascot-dock[data-mode="alert"] {
-  transform: translate3d(-50%, var(--dl-peek), 0);
+  transform: translate3d(calc(-50% + var(--dl-x, 0vw)), var(--dl-peek), 0);
 }
 .dl-mascot-dock[data-mode="companion"], .dl-mascot-dock[data-mode="shock"],
-.dl-mascot-dock[data-mode="shy"] { transform: translate3d(-50%, 0, 0); }
+.dl-mascot-dock[data-mode="shy"] { transform: translate3d(calc(-50% + var(--dl-x, 0vw)), 0, 0); }
 .dl-mascot-dock[data-mode="shy_hide"], .dl-mascot-dock[data-mode="shy_wait"],
-.dl-mascot-dock[data-mode="guarded"] { transform: translate3d(-50%, var(--dl-hidden), 0); }
+.dl-mascot-dock[data-mode="guarded"] { transform: translate3d(calc(-50% + var(--dl-x, 0vw)), var(--dl-hidden), 0); }
 .dl-mascot-button {
   position: relative; display: block; width: 100%; height: 100%; padding: 0;
   border: 0; background: transparent; cursor: pointer; pointer-events: auto;
   -webkit-tap-highlight-color: transparent;
 }
-.dl-mascot-dock[data-mode="rest"] .dl-mascot-button,
-.dl-mascot-dock[data-mode="sleep"] .dl-mascot-button { height: 70%; }
 .dl-mascot-button::before { content: ""; position: absolute; z-index: 8; left: 0; right: 0; top: -12px; height: calc(100% + 12px); }
 .dl-mascot-dock[data-mode="shy_hide"] .dl-mascot-button,
 .dl-mascot-dock[data-mode="shy_wait"] .dl-mascot-button,
 .dl-mascot-dock[data-mode="guarded"] .dl-mascot-button { pointer-events: none; }
 .dl-mascot-button:focus-visible { outline: 2px solid var(--archive-accent); outline-offset: 2px; border-radius: 50%; }
 .dl-mascot-stage, .dl-mascot-core { position: absolute; inset: 0; display: block; }
-.dl-mascot-stage { inset: auto; top: 0; left: 0; width: 100%; height: 120px; }
+.dl-mascot-stage { inset: auto; top: 0; left: 0; width: 100%; height: 100%; }
 .dl-mascot-stage { filter: drop-shadow(0 6px 9px rgba(0,0,0,.35)); }
-.dl-mascot-core { transform-origin: 50% 80%; animation: dl-breathe 3.4s ease-in-out infinite; }
-.dl-mascot-plate { object-fit: contain; }
-.dl-mascot-sprout { position: absolute; display: block; z-index: 2; animation: dl-sprout 3.4s ease-in-out infinite; }
+.dl-mascot-core { contain: layout style; will-change: transform; transform-origin: 50% 80%; animation: dl-breathe 3.4s ease-in-out infinite; }
+.dl-mascot-plate { transform: translateZ(0); object-fit: contain; }
+.dl-mascot-sprout { will-change: transform; position: absolute; display: block; z-index: 2; animation: dl-sprout 3.4s ease-in-out infinite; }
 .dl-mascot-sprout img { object-fit: contain; }
 .dl-mascot-slate, .dl-mascot-glyph { position: absolute; display: block; }
 .dl-mascot-slate { z-index: 3; transform: rotate(-4deg); }
@@ -128,7 +125,7 @@ body {
 .dl-mascot-slate img, .dl-mascot-glyph img { display: block; width: 100%; height: auto; object-fit: contain; }
 .dl-mascot-screen-glow { position: absolute; z-index: 4; left: 29%; top: 73%; width: 27%; height: 17%; border-radius: 12%; background: rgba(91,201,167,.32); box-shadow: 0 0 5px rgba(91,201,167,.35); opacity: .09; transform: rotate(-4deg); pointer-events: none; animation: dl-screen-idle 3.4s ease-in-out infinite; }
 .dl-mascot-eyes { position: absolute; inset: 0; z-index: 6; width: 100%; height: 100%; overflow: visible; }
-.dl-mascot-eye { animation: dl-blink 5.2s ease-in-out infinite; }
+.dl-mascot-eye { position: absolute; display: block; transform-origin: center; will-change: transform; animation: dl-blink 5.2s ease-in-out infinite; }
 .dl-mascot-eye:nth-child(2) { animation-delay: 120ms; }
 .dl-mascot-eye-halo { fill: #f9f8f5; stroke: #242423; stroke-width: 13; }
 .dl-mascot-eye-center { fill: #111110; }
@@ -172,12 +169,10 @@ body {
 @keyframes dl-waddle { 0%,100% { transform: rotate(-2deg); } 50% { transform: rotate(2deg); } }
 @keyframes dl-tilt { 0%,100% { transform: rotate(0); } 45% { transform: rotate(-7deg); } 70% { transform: rotate(4deg); } }
 @media (min-width: 768px) {
-  .dl-mascot-dock { --dl-rest: var(--dl-desktop-rest, 60%); --dl-peek: var(--dl-desktop-peek, 46%); --dl-hidden: var(--dl-desktop-hidden, 125%); width: 122px; height: 135px; bottom: calc(var(--dl-desktop-bottom, 8px) + env(safe-area-inset-bottom, 0px)); }
-  .dl-mascot-stage { height: 135px; }
+  .dl-mascot-dock { --dl-rest: var(--dl-desktop-rest, 60%); --dl-peek: var(--dl-desktop-peek, 46%); --dl-hidden: var(--dl-desktop-hidden, 125%); width: 132px; height: 145px; bottom: calc(var(--dl-desktop-bottom, 8px) + env(safe-area-inset-bottom, 0px)); }
 }
 @media (max-width: 767px) and (max-height: 520px) {
-  .dl-mascot-dock { --dl-rest: var(--dl-compact-rest, 54%); --dl-peek: var(--dl-compact-peek, 30%); --dl-hidden: var(--dl-compact-hidden, 135%); width: 48px; height: 52px; bottom: calc(var(--dl-compact-bottom, 64px) + env(safe-area-inset-bottom, 0px)); }
-  .dl-mascot-stage { height: 52px; }
+  .dl-mascot-dock { --dl-rest: var(--dl-compact-rest, 54%); --dl-peek: var(--dl-compact-peek, 30%); --dl-hidden: var(--dl-compact-hidden, 135%); width: 118px; height: 129px; bottom: calc(var(--dl-compact-bottom, 64px) + env(safe-area-inset-bottom, 0px)); }
 }
 @media (prefers-reduced-motion: reduce) {
   .dl-mascot-dock, .dl-mascot-stage, .dl-mascot-core, .dl-mascot-sprout,
@@ -359,3 +354,6 @@ body {
     padding-bottom: calc(0.5rem + env(safe-area-inset-bottom));
   }
 }
+
+.dl-mascot-eye svg { display: block; width: 100%; height: 100%; }
+.dl-mascot-dock[data-render-paused="true"] * { animation-play-state: paused !important; }

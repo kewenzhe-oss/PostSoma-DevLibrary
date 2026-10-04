@@ -19,6 +19,8 @@ function isEditing(target: Element | null) {
 export default function DevLibraryMascot() {
   const [snapshot, setSnapshot] = useState<MascotSnapshot>(initialSnapshot);
   const pendingRef = useRef<MascotSignal[]>([]);
+  const dockRef = useRef<HTMLElement>(null);
+  const [renderPaused, setRenderPaused] = useState(false);
   const buttonRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
@@ -31,8 +33,26 @@ export default function DevLibraryMascot() {
     let lastScrollY = window.scrollY;
     let lastPointer = { x: 0, y: 0, at: 0 };
     let lastActivityAt = 0;
+    let lastPointerSampleAt = 0;
 
-    const onVisibility = () => pendingRef.current.push({ type: "document_hidden", value: document.hidden });
+    let interval: number | undefined;
+    let intersecting = true;
+    const step = () => {
+      engine.tick(Date.now(), pendingRef.current.splice(0), motionQuery.matches);
+      if (engine.consumeChanged()) setSnapshot(engine.snapshot());
+    };
+    const onVisibility = () => {
+      setRenderPaused(document.hidden || !intersecting);
+      pendingRef.current.push({ type: "document_hidden", value: document.hidden });
+      step();
+      if (interval !== undefined) window.clearInterval(interval);
+      interval = document.hidden ? undefined : window.setInterval(step, mascotConfig.scheduler.tickMs);
+    };
+    const observer = new IntersectionObserver(([entry]) => {
+      intersecting = entry.isIntersecting;
+      setRenderPaused(document.hidden || !intersecting);
+    });
+    if (dockRef.current) observer.observe(dockRef.current);
     const onFullscreen = () => pendingRef.current.push({ type: "fullscreen", value: Boolean(document.fullscreenElement) });
     const onFocusIn = (event: FocusEvent) => pendingRef.current.push({ type: "busy", value: isEditing(event.target as Element) });
     const onFocusOut = (event: FocusEvent) => {
@@ -47,6 +67,9 @@ export default function DevLibraryMascot() {
       }
     };
     const onPointerMove = (event: globalThis.PointerEvent) => {
+      const now = Date.now();
+      if (document.hidden || now - lastPointerSampleAt < mascotConfig.scheduler.tickMs) return;
+      lastPointerSampleAt = now;
       const current = { x: event.clientX, y: event.clientY, at: Date.now() };
       if (current.at - lastActivityAt >= 1_000) {
         pendingRef.current.push({ type: "pointer_activity", near: false });
@@ -73,13 +96,9 @@ export default function DevLibraryMascot() {
     onVisibility(); onFullscreen();
     pendingRef.current.push({ type: "busy", value: isEditing(document.activeElement) });
 
-    const interval = window.setInterval(() => {
-      engine.tick(Date.now(), pendingRef.current.splice(0), motionQuery.matches);
-      if (engine.consumeChanged()) setSnapshot(engine.snapshot());
-    }, mascotConfig.scheduler.tickMs);
-
     return () => {
-      window.clearInterval(interval);
+      if (interval !== undefined) window.clearInterval(interval);
+      observer.disconnect();
       document.removeEventListener("visibilitychange", onVisibility);
       document.removeEventListener("fullscreenchange", onFullscreen);
       document.removeEventListener("focusin", onFocusIn);
@@ -96,10 +115,10 @@ export default function DevLibraryMascot() {
   };
   const enqueue = (signal: MascotSignal) => pendingRef.current.push(signal);
   const style = {
-    left: `${snapshot.xPercent}%`,
+    left: "50%",
+    "--dl-x": `${snapshot.xPercent - 50}vw`,
     "--dl-transition-ms": `${snapshot.transitionMs}ms`,
     "--dl-action-ms": `${snapshot.actionMs}ms`,
-    "--dl-travel-ms": snapshot.behavior === "wander_slide" ? `${snapshot.actionMs}ms` : "650ms",
     "--dl-mobile-bottom": `${mascotConfig.motion.bottomPx.mobile}px`,
     "--dl-desktop-bottom": `${mascotConfig.motion.bottomPx.desktop}px`,
     "--dl-compact-bottom": `${mascotConfig.motion.bottomPx.compactMobile}px`,
@@ -115,7 +134,7 @@ export default function DevLibraryMascot() {
   } as CSSProperties;
 
   return (
-    <aside className="dl-mascot-dock" aria-label="DevLibrary mascot" data-mode={snapshot.mode}
+    <aside ref={dockRef} data-render-paused={renderPaused || snapshot.mode === "guarded" || snapshot.mode === "shy_wait"} className="dl-mascot-dock" aria-label="DevLibrary mascot" data-mode={snapshot.mode}
       data-behavior={snapshot.behavior ?? "idle"} style={style}
       onTransitionEnd={(event) => {
         if (event.target === event.currentTarget && event.propertyName === "transform")
@@ -127,34 +146,42 @@ export default function DevLibraryMascot() {
         onClick={() => enqueue({ type: "tap", at: Date.now(), anchorX: anchorX() })}>
         <span className="dl-mascot-stage" aria-hidden="true">
           <span className="dl-mascot-core">
-            <Image src={mascotConfig.core.plate} alt="" fill sizes="88px" priority className="dl-mascot-plate" />
+            <Image src={mascotConfig.core.plate} alt="" fill sizes="132px" unoptimized fetchPriority="low" className="dl-mascot-plate" />
             <span className="dl-mascot-sprout" style={{
               left: mascotConfig.core.sprout.left,
               top: mascotConfig.core.sprout.top,
               width: mascotConfig.core.sprout.displayWidth,
               height: mascotConfig.core.sprout.displayHeight,
               transformOrigin: mascotConfig.core.sprout.pivot,
-            }}><Image src={mascotConfig.core.sprout.src} alt="" fill sizes="12px" /></span>
+            }}><Image src={mascotConfig.core.sprout.src} alt="" fill sizes="16px" unoptimized /></span>
             <span className="dl-mascot-slate" style={{
               left: mascotConfig.slots.codingSlate.left,
               top: mascotConfig.slots.codingSlate.top,
               width: mascotConfig.slots.codingSlate.width,
               transformOrigin: mascotConfig.slots.codingSlate.pivot,
-            }}><Image src={mascotConfig.slots.codingSlate.src} alt="" width={1057} height={668} sizes="56px" /></span>
+            }}><Image src={mascotConfig.slots.codingSlate.src} alt="" width={1057} height={668} sizes="74px" unoptimized /></span>
             <span className="dl-mascot-screen-glow" />
             <span className="dl-mascot-glyph" style={{
               left: mascotConfig.slots.codeGlyph.left,
               top: mascotConfig.slots.codeGlyph.top,
               width: mascotConfig.slots.codeGlyph.width,
               transformOrigin: mascotConfig.slots.codeGlyph.pivot,
-            }}><Image src={mascotConfig.slots.codeGlyph.src} alt="" width={1216} height={756} sizes="15px" /></span>
-            <svg className="dl-mascot-eyes" viewBox={`0 0 ${mascotConfig.core.width} ${mascotConfig.core.height}`}>
-              {mascotConfig.core.eyes.map((eye, index) => <g className="dl-mascot-eye" key={index}
-                style={{ transformOrigin: `${eye.x}px ${eye.y}px` }}>
-                <circle className="dl-mascot-eye-halo" cx={eye.x} cy={eye.y} r={eye.haloRadius} />
-                <circle className="dl-mascot-eye-center" cx={eye.x} cy={eye.y} r={eye.moonRadius} />
-              </g>)}
-            </svg>
+            }}><Image src={mascotConfig.slots.codeGlyph.src} alt="" width={1216} height={756} sizes="20px" unoptimized /></span>
+            <span className="dl-mascot-eyes">
+              {mascotConfig.core.eyes.map((eye, index) => {
+                const extent = eye.haloRadius + 6.5;
+                const size = extent * 2;
+                return <span className="dl-mascot-eye" key={index} style={{
+                  left: `${(eye.x - extent) / mascotConfig.core.width * 100}%`,
+                  top: `${(eye.y - extent) / mascotConfig.core.height * 100}%`,
+                  width: `${size / mascotConfig.core.width * 100}%`,
+                  height: `${size / mascotConfig.core.height * 100}%`,
+                }}><svg viewBox={`0 0 ${size} ${size}`}>
+                  <circle className="dl-mascot-eye-halo" cx={extent} cy={extent} r={eye.haloRadius} />
+                  <circle className="dl-mascot-eye-center" cx={extent} cy={extent} r={eye.moonRadius} />
+                </svg></span>;
+              })}
+            </span>
             <span className="dl-mascot-cheek dl-mascot-cheek-left" />
             <span className="dl-mascot-cheek dl-mascot-cheek-right" />
           </span>

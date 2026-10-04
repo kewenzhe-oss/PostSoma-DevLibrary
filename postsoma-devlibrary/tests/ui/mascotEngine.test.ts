@@ -32,7 +32,8 @@ describe("DevLibrary mascot shared interaction vocabulary", () => {
     tap(100); tap(100);
     expect(tap(100).mode).toBe("shy");
     expect(tick(1_000).mode).toBe("shy_hide");
-    expect(tick(700).mode).toBe("shy_wait");
+    expect(tick(100, [{ type: "scroll" }]).mode).toBe("shy_hide");
+    expect(tick(600).mode).toBe("shy_wait");
     expect(tick(2_500).mode).toBe("rest");
     expect(tick(100, [{ type: "busy", value: true }]).mode).toBe("guarded");
     expect(tick(100, [{ type: "busy", value: false }]).mode).toBe("rest");
