@@ -1,28 +1,18 @@
 "use client";
 
-import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import Icon from "@/components/ui/Icon";
 
 const navLinks = [
-  { href: "/recommend", label: "Recommend", icon: "shortlist" as const, activeIcon: "shortlistActive" as const },
-  { href: "/resources", label: "Archive", icon: "archive" as const, activeIcon: "archiveActive" as const },
-  { href: "/library", label: "My Library", icon: "library" as const, activeIcon: "libraryActive" as const },
+  { href: "/recommend", label: "找推荐", icon: "shortlist" as const, activeIcon: "shortlistActive" as const },
+  { href: "/resources", label: "资源库", icon: "archive" as const, activeIcon: "archiveActive" as const },
+  { href: "/library", label: "我的收藏", icon: "library" as const, activeIcon: "libraryActive" as const },
 ];
 
 export default function AppHeader() {
   const pathname = usePathname();
-  const [manifest, setManifest] = useState<any>(null);
-
-  useEffect(() => {
-    fetch("/data/manifest.json")
-      .then((res) => res.json())
-      .then((data) => setManifest(data))
-      .catch((err) => console.error("Failed to load header manifest:", err));
-  }, []);
-
   return (
     <>
       <header className="sticky top-0 z-50 border-b border-archive-border bg-archive-bg/90 backdrop-blur-sm">
@@ -49,32 +39,22 @@ export default function AppHeader() {
                     DEVLIBRARY
                   </span>
                 </div>
-                <span className="font-mono text-[8px] text-archive-accent tracking-widest uppercase mt-0.5">
-                  ARCHIVE NODE // PORT.2050
-                </span>
               </div>
             </Link>
 
-            {/* System Status Strip */}
-            {manifest && (
-              <div className="hidden lg:flex items-center gap-3 font-mono text-[9px] text-archive-subtle/60 border-l border-archive-border/40 pl-4 h-5 mt-0.5">
-                <span>INDEX: {manifest.total?.toLocaleString() ?? "—"}</span>
-                <span>/</span>
-                <span>UPDATED: {manifest.generatedAt ? new Date(manifest.generatedAt).toLocaleDateString("en-US", { month: "short", day: "numeric" }).toUpperCase() : "—"}</span>
-              </div>
-            )}
           </div>
 
           {/* Navigation Links and Portals */}
           <div className="hidden md:flex items-center gap-3">
-            <nav className="flex items-center gap-1.5 mr-2">
+            <nav aria-label="主导航" className="flex items-center gap-1.5 mr-2">
               {navLinks.map((link) => {
                 const isActive = pathname === link.href || pathname.startsWith(link.href + "/");
                 return (
                   <Link
                     key={link.href}
                     href={link.href}
-                    className={`px-3 py-1.5 text-xs font-mono rounded-sm transition-all duration-150 flex items-center gap-1.5 border border-transparent ${
+                    aria-current={isActive ? "page" : undefined}
+                    className={`px-3 py-1.5 text-sm font-sans rounded-sm transition-all duration-150 flex items-center gap-1.5 border border-transparent ${
                       isActive
                         ? "text-archive-accent bg-archive-surface border-archive-border"
                         : "text-archive-subtle hover:text-archive-text"
@@ -100,7 +80,7 @@ export default function AppHeader() {
       </header>
 
       {/* Mobile Bottom Tab Bar */}
-      <nav className="fixed bottom-0 left-0 right-0 z-50 bg-archive-surface/95 backdrop-blur-md border-t border-archive-border min-h-16 pt-2 flex items-center justify-around md:hidden pb-safe">
+      <nav aria-label="主导航" className="fixed bottom-0 left-0 right-0 z-50 bg-archive-surface/95 backdrop-blur-md border-t border-archive-border min-h-16 pt-2 flex items-center justify-around md:hidden pb-safe">
         {mobileNavLinks.map((link) => {
           const isActive =
             link.href === "/"
@@ -110,6 +90,7 @@ export default function AppHeader() {
             <Link
               key={link.href}
               href={link.href}
+              aria-current={isActive ? "page" : undefined}
               className={`flex flex-col items-center justify-center flex-1 h-full py-1.5 transition-all duration-150 active:scale-95 ${
                 isActive
                   ? "text-archive-accent"
@@ -117,7 +98,7 @@ export default function AppHeader() {
               }`}
             >
               <Icon name={isActive ? link.activeIcon : link.icon} size={18} />
-              <span className="text-[9px] font-mono mt-1 font-medium">{link.label}</span>
+              <span className="text-[11px] font-sans mt-1 font-medium">{link.label}</span>
             </Link>
           );
         })}
@@ -129,25 +110,25 @@ export default function AppHeader() {
 const mobileNavLinks = [
   {
     href: "/",
-    label: "Home",
+    label: "首页",
     icon: "home" as const,
     activeIcon: "homeActive" as const,
   },
   {
     href: "/recommend",
-    label: "Recommend",
+    label: "找推荐",
     icon: "shortlist" as const,
     activeIcon: "shortlistActive" as const,
   },
   {
     href: "/resources",
-    label: "Archive",
+    label: "资源库",
     icon: "archive" as const,
     activeIcon: "archiveActive" as const,
   },
   {
     href: "/library",
-    label: "My Library",
+    label: "我的收藏",
     icon: "library" as const,
     activeIcon: "libraryActive" as const,
   },

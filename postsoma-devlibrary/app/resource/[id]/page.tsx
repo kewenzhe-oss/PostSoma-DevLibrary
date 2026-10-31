@@ -136,7 +136,7 @@ export default async function ResourceDetailPage({
   const displayType = resource.facet?.resourceType ?? resource.type;
   const facetBreadcrumb = getResourceFacetBreadcrumb(
     resource,
-    displayLanguage === "zh" ? "zh" : "en",
+    "zh",
   );
   const displayDetailSummary = resource.detailSummary || resource.summary || null;
   const displayBestFor = resource.bestFor ?? [];
@@ -188,9 +188,6 @@ export default async function ResourceDetailPage({
         <BackLink />
 
         <article className="archive-card p-4 sm:p-8 md:p-10 relative overflow-hidden">
-          {/* Subtle background element */}
-          <div className="absolute -top-24 -right-24 w-64 h-64 bg-archive-accent opacity-[0.03] rounded-full blur-3xl pointer-events-none" />
-
           {/* Header metadata */}
           <div className="flex items-center gap-3 mb-6 flex-wrap relative z-10">
             <span
@@ -198,7 +195,7 @@ export default async function ResourceDetailPage({
                 displayLanguage === "zh" ? "lang-badge-zh" : "lang-badge-en"
               }
             >
-              {displayLanguage === "zh" ? "Chinese" : "English"}
+              {displayLanguage === "zh" ? "中文" : "英文"}
             </span>
             <span className="type-badge capitalize">{TYPE_LABELS[displayType] || displayType}</span>
             {githubFavorite && <GitHubHealthBadge favorite={githubFavorite} />}
@@ -210,6 +207,11 @@ export default async function ResourceDetailPage({
           <h1 className="font-display text-3xl md:text-4xl text-archive-text leading-snug mb-6 relative z-10">
             {resource.title}
           </h1>
+
+          <div className="flex flex-wrap items-start gap-3 mb-8">
+            <a href={resource.url} target="_blank" rel="noopener noreferrer" className="btn-accent min-h-11 flex items-center justify-center px-5">访问原站 ↗</a>
+            <BookmarkButton resourceId={resource.id} variant="full" />
+          </div>
 
           {githubFavorite && (
             <div className="relative z-10 mb-5">
@@ -227,21 +229,20 @@ export default async function ResourceDetailPage({
             ) : (
               <>
                 <div className="bg-archive-bg/40 p-4 border border-archive-border rounded-sm relative overflow-hidden">
-                  <div className="absolute top-0 left-0 w-1 h-full bg-archive-accent/40" />
                   {displayDetailSummary ? (
                     <p className="font-sans text-sm text-archive-subtle leading-relaxed">
                       {displayDetailSummary}
                     </p>
                   ) : (
                     <p className="font-mono text-[10px] text-archive-subtle/60 leading-relaxed">
-                      Summary not yet curated. Open the original resource for verified details.
+                      暂无简介，可访问原站了解详情。
                     </p>
                   )}
                 </div>
                 {githubFavorite && (
                   <div className="mt-4">
                     <p className="mb-2 font-mono text-[10px] uppercase tracking-widest text-teal-400">
-                      GitHub research context
+                      GitHub 项目资料
                     </p>
                     <GitHubResearchDetails favorite={githubFavorite} />
                   </div>
@@ -254,7 +255,7 @@ export default async function ResourceDetailPage({
             <div className="flex-1 space-y-4">
               <div>
                 <h3 className="font-mono text-[10px] uppercase tracking-widest text-archive-subtle mb-1">
-                  Category
+                  分类
                 </h3>
                 <p className="font-sans text-sm text-archive-text">
                   {facetBreadcrumb.join(" / ")}
@@ -263,7 +264,7 @@ export default async function ResourceDetailPage({
 
               <div>
                 <h3 className="font-mono text-[10px] uppercase tracking-widest text-archive-subtle mb-1">
-                  Provider
+                  来源
                 </h3>
                 <p className="font-sans text-sm text-archive-text">
                   {getProviderLabel(resource.url)}
@@ -272,7 +273,7 @@ export default async function ResourceDetailPage({
 
               <div>
                 <h3 className="font-mono text-[10px] uppercase tracking-widest text-archive-subtle mb-1">
-                  External Link
+                  原站链接
                 </h3>
                 <a
                   href={resource.url}
@@ -285,21 +286,18 @@ export default async function ResourceDetailPage({
               </div>
             </div>
 
-            <div className="w-full sm:w-auto p-4 bg-archive-bg/50 border border-archive-border rounded-sm">
-              <BookmarkButton resourceId={resource.id} variant="full" />
-            </div>
           </div>
 
           {/* Editorial Decision Panel (Best For & Access Note) */}
           {(displayBestFor.length > 0 || displayAccessNote) && (
             <div className="bg-archive-surface border border-archive-border rounded-sm p-4 sm:p-5 mb-8 relative z-10 space-y-4">
               <h3 className="font-mono text-[10px] uppercase tracking-widest text-teal-400 mb-1">
-                Editorial Review & Decision Guide
+                编辑备注
               </h3>
               {displayBestFor.length > 0 && (
                 <div className="space-y-1.5">
                   <p className="font-sans text-xs text-archive-text font-semibold">
-                    Best For:
+                    适合：
                   </p>
                   <ul className="list-disc pl-4 space-y-1 text-xs text-archive-subtle font-sans">
                     {displayBestFor.map((item, idx) => (
@@ -310,7 +308,7 @@ export default async function ResourceDetailPage({
               )}
               {displayAccessNote && (
                 <p className="font-sans text-xs text-archive-subtle leading-relaxed pt-1 border-t border-archive-border/30">
-                  <strong className="text-archive-text font-semibold">Access Recommendation: </strong> 
+                  <strong className="text-archive-text font-semibold">访问说明：</strong>
                   {displayAccessNote}
                 </p>
               )}
@@ -331,22 +329,22 @@ export default async function ResourceDetailPage({
           {!githubFavorite && (resource.keyTakeaway || resource.priority || resource.action) && (
             <div className="bg-archive-surface border border-archive-border rounded-sm p-4 sm:p-5 mb-8 relative z-10 space-y-3">
               <h3 className="font-mono text-[10px] uppercase tracking-widest text-archive-subtle mb-1">
-                AI Workflow Audit Data
+                AI 工作流记录
               </h3>
               {resource.keyTakeaway && (
                 <p className="font-sans text-xs sm:text-sm text-archive-subtle leading-relaxed">
-                  <strong className="text-archive-text font-medium">Key Takeaway:</strong> {resource.keyTakeaway}
+                  <strong className="text-archive-text font-medium">要点：</strong> {resource.keyTakeaway}
                 </p>
               )}
               <div className="flex gap-4 flex-wrap text-xs font-mono text-archive-subtle/80 pt-1">
                 {resource.priority && (
                   <span>
-                    Priority: <span className="text-archive-text font-medium">{resource.priority}</span>
+                    优先级： <span className="text-archive-text font-medium">{resource.priority}</span>
                   </span>
                 )}
                 {resource.action && (
                   <span>
-                    Suggested Action: <span className="text-archive-text font-medium">{resource.action}</span>
+                    建议操作： <span className="text-archive-text font-medium">{resource.action}</span>
                   </span>
                 )}
               </div>
@@ -371,14 +369,6 @@ export default async function ResourceDetailPage({
                 ))}
               </div>
             )}
-            <a
-              href={resource.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="btn-accent w-full sm:w-auto h-11 md:h-auto flex items-center justify-center"
-            >
-              Open Resource ↗
-            </a>
           </div>
         </article>
       </div>

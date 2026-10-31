@@ -43,7 +43,7 @@ export const metadata: Metadata = {
 const presets = [
   {
     id: "preset-python-zh",
-    name: "零基础 Python，中文，教程/书籍优先",
+    name: "零基础 Python，中文资源",
     nameEn: "Zero-basis Python, Chinese, tutorials/books preferred",
     inputs: { goal: "Python", difficulty: "beginner" as const, language: "zh" as const, format: "all" as const }
   },
@@ -88,6 +88,7 @@ export default async function RecommendPage() {
     title: r.title,
     url: r.url,
     type: r.type,
+    collection: r.collection,
     language: r.language,
     category: r.category,
     subcategory: r.subcategory || undefined,

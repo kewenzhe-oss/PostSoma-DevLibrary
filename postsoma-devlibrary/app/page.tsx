@@ -135,7 +135,7 @@ export default async function HomePage() {
     }));
 
   return (
-    <AppShell>
+    <AppShell showMascot>
       <JsonLd
         data={{
           "@context": "https://schema.org",
@@ -161,81 +161,21 @@ export default async function HomePage() {
         }}
       />
 
-      {/* Hero Section */}
-      <section className="pt-16 pb-14 animate-slide-up">
-        <p className="font-mono text-xs tracking-widest text-archive-accent/80 uppercase mb-5">
-          {"// POSTSOMA-2050 // ARCHIVE.NODE"}
-        </p>
-
-        <h1 className="font-display text-4xl md:text-5xl text-archive-text leading-tight mb-5 max-w-2xl font-bold">
+      <section className="pt-10 pb-12 md:pt-16 md:pb-16">
+        <h1 className="font-display text-4xl md:text-5xl text-archive-text leading-tight mb-4 max-w-2xl">
           Find one good place to begin.
         </h1>
-
-        <p className="font-sans text-base text-archive-subtle max-w-2xl leading-relaxed mb-8">
-          PostSoma DevLibrary 索引 {allResources.length.toLocaleString()} 项高质量免费编程资源。不卖课、不编造学习路线，专注为自学者与 AI 助手提供真实可信的起点检索与更可靠的规划上下文。
+        <p className="font-sans text-base text-archive-subtle max-w-2xl leading-relaxed">
+          在 {allResources.length.toLocaleString()} 项免费编程资源中，找到适合你的书籍、课程、文档和开源项目。
         </p>
-
-        {/* Hero CTA - Scheme A: Primary = Shortlist, Secondary = Browse Archive */}
-        <div className="flex items-center gap-4 flex-wrap">
-          <Link
-            href="/recommend"
-            id="hero-recommend-btn"
-            className="btn-accent text-xs px-6 py-2.5 h-10 flex items-center justify-center gap-1.5 font-mono font-semibold"
-          >
-            <Icon name="shortlist" size={16} />
-            生成推荐短清单
-          </Link>
-
-          <Link
-            href="/resources"
-            id="hero-browse-btn"
-            className="btn-outline text-xs px-6 py-2.5 h-10 flex items-center justify-center gap-1.5 font-mono"
-          >
-            <Icon name="archive" size={14} className="opacity-70" />
-            浏览全库 {allResources.length.toLocaleString()} 项归档 →
-          </Link>
-        </div>
-
-        {/* Instant Search Bar */}
         <HeroSearch totalCount={allResources.length} />
-
-        {/* 3 Core Value Bullets */}
-        <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6 border-t border-archive-border/40 pt-10">
-          <div className="space-y-2.5">
-            <div className="flex items-center gap-2 text-archive-accent">
-              <Icon name="archive" size={16} />
-              <h3 className="font-mono text-xs font-bold uppercase tracking-wider">
-                1. 100% 免费开源
-              </h3>
-            </div>
-            <p className="font-sans text-xs text-archive-subtle leading-relaxed">
-              数据源自 free-programming-books 社区与精选开源项目，全库无商业推广与付费墙。
-            </p>
-          </div>
-
-          <div className="space-y-2.5">
-            <div className="flex items-center gap-2 text-archive-accent">
-              <Icon name="shuffle" size={16} />
-              <h3 className="font-mono text-xs font-bold uppercase tracking-wider">
-                2. 五维意图导向
-              </h3>
-            </div>
-            <p className="font-sans text-xs text-archive-subtle leading-relaxed">
-              阅读、实战、练习、速查、探索，直达学习起点，告别分类迷宫。
-            </p>
-          </div>
-
-          <div className="space-y-2.5">
-            <div className="flex items-center gap-2 text-archive-accent">
-              <Icon name="shortlist" size={16} />
-              <h3 className="font-mono text-xs font-bold uppercase tracking-wider">
-                3. AI 提示词友好
-              </h3>
-            </div>
-            <p className="font-sans text-xs text-archive-subtle leading-relaxed">
-              一键导出结构化上下文，让外部大模型生成更可靠的学习规划。
-            </p>
-          </div>
+        <div className="mt-5 flex flex-wrap items-center gap-x-6 gap-y-3 text-sm">
+          <Link href="/resources" id="hero-browse-btn" className="text-archive-text hover:text-archive-accent underline underline-offset-4 decoration-archive-muted">
+            浏览全部资源 <span aria-hidden="true">→</span>
+          </Link>
+          <Link href="/recommend" id="hero-recommend-btn" className="text-archive-subtle hover:text-archive-accent underline underline-offset-4 decoration-archive-muted">
+            不知道从哪开始？获取推荐 <span aria-hidden="true">→</span>
+          </Link>
         </div>
       </section>
 
@@ -246,11 +186,9 @@ export default async function HomePage() {
       {total > 0 && (
         <section className="border-t border-archive-border pt-8 pb-12 animate-fade-in">
           <div className="max-w-xl mb-6">
-            <h3 className="font-mono text-[10px] uppercase text-archive-subtle tracking-widest mb-2">
-              {"// 全库数据透明度"}
-            </h3>
+            <h2 className="text-sm font-semibold text-archive-text mb-2">关于这份资源库</h2>
             <p className="font-sans text-xs text-archive-subtle leading-relaxed">
-              基于开源社区维护目录自动化清洗，数据保持真实透明，无隐式黑盒过滤。
+              资源来自开源社区维护的目录，并经过整理与分类。
             </p>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
@@ -258,7 +196,7 @@ export default async function HomePage() {
             <Stat label="英文目录" value={enCount.toLocaleString()} accent="en" />
             <Stat label="中文目录" value={zhCount.toLocaleString()} accent="zh" />
             <Stat
-              label="Pipeline 同步"
+              label="更新日期"
               value={
                 manifest?.generatedAt
                   ? new Date(manifest.generatedAt).toLocaleDateString("en-US", {
@@ -266,7 +204,7 @@ export default async function HomePage() {
                       day: "numeric",
                       year: "numeric",
                     })
-                  : "Sep 11, 2026"
+                  : "—"
               }
             />
           </div>

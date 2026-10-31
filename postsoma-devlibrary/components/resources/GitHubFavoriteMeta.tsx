@@ -13,26 +13,26 @@ const HEALTH_META: Record<
   }
 > = {
   active: {
-    label: "Active",
-    description: "Recently maintained",
+    label: "活跃",
+    description: "近期有更新",
     dotClassName: "bg-emerald-500/60",
     textClassName: "text-archive-subtle/70",
   },
   quiet: {
-    label: "Quiet",
-    description: "No push within the quiet threshold",
+    label: "近期较少更新",
+    description: "在设定的时间内没有推送",
     dotClassName: "bg-amber-500/50",
     textClassName: "text-archive-subtle/60",
   },
   archived: {
-    label: "Archived",
-    description: "Archived by its GitHub owner",
+    label: "已归档",
+    description: "项目已由所有者归档",
     dotClassName: "bg-archive-subtle/40",
     textClassName: "text-archive-subtle/50",
   },
   unavailable: {
-    label: "Unavailable",
-    description: "Disabled or no longer reachable",
+    label: "不可访问",
+    description: "项目已停用或无法访问",
     dotClassName: "bg-rose-500/40",
     textClassName: "text-archive-subtle/50",
   },
@@ -72,31 +72,31 @@ export function GitHubHealthBadge({
 }) {
   if (!favorite.lastCheckedAt) {
     const accessibleLabel =
-      "Unchecked: awaiting first GitHub API check. No verified maintenance status is available yet.";
+      "尚未检查：暂无经过核实的更新状态。";
     return (
       <span
         className="inline-flex items-center gap-1.5 font-mono text-[9px] uppercase tracking-wide text-archive-subtle/70"
         title={accessibleLabel}
-        aria-label={`Repository health: ${accessibleLabel}`}
+        aria-label={`项目状态：${accessibleLabel}`}
       >
         <span
           className="h-1.5 w-1.5 shrink-0 rounded-full border border-current bg-transparent"
           aria-hidden="true"
         />
-        {showLabel && <span>Unchecked</span>}
+        {showLabel && <span>未检查</span>}
       </span>
     );
   }
 
   const meta = HEALTH_META[favorite.health];
-  const checkState = `Last checked ${favorite.lastCheckedAt}`;
+  const checkState = `上次检查：${favorite.lastCheckedAt}`;
   const accessibleLabel = `${meta.label}: ${meta.description}. ${checkState}`;
 
   return (
     <span
       className={`inline-flex items-center gap-1.5 font-mono text-[9px] uppercase tracking-wide ${meta.textClassName}`}
       title={accessibleLabel}
-      aria-label={`Repository health: ${accessibleLabel}`}
+      aria-label={`项目状态：${accessibleLabel}`}
     >
       <span
         className={`h-1.5 w-1.5 rounded-full shrink-0 ${meta.dotClassName}`}
@@ -120,7 +120,7 @@ export function GitHubCapabilityTags({
   if (capabilities.length === 0) {
     return (
       <span className="font-mono text-[9px] text-archive-subtle/45">
-        Capabilities pending
+        暂无能力标签
       </span>
     );
   }
@@ -152,21 +152,20 @@ export function GitHubResearchDetails({
   return (
     <div className="space-y-4">
       <section className="bg-archive-bg/40 p-4 border border-archive-border rounded-sm relative overflow-hidden">
-        <div className="absolute top-0 left-0 w-1 h-full bg-archive-accent/40" />
         <h3 className="font-mono text-[9px] uppercase tracking-widest text-archive-subtle mb-2">
-          Full AI Description
+          项目简介
         </h3>
         <p className="font-sans text-xs sm:text-sm text-archive-subtle leading-relaxed">
           {favorite.editorial.fullSummary ||
             favorite.shortSummary ||
-            "Description not added yet."}
+            "暂无简介。"}
         </p>
       </section>
 
       {favorite.whySaved && (
         <section className="border-t border-archive-border/50 pt-3">
           <h3 className="font-mono text-[9px] uppercase tracking-widest text-archive-subtle mb-1.5">
-            Why Saved
+            收藏理由
           </h3>
           <p className="font-sans text-xs text-archive-text/85 leading-relaxed">
             {favorite.whySaved}
@@ -176,7 +175,7 @@ export function GitHubResearchDetails({
 
       <section className="border-t border-archive-border/50 pt-3">
         <h3 className="font-mono text-[9px] uppercase tracking-widest text-archive-subtle mb-1.5">
-          Personal Note
+          个人笔记
         </h3>
         <p
           className={`font-sans text-xs leading-relaxed ${
@@ -185,7 +184,7 @@ export function GitHubResearchDetails({
               : "text-archive-subtle/50 italic"
           }`}
         >
-          {favorite.personalNote || "No personal note added yet."}
+          {favorite.personalNote || "暂无个人笔记。"}
         </p>
       </section>
     </div>

@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { TYPE_LABELS } from "@/lib/utils/resource";
 import {
   humanizeId,
   type ResourceFacetModel,
@@ -53,7 +54,7 @@ function LanguageSegmentedControl({
           id="language-label"
           className="font-mono text-[10px] font-semibold uppercase tracking-[0.16em] text-archive-subtle"
         >
-          LANGUAGE
+          语言
         </h3>
       </div>
       <div className="grid grid-cols-3 gap-1 rounded bg-archive-bg/80 p-1 border border-archive-border/70 font-mono text-xs">
@@ -61,13 +62,14 @@ function LanguageSegmentedControl({
         <button
           type="button"
           onClick={() => onChange("all")}
+          aria-pressed={currentLanguage === "all"}
           className={`flex flex-col items-center justify-center py-1.5 px-1 rounded transition-all duration-150 cursor-pointer ${
             currentLanguage === "all"
               ? "bg-archive-accent text-archive-bg font-semibold shadow-sm"
               : "text-archive-subtle hover:text-archive-text hover:bg-white/[0.04]"
           }`}
         >
-          <span>All</span>
+          <span>全部</span>
           <span className="text-[10px] opacity-75 tabular-nums">
             {allCount > 0 ? allCount.toLocaleString() : "—"}
           </span>
@@ -78,6 +80,7 @@ function LanguageSegmentedControl({
           type="button"
           disabled={zhCount === 0}
           onClick={() => onChange("zh")}
+          aria-pressed={currentLanguage === "zh"}
           className={`flex flex-col items-center justify-center py-1.5 px-1 rounded transition-all duration-150 ${
             currentLanguage === "zh"
               ? "bg-archive-accent text-archive-bg font-semibold shadow-sm cursor-pointer"
@@ -97,6 +100,7 @@ function LanguageSegmentedControl({
           type="button"
           disabled={enCount === 0}
           onClick={() => onChange("en")}
+          aria-pressed={currentLanguage === "en"}
           className={`flex flex-col items-center justify-center py-1.5 px-1 rounded transition-all duration-150 ${
             currentLanguage === "en"
               ? "bg-archive-accent text-archive-bg font-semibold shadow-sm cursor-pointer"
@@ -173,7 +177,7 @@ function SubcategorySection({
           id="subcategory-label"
           className="font-mono text-[10px] font-semibold uppercase tracking-[0.16em] text-archive-subtle"
         >
-          SUBCATEGORIES
+          分类
         </h3>
         {selected.length > 0 && (
           <span className="rounded-full border border-archive-accent-dim/40 bg-archive-accent/10 px-1.5 py-0.5 font-mono text-[9px] text-archive-accent">
@@ -186,13 +190,14 @@ function SubcategorySection({
       <div className="flex flex-wrap gap-1.5 mb-2.5">
         {topChips.map((option) => {
           const isSelected = selected.includes(option.value);
-          const label = option.labelEn || humanizeId(option.value);
+          const label = option.labelZh || option.labelEn || humanizeId(option.value);
 
           return (
             <button
               key={option.value}
               type="button"
               onClick={() => onToggle(option.value)}
+              aria-pressed={isSelected}
               className={`inline-flex items-center gap-1 px-2 py-1 rounded text-xs font-sans transition-all duration-150 active:scale-95 cursor-pointer ${
                 isSelected
                   ? "border border-archive-accent bg-archive-accent/15 text-archive-accent font-medium shadow-[inset_0_0_0_1px_rgba(200,169,110,0.5)]"
@@ -216,15 +221,17 @@ function SubcategorySection({
       <div className="relative">
         <input
           type="text"
+          aria-label="搜索分类"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          placeholder={`Search all ${options.length} subcategories…`}
+          placeholder={`搜索 ${options.length} 个分类…`}
           className="w-full bg-archive-bg/90 border border-archive-border/70 rounded px-2.5 py-1.5 text-xs text-archive-text font-sans placeholder:text-archive-subtle/50 focus:outline-none focus:border-archive-accent transition-colors"
         />
         {search && (
           <button
             type="button"
             onClick={() => setSearch("")}
+            aria-label="清除分类搜索"
             className="absolute right-2 top-1/2 -translate-y-1/2 text-archive-subtle hover:text-archive-text font-mono text-xs px-1 cursor-pointer"
           >
             ×
@@ -237,18 +244,19 @@ function SubcategorySection({
         <div className="mt-1.5 max-h-48 overflow-y-auto drawer-scroll rounded border border-archive-border/80 bg-archive-bg/95 p-1 space-y-0.5">
           {filteredOptions.length === 0 ? (
             <div className="py-3 text-center font-mono text-[11px] text-archive-subtle/60">
-              No matching subcategories
+              没有匹配的分类
             </div>
           ) : (
             filteredOptions.map((option) => {
               const isSelected = selected.includes(option.value);
-              const label = option.labelEn || humanizeId(option.value);
+              const label = option.labelZh || option.labelEn || humanizeId(option.value);
 
               return (
                 <button
                   key={option.value}
                   type="button"
                   onClick={() => onToggle(option.value)}
+                  aria-pressed={isSelected}
                   className={`flex w-full items-center justify-between px-2 py-1.5 rounded text-xs text-left transition-colors cursor-pointer ${
                     isSelected
                       ? "bg-archive-accent/15 text-archive-accent font-medium"
@@ -272,7 +280,7 @@ function SubcategorySection({
             onClick={() => setShowAllList((prev) => !prev)}
             className="font-mono text-[10px] text-archive-accent-dim hover:text-archive-accent hover:underline py-0.5 cursor-pointer"
           >
-            {showAllList ? "Collapse all ▲" : `Browse all (${options.length}) ▾`}
+            {showAllList ? "收起 ▲" : `查看全部（${options.length}） ▾`}
           </button>
         </div>
       )}
@@ -282,13 +290,14 @@ function SubcategorySection({
         <div className="mt-1.5 max-h-56 overflow-y-auto drawer-scroll rounded border border-archive-border/70 bg-archive-bg/80 p-1 space-y-0.5">
           {options.map((option) => {
             const isSelected = selected.includes(option.value);
-            const label = option.labelEn || humanizeId(option.value);
+            const label = option.labelZh || option.labelEn || humanizeId(option.value);
 
             return (
               <button
                 key={option.value}
                 type="button"
                 onClick={() => onToggle(option.value)}
+                aria-pressed={isSelected}
                 className={`flex w-full items-center justify-between px-2 py-1.5 rounded text-xs text-left transition-colors cursor-pointer ${
                   isSelected
                     ? "bg-archive-accent/15 text-archive-accent font-medium"
@@ -334,7 +343,7 @@ function TopicSection({
           id="topic-label"
           className="font-mono text-[10px] font-semibold uppercase tracking-[0.16em] text-archive-subtle"
         >
-          TOPIC
+          主题
         </h3>
         {selected.length > 0 && (
           <span className="rounded-full border border-archive-accent-dim/40 bg-archive-accent/10 px-1.5 py-0.5 font-mono text-[9px] text-archive-accent">
@@ -346,7 +355,7 @@ function TopicSection({
       <div className="space-y-0.5">
         {options.map((option) => {
           const isSelected = selected.includes(option.value);
-          const label = option.labelEn || humanizeId(option.value);
+          const label = option.labelZh || option.labelEn || humanizeId(option.value);
           const pct = Math.round((option.count / maxTopicCount) * 100);
 
           return (
@@ -443,14 +452,14 @@ function FormatSection({
       <section aria-labelledby="format-label" className="border-b border-archive-border/50 py-3 last:border-b-0">
         <div className="flex items-center justify-between text-xs text-archive-subtle">
           <span className="font-mono text-[10px] text-archive-subtle/80">
-            Format: {topPct}% {topOption.labelEn || humanizeId(topOption.value)}
+            资源类型：{topPct}% {TYPE_LABELS[topOption.value] || humanizeId(topOption.value)}
           </span>
           <button
             type="button"
             onClick={() => setExpanded(true)}
             className="font-mono text-[10px] text-archive-accent-dim hover:text-archive-accent hover:underline py-0.5 cursor-pointer"
           >
-            Expand ▾
+            展开 ▾
           </button>
         </div>
       </section>
@@ -465,7 +474,7 @@ function FormatSection({
             id="format-label"
             className="font-mono text-[10px] font-semibold uppercase tracking-[0.16em] text-archive-subtle"
           >
-            FORMAT
+            资源类型
           </h3>
           {isDominant && (
             <button
@@ -473,7 +482,7 @@ function FormatSection({
               onClick={() => setExpanded(false)}
               className="font-mono text-[9px] text-archive-subtle hover:text-archive-text underline cursor-pointer"
             >
-              Collapse
+              收起
             </button>
           )}
         </div>
@@ -487,7 +496,7 @@ function FormatSection({
       <div className="space-y-0.5">
         {options.map((option) => {
           const isSelected = selected.includes(option.value);
-          const label = option.labelEn || humanizeId(option.value);
+          const label = TYPE_LABELS[option.value] || humanizeId(option.value);
 
           return (
             <button
@@ -585,13 +594,13 @@ export default function ResourceFacetPanel({
     <div className={compact ? "w-full" : "w-[260px] shrink-0"}>
       <div className={compact ? "" : "sticky top-5 max-h-[calc(100vh-2.5rem)] overflow-y-auto rounded-lg border border-archive-border/70 bg-archive-surface/65 p-4 drawer-scroll"}>
         {/* Header with clear */}
-        <div className="mb-3.5 flex items-start justify-between gap-3 border-b border-archive-border/50 pb-3">
+        {!compact && <div className="mb-3.5 flex items-start justify-between gap-3 border-b border-archive-border/50 pb-3">
           <div>
             <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-archive-accent">
-              {"// REFINE ARCHIVE"}
+              筛选条件
             </p>
             <p className="mt-0.5 font-mono text-[10px] text-archive-subtle/70">
-              {selectedCount > 0 ? `${selectedCount} active filters` : "Live multi-facet filtering"}
+              {selectedCount > 0 ? `已选择 ${selectedCount} 项` : "结果随筛选条件更新"}
             </p>
           </div>
           {selectedCount > 0 && (
@@ -600,10 +609,12 @@ export default function ResourceFacetPanel({
               onClick={onClear}
               className="min-h-7 shrink-0 cursor-pointer font-mono text-[10px] text-archive-accent hover:text-archive-accent-glow hover:underline transition-colors"
             >
-              Reset all ↺
+              清除筛选
             </button>
           )}
         </div>
+
+        }
 
         {/* 1. 语言三段开关 */}
         <LanguageSegmentedControl

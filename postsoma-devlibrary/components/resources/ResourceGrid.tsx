@@ -56,7 +56,7 @@ function GitHubRecallContext({ favorite }: { favorite: GitHubFavorite }) {
     <div className="mb-1.5 flex flex-wrap items-center gap-x-3 gap-y-1 px-3 font-mono text-[9px] text-archive-subtle/65">
       {trustedDiscoveryDate && (
         <span>
-          Saved ·{" "}
+          收藏于 ·{" "}
           <span className="text-archive-subtle">
             {trustedDiscoveryDate}
           </span>
@@ -64,9 +64,9 @@ function GitHubRecallContext({ favorite }: { favorite: GitHubFavorite }) {
       )}
       {trustedReviewDate && (
         <span>
-          Review history ·{" "}
+          复核记录 ·{" "}
           <span className="text-archive-subtle">
-            Reviewed {trustedReviewDate}
+            {trustedReviewDate}
           </span>
         </span>
       )}
@@ -75,7 +75,7 @@ function GitHubRecallContext({ favorite }: { favorite: GitHubFavorite }) {
           className="min-w-0 basis-full truncate sm:basis-auto text-archive-text/75"
           title={favorite.personalNote}
         >
-          Personal note · {favorite.personalNote}
+          个人笔记 · {favorite.personalNote}
         </span>
       )}
     </div>
@@ -94,10 +94,10 @@ function GitHubMatchReasons({
   return (
     <div
       className="mt-1.5 flex flex-wrap items-center gap-1.5 px-3"
-      aria-label="Search match reasons"
+      aria-label="搜索匹配原因"
     >
       <span className="mr-0.5 font-mono text-[8px] uppercase tracking-widest text-archive-subtle/45">
-        Matched
+        匹配
       </span>
       {visible.map((reason) => {
         const isStructured = reason.kind !== "text";
@@ -222,7 +222,7 @@ export default function ResourceGrid({
       <div
         className="grid gap-3 stagger-children"
         style={{
-          gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))",
+          gridTemplateColumns: "repeat(auto-fill, minmax(min(100%, 280px), 1fr))",
         }}
       >
         {/* Aggregated topic groups ONLY — Option B strict filter */}
@@ -242,9 +242,7 @@ export default function ResourceGrid({
     );
   }
 
-  const isGitHubList = isGitHubCollection || resources.some(
-    (resource) => resource.collection === "github",
-  );
+  const isGitHubList = isGitHubCollection;
 
   return (
     <div
@@ -258,7 +256,7 @@ export default function ResourceGrid({
       style={
         isGitHubList
           ? undefined
-          : { gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))" }
+          : { gridTemplateColumns: "repeat(auto-fill, minmax(min(100%, 280px), 1fr))" }
       }
     >
       {resources.map((resource) => {

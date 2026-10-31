@@ -9,7 +9,7 @@
   --archive-border: #1e2228;
   --archive-muted: #2a2f38;
   --archive-text: #e8e4dc;
-  --archive-subtle: #8c8880;
+  --archive-subtle: #aaa69e;
   --archive-accent: #c8a96e;
   --archive-accent-dim: #9a7d4a;
   --archive-accent-glow: #e8c88a;
@@ -39,6 +39,10 @@ body {
 :where(a, button, input, select, textarea, [tabindex]):focus-visible {
   outline: 2px solid var(--archive-accent);
   outline-offset: 2px;
+}
+
+@media (max-width: 767px) {
+  input, select, textarea { font-size: 16px !important; }
 }
 
 /* ─── Scrollbar ───────────────────────────────────────── */
@@ -174,6 +178,9 @@ body {
 @keyframes dl-curious { 0%,100% { transform: rotate(0); } 35%,65% { transform: rotate(3deg); } }
 @keyframes dl-waddle { 0%,100% { transform: rotate(-2deg); } 50% { transform: rotate(2deg); } }
 @keyframes dl-tilt { 0%,100% { transform: rotate(0); } 45% { transform: rotate(-7deg); } 70% { transform: rotate(4deg); } }
+@media (max-width: 767px) {
+  .dl-mascot-dock { display: none; }
+}
 @media (min-width: 768px) {
   .dl-mascot-dock { --dl-rest: var(--dl-desktop-rest, 60%); --dl-peek: var(--dl-desktop-peek, 46%); --dl-hidden: var(--dl-desktop-hidden, 125%); width: 132px; height: 145px; bottom: calc(var(--dl-desktop-bottom, 8px) + env(safe-area-inset-bottom, 0px)); }
 }
@@ -210,13 +217,11 @@ body {
   @media (hover: hover) {
     .archive-card:hover {
       @apply border-archive-muted;
-      box-shadow: 0 0 0 1px rgba(200, 169, 110, 0.08),
-                  0 4px 24px rgba(0, 0, 0, 0.4);
+
     }
   }
 
   .archive-card:active {
-    transform: scale(0.99);
     border-color: var(--archive-accent-dim);
     background: rgba(200, 169, 110, 0.02);
   }
@@ -323,6 +328,7 @@ body {
   *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
+    animation-delay: 0ms !important;
     transition-duration: 0.01ms !important;
   }
 }

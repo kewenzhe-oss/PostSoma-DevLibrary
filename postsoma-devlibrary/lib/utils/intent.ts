@@ -16,7 +16,7 @@ export const INTENT_DEFINITIONS: Record<IntentKey, IntentMeta> = {
   read: {
     key: "read",
     order: "01",
-    name: "阅读研读",
+    name: "阅读",
     label: "READ",
     problemSolved: "体系化教材与深度教程，适合从零构筑底层心智模型与知识体系。",
     carrierLabel: "书籍 / 教程 / 课程",
@@ -27,7 +27,7 @@ export const INTENT_DEFINITIONS: Record<IntentKey, IntentMeta> = {
   build: {
     key: "build",
     order: "02",
-    name: "开源实战",
+    name: "做项目",
     label: "BUILD",
     problemSolved: "真实生产级开源项目与开发者工具，通过阅读源码与调试掌握工程落地。",
     carrierLabel: "开源项目 / 生产工具 / 插件",
@@ -38,7 +38,7 @@ export const INTENT_DEFINITIONS: Record<IntentKey, IntentMeta> = {
   practice: {
     key: "practice",
     order: "03",
-    name: "动手练习",
+    name: "练习",
     label: "PRACTICE",
     problemSolved: "免配置的浏览器在线沙箱与关卡挑战，快速获得代码运行反馈。",
     carrierLabel: "在线沙箱 / 交互实验 / 练习题",
@@ -49,7 +49,7 @@ export const INTENT_DEFINITIONS: Record<IntentKey, IntentMeta> = {
   reference: {
     key: "reference",
     order: "04",
-    name: "速查参考",
+    name: "查文档",
     label: "REFERENCE",
     problemSolved: "官方标准规范、API 文档与常用速查备忘单，日常编码时高频精准查阅。",
     carrierLabel: "官方文档 / 速查备忘单",
@@ -60,7 +60,7 @@ export const INTENT_DEFINITIONS: Record<IntentKey, IntentMeta> = {
   surprise: {
     key: "surprise",
     order: "05",
-    name: "盲盒探索",
+    name: "随便看看",
     label: "SURPRISE",
     problemSolved: "打破预设技术栈边界，在全库精选中随机偶遇可能启发你的优质开源节点。",
     carrierLabel: "跨分类随机采样 / 灵感漫游",

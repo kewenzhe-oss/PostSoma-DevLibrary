@@ -28,10 +28,10 @@ export default async function LibraryPage() {
       <div className="mb-8 animate-fade-in flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div>
           <h1 className="font-display text-3xl text-archive-text mb-2">
-            My Library
+            我的收藏
           </h1>
           <p className="font-sans text-sm text-archive-subtle">
-            Your saved resources on this browser.
+            收藏保存在当前浏览器中，清除浏览器数据后可能丢失。
           </p>
         </div>
       </div>

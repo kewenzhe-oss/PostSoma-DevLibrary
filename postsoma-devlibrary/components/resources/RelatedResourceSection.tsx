@@ -21,9 +21,6 @@ export default function RelatedResourceSection({
   const heading = isOpenSourceReferences
     ? "相关开源参考"
     : "适合学完这些书 / 课程后查看";
-  const eyebrow = isOpenSourceReferences
-    ? "LEARN → BUILD"
-    : "LEARNED CONTEXT → BUILD";
   const description = isOpenSourceReferences
     ? "把本页知识带入真实项目，继续观察架构、实现与工程取舍。"
     : "这些学习资源提供理解该项目所需的概念背景，可先学再拆解实现。";
@@ -31,9 +28,6 @@ export default function RelatedResourceSection({
   return (
     <section className="mb-8 rounded-sm border border-teal-500/20 bg-teal-500/[0.025] p-4 sm:p-5 relative z-10">
       <div className="mb-4">
-        <p className="mb-1 font-mono text-[9px] uppercase tracking-[0.2em] text-teal-400/70">
-          {eyebrow}
-        </p>
         <h2 className="font-display text-lg text-archive-text">{heading}</h2>
         <p className="mt-1 font-sans text-xs leading-relaxed text-archive-subtle">
           {description}
@@ -50,13 +44,13 @@ export default function RelatedResourceSection({
             <div className="mb-1.5 flex items-center gap-2">
               <span className="font-mono text-[8px] uppercase tracking-widest text-teal-300/70">
                 {resource.collection === "github"
-                  ? "GitHub Reference"
+                  ? "GitHub 项目"
                   : resource.collection === "courses"
-                    ? "Course"
-                    : "Book"}
+                    ? "课程"
+                    : "书籍"}
               </span>
               <span className="ml-auto font-mono text-[9px] text-archive-subtle/40 transition-colors group-hover:text-teal-300/70">
-                View →
+                查看 →
               </span>
             </div>
             <h3 className="font-sans text-sm font-semibold leading-snug text-archive-text transition-colors group-hover:text-teal-200">

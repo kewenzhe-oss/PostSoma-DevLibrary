@@ -30,11 +30,11 @@ const HEALTH_SEGMENTS: Array<{
   value: GitHubFavoriteHealth | "";
   label: string;
 }> = [
-  { value: "", label: "All" },
-  { value: "active", label: "Active" },
-  { value: "quiet", label: "Quiet" },
-  { value: "archived", label: "Archived" },
-  { value: "unavailable", label: "Unavailable" },
+  { value: "", label: "全部" },
+  { value: "active", label: "活跃" },
+  { value: "quiet", label: "近期较少更新" },
+  { value: "archived", label: "已归档" },
+  { value: "unavailable", label: "不可访问" },
 ];
 
 function HealthSegmentedControl({
@@ -55,7 +55,7 @@ function HealthSegmentedControl({
     <div className="flex flex-col gap-2">
       <div className="flex items-center justify-between">
         <span className="font-mono text-[10px] font-semibold uppercase tracking-[0.16em] text-archive-subtle">
-          HEALTH
+          更新状态
         </span>
         {selectedHealth && (
           <button
@@ -63,11 +63,11 @@ function HealthSegmentedControl({
             onClick={() => onHealthChange("")}
             className="font-mono text-[10px] text-teal-400 hover:text-teal-300 transition-colors cursor-pointer"
           >
-            Reset ×
+            清除
           </button>
         )}
       </div>
-      <div className="grid grid-cols-5 gap-1 rounded bg-archive-bg/80 p-1 border border-archive-border/70 font-mono text-xs">
+      <div className="grid grid-cols-3 sm:grid-cols-5 gap-1 rounded bg-archive-bg/80 p-1 border border-archive-border/70 font-mono text-xs">
         {HEALTH_SEGMENTS.map(({ value, label }) => {
           const count = value === "" ? allCount : healthCounts.get(value) ?? 0;
           const isActive = selectedHealth === value;
@@ -77,6 +77,7 @@ function HealthSegmentedControl({
               key={value}
               type="button"
               disabled={count === 0}
+              aria-pressed={isActive}
               onClick={() =>
                 onHealthChange(isActive && value !== "" ? "" : value)
               }
@@ -165,7 +166,7 @@ function GitHubFacetChipSection({
             onClick={() => onChange("")}
             className="font-mono text-[10px] text-teal-400 hover:text-teal-300 transition-colors cursor-pointer"
           >
-            Reset ×
+            清除
           </button>
         )}
       </div>
@@ -179,6 +180,7 @@ function GitHubFacetChipSection({
             <button
               key={option.value}
               type="button"
+              aria-pressed={isSelected}
               onClick={() => onChange(isSelected ? "" : option.value)}
               className={`inline-flex items-center gap-1 px-2 py-1 rounded text-xs font-sans transition-all duration-150 active:scale-95 cursor-pointer ${
                 isSelected
@@ -205,6 +207,7 @@ function GitHubFacetChipSection({
       <div className="relative">
         <input
           type="text"
+          aria-label={placeholder}
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           placeholder={placeholder}
@@ -214,6 +217,7 @@ function GitHubFacetChipSection({
           <button
             type="button"
             onClick={() => setSearch("")}
+            aria-label={`清除${title}搜索`}
             className="absolute right-2 top-1/2 -translate-y-1/2 text-archive-subtle hover:text-archive-text font-mono text-xs px-1 cursor-pointer"
           >
             ×
@@ -226,7 +230,7 @@ function GitHubFacetChipSection({
         <div className="max-h-48 overflow-y-auto drawer-scroll rounded border border-archive-border/80 bg-archive-bg/95 p-1 space-y-0.5 shadow-lg">
           {filteredOptions.length === 0 ? (
             <div className="py-2.5 text-center font-mono text-[11px] text-archive-subtle/60">
-              No matches found
+              没有匹配的选项
             </div>
           ) : (
             filteredOptions.map((option) => {
@@ -279,23 +283,23 @@ export default function GitHubBrowseControls({
   return (
     <section
       className="rounded-md border border-archive-border/55 bg-archive-surface/45 p-3 sm:p-4 flex flex-col gap-4"
-      aria-label="GitHub collection browsing controls"
+      aria-label="GitHub 项目筛选"
     >
       {/* Recall mode notification - only rendered if mode === "recall" */}
       {mode === "recall" && (
         <div
           className="rounded border border-amber-400/20 bg-amber-400/[0.04] px-3.5 py-2.5"
-          aria-label="Personal timeline status"
+          aria-label="收藏时间说明"
         >
           <p className="font-mono text-[9px] uppercase tracking-widest text-amber-200/85 font-medium">
             {hasTrustedTimeline
-              ? "Timeline in progress"
-              : "Timeline not established"}
+              ? "收藏时间信息"
+              : "收藏时间暂不可用"}
           </p>
           <p className="mt-1 font-sans text-[11px] leading-relaxed text-archive-subtle/80">
             {hasTrustedTimeline
-              ? `${localEntryCount} local timestamps and ${manualReviewCount} manual reviews. Order continues by stable repository index.`
-              : "Historical timestamps originate from bulk import and do not reflect personal discovery. Order continues by stable repository index."}
+              ? `记录了 ${localEntryCount} 个本地收藏时间和 ${manualReviewCount} 次人工复核；其余项目按固定顺序排列。`
+              : "历史时间来自批量导入，不能代表实际收藏时间；项目按固定顺序排列。"}
           </p>
         </div>
       )}
@@ -310,16 +314,16 @@ export default function GitHubBrowseControls({
       {/* 2 & 3. 能力 + 技术栈 Chips & Inline Search */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-1 border-t border-archive-border/40">
         <GitHubFacetChipSection
-          title="CAPABILITIES"
-          placeholder="Search all capabilities…"
+          title="能力"
+          placeholder="搜索能力…"
           options={capabilityOptions}
           selectedValue={selectedCapability}
           onChange={onCapabilityChange}
         />
 
         <GitHubFacetChipSection
-          title="TECH STACK"
-          placeholder="Search all stacks…"
+          title="技术栈"
+          placeholder="搜索技术栈…"
           options={techStackOptions}
           selectedValue={selectedTechStack}
           onChange={onTechStackChange}

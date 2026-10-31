@@ -5,11 +5,13 @@ import DevLibraryMascot from "./DevLibraryMascot";
 
 export default function AppShell({
   children,
+  showMascot = false,
 }: {
   children: React.ReactNode;
+  showMascot?: boolean;
 }) {
   return (
-    <div className="noise-overlay min-h-screen flex flex-col overflow-x-hidden w-full">
+    <div className="min-h-screen flex flex-col overflow-x-hidden w-full">
       <AppHeader />
       <main className="flex-1 max-w-7xl mx-auto w-full px-4 py-6 pb-24 md:px-6 md:py-8 md:pb-8">
         {children}
@@ -50,13 +52,9 @@ export default function AppShell({
             </a>
           </div>
 
-          {/* Row 2: Monospace factual status */}
-          <div className="text-[10px] text-archive-subtle/60 sm:text-right select-none">
-            <span>5,184 项收录 · Pipeline 同步 Sep 11, 2026 · 本地计算无追踪</span>
-          </div>
         </div>
       </footer>
-      <DevLibraryMascot />
+      {showMascot && <DevLibraryMascot />}
     </div>
   );
 }

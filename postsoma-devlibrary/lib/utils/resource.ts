@@ -2,19 +2,9 @@ import type { Resource } from "@/lib/types/resource";
 import { getProviderLabel } from "./provider";
 
 export const TYPE_LABELS: Record<Resource["type"], string> = {
-  book: "book",
-  course: "course",
-  tutorial: "tutorial",
-  documentation: "docs",
-  interactive: "interactive",
-  article: "article",
-  app: "app",
-  library: "library",
-  framework: "framework",
-  cli: "cli",
-  collection: "collection",
-  extension: "extension",
-  unknown: "resource",
+  book: "书籍", course: "课程", tutorial: "教程", documentation: "文档",
+  interactive: "互动练习", article: "文章", app: "应用", library: "代码库",
+  framework: "框架", cli: "命令行工具", collection: "资源合集", extension: "扩展", unknown: "其他资源",
 };
 
 export function getResourceDomain(url?: string): string {

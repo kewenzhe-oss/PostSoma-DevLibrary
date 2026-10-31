@@ -3,6 +3,8 @@
 import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import Icon from "@/components/ui/Icon";
+import { TYPE_LABELS } from "@/lib/utils/resource";
+import type { Resource } from "@/lib/types/resource";
 import {
   IntentKey,
   INTENT_DEFINITIONS,
@@ -175,147 +177,37 @@ export default function RandomCurations({ resources }: RandomCurationsProps) {
   if (cards.length === 0) return null;
 
   return (
-    <section className="border-t border-archive-border pt-12 pb-12 animate-fade-in">
-      {/* Section Header */}
-      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-6">
+    <section className="border-t border-archive-border pt-10 pb-14">
+      <div className="flex flex-wrap items-end justify-between gap-4 mb-6">
         <div>
-          <span className="font-mono text-xs text-archive-accent/80 uppercase tracking-widest block mb-2">
-            {"// 五维意图导览 · INTENT.GATEWAY"}
-          </span>
-          <h2 className="font-display text-2xl text-archive-text mb-1 font-bold">
-            Five Ways Into The Catalog
-          </h2>
-          <p className="font-sans text-xs text-archive-subtle">
-            告别技术分类迷宫，根据当下学习阶段直达对应起点的精选示例。
-          </p>
+          <h2 className="font-display text-2xl text-archive-text mb-2">从这里开始探索</h2>
+          <p className="text-sm text-archive-subtle">读一本书、动手练习，或随便发现一点新东西。</p>
         </div>
-
-        {/* Demoted subtle secondary outline button */}
-        <button
-          onClick={shuffle}
-          className="btn-outline text-xs font-mono px-3.5 py-1.5 shrink-0 h-8 flex items-center justify-center gap-1.5 hover:border-archive-accent/60 hover:text-archive-accent transition-all"
-        >
-          <Icon
-            name="shuffle"
-            size={13}
-            className={`transition-transform duration-300 ${rotate ? "rotate-180" : ""}`}
-          />
-          换一批示例
+        <button onClick={shuffle} className="btn-outline min-h-10 text-sm flex items-center gap-2">
+          <Icon name="shuffle" size={15} className={`transition-transform duration-300 ${rotate ? "rotate-180" : ""}`} />
+          换一批
         </button>
       </div>
-
-      {/* 5-Column Intent Cards Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3.5">
-        {cards.map((card) => {
-          const { meta, data: r, curatorNote } = card;
-
-          if (!r) {
-            return (
-              <div
-                key={meta.key}
-                className="archive-card p-4 relative overflow-hidden flex flex-col justify-between min-h-[250px] border-archive-border/40 bg-archive-surface/5 opacity-80"
-              >
-                <div className="absolute top-0 left-0 w-full h-[2px] bg-archive-border/30" />
-                <div>
-                  <div className="flex items-center gap-1.5 mb-2">
-                    <span className="font-mono text-[9px] text-archive-subtle uppercase tracking-wider font-semibold">
-                      {"// "}{meta.order}. {meta.name}
-                    </span>
-                  </div>
-                  <p className="text-[10px] text-archive-subtle/70 leading-relaxed font-sans mb-3">
-                    {meta.problemSolved}
-                  </p>
-                </div>
-                <div className="pt-3 border-t border-archive-border/40 mt-3">
-                  <Link
-                    href={meta.exploreHref}
-                    className="text-[10px] font-mono text-archive-accent hover:text-archive-accent-glow hover:underline block text-center"
-                  >
-                    分类归档 →
-                  </Link>
-                </div>
-              </div>
-            );
-          }
-
-          const isSurprise = meta.key === "surprise";
-
-          return (
-            <div
-              key={meta.key}
-              className={`archive-card p-4 relative overflow-hidden flex flex-col justify-between min-h-[250px] transition-all duration-200 hover:-translate-y-0.5 hover:border-archive-border-glow ${
-                isSurprise
-                  ? "border-archive-accent/50 bg-archive-accent/[0.02] shadow-sm shadow-archive-accent/5"
-                  : ""
-              }`}
-            >
-              <div
-                className={`absolute top-0 left-0 w-full h-[2px] ${
-                  isSurprise ? "bg-archive-accent" : "bg-archive-accent/40"
-                }`}
-              />
-
-              <div>
-                {/* Intent order and name header */}
-                <div className="flex items-center justify-between gap-1 mb-2">
-                  <div className="flex items-center gap-1.5 text-archive-accent">
-                    <Icon name={meta.icon} size={13} />
-                    <span className="font-mono text-[9px] text-archive-accent uppercase tracking-wider font-semibold">
-                      {"// "}{meta.order}. {meta.name}
-                    </span>
-                    {isSurprise && (
-                      <span className="font-mono text-[8px] px-1 py-0.2 rounded bg-archive-accent/20 text-archive-accent border border-archive-accent/30 tracking-tight">
-                        精选奖池
-                      </span>
-                    )}
-                  </div>
-                  <span className="text-[9px] font-mono text-archive-subtle/70 uppercase select-none">
-                    {r.language === "zh" ? "中文" : "EN"}
-                  </span>
-                </div>
-
-                {/* Problem solved OR Curator Note as visual highlight */}
-                {isSurprise && curatorNote ? (
-                  <div className="mb-2.5 p-2 rounded bg-archive-accent/10 border border-archive-accent/25 text-archive-text">
-                    <div className="flex items-center gap-1 font-mono text-[9px] text-archive-accent font-semibold mb-1">
-                      <span>★ PostSoma 推薦</span>
-                    </div>
-                    <p className="text-[11px] leading-snug font-sans text-archive-text font-medium">
-                      “{curatorNote}”
-                    </p>
-                  </div>
-                ) : (
-                  <p className="text-[10px] text-archive-subtle/90 leading-relaxed font-sans mb-2.5 line-clamp-2">
-                    {meta.problemSolved}
-                  </p>
-                )}
-
-                <div className="border-t border-archive-border/40 my-2" />
-
-                {/* Resource Title */}
-                <h3 className="font-display text-xs text-archive-text line-clamp-2 mb-1.5 leading-snug font-medium hover:text-archive-accent transition-colors">
-                  <Link href={`/resource/${r.id}`}>{r.title}</Link>
-                </h3>
-
-                {/* Resource Whisper line */}
-                <p className="font-mono text-[9px] text-archive-subtle/70 truncate select-none">
-                  {formatIntentCategory(r)} · {r.type}
-                  {r.sourceDomain && <span> · {r.sourceDomain}</span>}
-                </p>
-              </div>
-
-              {/* Action Link (Single focused CTA) */}
-              <div className="pt-2.5 border-t border-archive-border/40 mt-3 flex items-center justify-end">
-                <Link
-                  href={`/resource/${r.id}`}
-                  className="text-[10px] font-mono text-archive-accent hover:text-archive-accent-glow hover:underline"
-                >
-                  {meta.actionLabel} →
-                </Link>
-              </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-x-6 gap-y-0">
+        {cards.map(({ meta, data: resource, curatorNote }) => (
+          <article key={meta.key} className="border-t border-archive-border py-5 min-w-0">
+            <div className="flex items-center justify-between gap-2 mb-3">
+              <h3 className="text-sm font-semibold text-archive-accent">{meta.name}</h3>
+              {resource && <span className="text-xs text-archive-subtle">{resource.language === "zh" ? "中文" : "EN"}</span>}
             </div>
-          );
-        })}
+            {resource ? (
+              <>
+                <Link href={`/resource/${resource.id}`} className="font-display text-base leading-snug text-archive-text hover:text-archive-accent underline-offset-4 hover:underline break-words">
+                  {resource.title}
+                </Link>
+                <p className="mt-2 text-xs text-archive-subtle leading-relaxed break-words">
+                  {formatIntentCategory(resource)} · {TYPE_LABELS[resource.type as Resource["type"]] || resource.type}{resource.sourceDomain && ` · ${resource.sourceDomain}`}
+                </p>
+                {curatorNote && <p className="mt-3 text-xs text-archive-subtle leading-relaxed">{curatorNote}</p>}
+              </>
+            ) : <Link href={meta.exploreHref} className="text-sm text-archive-subtle hover:text-archive-accent">浏览相关资源 →</Link>}
+          </article>
+        ))}
       </div>
     </section>
   );

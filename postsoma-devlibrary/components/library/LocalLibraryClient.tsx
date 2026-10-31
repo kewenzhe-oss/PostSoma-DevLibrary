@@ -30,14 +30,17 @@ export default function LocalLibraryClient({ allResources }: LocalLibraryClientP
   return (
     <div className="animate-slide-up">
       {savedResources.length > 0 ? (
-        <ResourceGrid resources={savedResources} />
+        <>
+          <p className="mb-4 text-sm text-archive-subtle">已收藏 {savedResources.length} 项资源</p>
+          <ResourceGrid resources={savedResources} />
+        </>
       ) : (
         <EmptyState
           icon="bookmark"
-          title="No saved resources"
-          description="Save resources from the archive and they will appear here. Saved locally in this browser."
+          title="还没有收藏"
+          description="在资源卡片上点击收藏按钮，方便以后回来查看。"
           action={{
-            label: "Browse the archive",
+            label: "浏览资源库",
             onClick: () => {
               router.push("/resources");
             },

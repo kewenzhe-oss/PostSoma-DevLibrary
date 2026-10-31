@@ -83,18 +83,15 @@ export default async function ResourcesPage() {
         }}
       />
       <div className="mb-4 md:mb-8 animate-fade-in">
-        <p className="mb-2 font-mono text-[10px] uppercase tracking-[0.2em] text-archive-accent-dim">
-          Read · Practice · Explore
-        </p>
         <h1 className="font-display text-2xl md:text-3xl text-archive-text mb-1 md:mb-2">
-          Full Archive
+          资源库
         </h1>
         <p className="max-w-2xl font-sans text-xs leading-relaxed text-archive-subtle md:text-sm">
-          {resources.length.toLocaleString()} free programming books, courses, cheat sheets and hand-picked open-source repos. No black-box ranking. Search, filter, go straight to the source.
+          搜索 {resources.length.toLocaleString()} 项免费资源，按主题、语言和类型筛选。
         </p>
       </div>
 
-      <Suspense fallback={<div className="font-mono text-sm text-archive-subtle animate-pulse">Loading archive...</div>}>
+      <Suspense fallback={<div className="font-mono text-sm text-archive-subtle animate-pulse">正在加载资源库…</div>}>
         <ResourceExplorer 
           resources={resources} 
           tocNodes={tocNodes} 

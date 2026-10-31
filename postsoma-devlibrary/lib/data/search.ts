@@ -1,5 +1,6 @@
 import MiniSearch from "minisearch";
 import type { Resource } from "@/lib/types/resource";
+import { getSearchAliases } from "./search-aliases";
 
 export interface SearchResourcesInput {
   query: string;
@@ -77,6 +78,7 @@ export function searchResources(
 ): Resource[] {
   const { query, language = "all", collection, category, tocPath, limit = 200 } = input;
 
+  if (limit <= 0) return [];
   let filtered = resources;
 
   // Language filter
@@ -110,16 +112,21 @@ export function searchResources(
 
   // Full-text search on filtered set
   const index = getOrBuildIndex(resources);
-  const results = index.search(query, {
-    filter: (result) => {
-      // Find the actual resource to check tocPath
-      const res = filtered.find(r => r.id === result.id);
-      return res !== undefined;
-    },
-  });
-
-  return results
-    .slice(0, limit)
-    .map((r) => filtered.find((res) => res.id === r.id))
-    .filter((r): r is Resource => r !== undefined);
+  const filteredById = new Map(filtered.map((resource) => [resource.id, resource]));
+  const searchOptions = { filter: (result: { id: string }) => filteredById.has(result.id) };
+  const directMatches = index.search(query, searchOptions);
+  const aliasMatches = getSearchAliases(query).flatMap((alias) =>
+    index.search(alias, { ...searchOptions, combineWith: "AND" }),
+  );
+  const seen = new Set<string>();
+  const matchingResources: Resource[] = [];
+  for (const match of [...directMatches, ...aliasMatches]) {
+    if (seen.has(match.id)) continue;
+    const resource = filteredById.get(match.id);
+    if (!resource) continue;
+    seen.add(match.id);
+    matchingResources.push(resource);
+    if (matchingResources.length >= limit) break;
+  }
+  return matchingResources;
 }

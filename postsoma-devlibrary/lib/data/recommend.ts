@@ -68,59 +68,39 @@ function generateHeuristicExplanation(
   const altTitle = alternativeRes ? alternativeRes.title : (isZh ? "浏览分类下的其他项目" : "Browse other catalog items");
   const evStatus = getEvidenceStatus(res);
 
+  const typeNames: Record<string, string> = {
+    book: "书籍", course: "课程", tutorial: "教程", article: "文章",
+    interactive: "交互式资源", documentation: "文档",
+  };
+  const typeName = typeNames[res.type] || "资源";
   if (isZh) {
-    let relAdv = "提供系统性的开发者资源归类，方便快速对照。";
-    let knownLim = "需要较强的自主学习意愿，缺乏即时的真人辅导。";
-    if (res.type === "book") {
-      relAdv = "提供结构完整、理论详尽的学习大纲。最适合用于系统性建立底层知识心智模型。";
-      knownLim = "阅读量大，需要较高的耐力；缺乏即时的浏览器交互式编程练习。";
-    } else if (res.type === "tutorial" || res.type === "article") {
-      relAdv = "极简入门指南，快速跑通 Setup 和 Demo，缩短从零到第一个运行代码的时间。";
-      knownLim = "可能会跳过深层计算机系统原理或底层边缘情况的讲解。";
-    } else if (res.type === "interactive") {
-      relAdv = "提供浏览器沙箱和即时 REPL，无需配置本地环境，直接写代码并看到运行结果。";
-      knownLim = "练习多为固定关卡，缺乏从零开始搭建工程项目的本地真实环境感。";
-    } else if (res.type === "documentation") {
-      relAdv = "官方标准文档，随时保持最新更新，是查阅 API 和核心规范的终极权威参考。";
-      knownLim = "文风较为干瘪冷冽，没有保姆式步骤，不太适合作为绝对新手的入门第一站。";
-    }
-
     return {
-      whyMatch: `匹配您的学习目标，符合 ${res.difficulty || "综合"} 难度及中文语言偏好。`,
-      relativeAdvantage: relAdv,
-      knownLimitations: knownLim,
-      suitableFor: `适合希望通过 ${res.type} 载体来构建 ${res.difficulty || "基础"} 技能的自学者。`,
-      notSuitableFor: "不适合寻找保姆式视频教学或需要实时互动答疑的初学者。",
-      alternative: `建议搭配查看替代资源：${altTitle}`,
-      evidenceStatus: evStatus,
-    };
-  } else {
-    let relAdv = "Provides a clean cataloged developer resource with verified source URLs.";
-    let knownLim = "Requires active self-study discipline; lacks real-time interactive mentoring.";
-    if (res.type === "book") {
-      relAdv = "Offers a structured, comprehensive, and theoretically complete curriculum. Ideal for systematically building mental models.";
-      knownLim = "Requires high reading stamina; lacks instant browser-based coding playgrounds.";
-    } else if (res.type === "tutorial" || res.type === "article") {
-      relAdv = "Highly practical, zero-friction getting started guide. Focuses on quick setup and rapid feedback loops.";
-      knownLim = "May skip deep software architectural principles or edge cases.";
-    } else if (res.type === "interactive") {
-      relAdv = "Provides a browser-based coding sandbox. Write, run, and test code immediately without local environment setup.";
-      knownLim = "Exercises can be too structured, lacking the realism of building a local repository from scratch.";
-    } else if (res.type === "documentation") {
-      relAdv = "Official authority documentation, kept up-to-date. Best for looking up APIs and syntax specifications.";
-      knownLim = "Can be dry and overwhelming for absolute beginners without an introductory guide.";
-    }
-
-    return {
-      whyMatch: `Matches your learning query and fits ${res.difficulty || "general"} difficulty and English language preferences.`,
-      relativeAdvantage: relAdv,
-      knownLimitations: knownLim,
-      suitableFor: `Self-directed learners wanting a ${res.type} medium to build ${res.difficulty || "basic"} skills.`,
-      notSuitableFor: "Learners seeking passive video walkthroughs or real-time classroom tutoring.",
-      alternative: `Consider alternative material: ${altTitle}`,
+      whyMatch: "根据目录中的标题、分类和标签等信息匹配。",
+      relativeAdvantage: `目录将此项归为${typeName}。`,
+      knownLimitations: "推荐基于目录信息，内容质量和更新状态请到原站核实。",
+      suitableFor: res.difficulty ? `目录标注难度：${res.difficulty}。` : "目录未标注难度。",
+      notSuitableFor: "目录信息不足以判断是否适合每位学习者。",
+      alternative: `其他候选：${altTitle}`,
       evidenceStatus: evStatus,
     };
   }
+  return {
+    whyMatch: "Matched using catalog information such as title, category, and tags.",
+    relativeAdvantage: `Catalog format: ${res.type}.`,
+    knownLimitations: "Recommendations use catalog data; check the source for quality and currency.",
+    suitableFor: res.difficulty ? `Catalog difficulty: ${res.difficulty}.` : "Difficulty is not specified in the catalog.",
+    notSuitableFor: "The catalog does not contain enough information to assess every learner's needs.",
+    alternative: `Another candidate: ${altTitle}`,
+    evidenceStatus: evStatus,
+  };
+}
+
+/** Avoid treating words such as "algorithm" or "google" as the Go language. */
+function matchesToken(text: string, token: string): boolean {
+  if (token === "go") {
+    return /(?:^|[^a-z0-9])(?:go|golang)(?=$|[^a-z0-9])/i.test(text);
+  }
+  return text.includes(token);
 }
 
 // Client/Server shared matching engine
@@ -165,11 +145,11 @@ export async function matchAndRecommend(all: Resource[], options: RecommendOptio
       let hasToken = false;
       for (const token of queryTokens) {
         if (
-          cat.includes(token) ||
-          subcat.includes(token) ||
-          title.includes(token) ||
-          tags.some((t) => t.includes(token)) ||
-          summary.includes(token)
+          matchesToken(cat, token) ||
+          matchesToken(subcat, token) ||
+          matchesToken(title, token) ||
+          tags.some((t) => matchesToken(t, token)) ||
+          matchesToken(summary, token)
         ) {
           hasToken = true;
           break;
@@ -185,7 +165,7 @@ export async function matchAndRecommend(all: Resource[], options: RecommendOptio
 
   if (options.difficulty !== "all" && countScoredMatches(finalFiltered) < 3) {
     finalFiltered = formatFiltered.filter((r) => r.difficulty === options.difficulty || r.difficulty === undefined);
-    relaxedReason = "未找到限定难度的资源，已自动补充未标记难度的相关项目供参考。";
+    relaxedReason = "符合指定难度的匹配项不足 3 项，已放宽条件，允许未标记难度的资源参与。";
   }
 
   if (options.format !== "all" && countScoredMatches(finalFiltered) < 3) {
@@ -194,7 +174,7 @@ export async function matchAndRecommend(all: Resource[], options: RecommendOptio
       relaxedFormatFiltered = filtered.filter((r) => r.difficulty === options.difficulty || r.difficulty === undefined);
     }
     finalFiltered = relaxedFormatFiltered;
-    relaxedReason = (relaxedReason ? relaxedReason + " " : "") + "未找到限定载体格式的资源，已自动补充其他载体类型的相关项目供参考。";
+    relaxedReason = (relaxedReason ? relaxedReason + " " : "") + "符合指定类型的匹配项不足 3 项，已放宽类型条件。";
   }
 
   const totalRelated = finalFiltered.length;
@@ -215,11 +195,11 @@ export async function matchAndRecommend(all: Resource[], options: RecommendOptio
     const summary = (res.summary || res.cardSummary || "").toLowerCase();
 
     for (const token of queryTokens) {
-      if (cat.includes(token)) score += 15;
-      if (subcat.includes(token)) score += 10;
-      if (title.includes(token)) score += 10;
-      if (tags.some((t) => t.includes(token))) score += 5;
-      if (summary.includes(token)) score += 2;
+      if (matchesToken(cat, token)) score += 15;
+      if (matchesToken(subcat, token)) score += 10;
+      if (matchesToken(title, token)) score += 10;
+      if (tags.some((t) => matchesToken(t, token))) score += 5;
+      if (matchesToken(summary, token)) score += 2;
     }
 
     if (score > 0) {

@@ -1,13 +1,13 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 
 interface ResourceSearchProps {
   value: string;
   onChange: (value: string, options?: ResourceSearchChangeOptions) => void;
   resultCount?: number;
-  totalCount?: number;
   isSearching?: boolean;
+  scopeLabel?: string;
 }
 
 export interface ResourceSearchChangeOptions {
@@ -19,22 +19,12 @@ export default function ResourceSearch({
   value,
   onChange,
   resultCount,
-  totalCount = 5184,
   isSearching = false,
+  scopeLabel = "全部资源",
 }: ResourceSearchProps) {
   const inputRef = useRef<HTMLInputElement>(null);
   const isComposingRef = useRef(false);
-  const countStr = totalCount.toLocaleString();
-  const [placeholder, setPlaceholder] = useState(`Search ${countStr} resources… (⌘K)`);
-
-  // Remove keyboard shortcut hint from placeholder on mobile screens
-  useEffect(() => {
-    if (typeof window !== "undefined" && window.innerWidth < 768) {
-      setPlaceholder(`Search ${countStr} resources…`);
-    } else {
-      setPlaceholder(`Search ${countStr} resources… (⌘K)`);
-    }
-  }, [countStr]);
+  const placeholder = `搜索${scopeLabel}…`;
 
   // Keyboard shortcut: Cmd+K / Ctrl+K
   useEffect(() => {
@@ -74,6 +64,7 @@ export default function ResourceSearch({
       <input
         ref={inputRef}
         id="resource-search-input"
+        aria-label={`搜索${scopeLabel}`}
         type="search"
         value={value}
         onCompositionStart={() => {

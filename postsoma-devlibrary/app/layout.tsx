@@ -69,7 +69,7 @@ export default function RootLayout({
 }) {
   return (
     <html
-      lang="en"
+      lang="zh-CN"
       className={`${dmSerifDisplay.variable}`}
       style={{
         ["--font-sans" as any]: "'Instrument Sans', system-ui, -apple-system, sans-serif",

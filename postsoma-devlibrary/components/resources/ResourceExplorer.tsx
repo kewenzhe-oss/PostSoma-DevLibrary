@@ -26,6 +26,7 @@ import BookmarkButton from "./BookmarkButton";
 import { TYPE_LABELS } from "@/lib/utils/resource";
 import { getProviderLabel } from "@/lib/utils/provider";
 import { searchResources } from "@/lib/data/search";
+import { getSearchAlias } from "@/lib/data/search-aliases";
 import {
   buildResourceFacetModel,
   CANONICAL_TOPIC_LABELS,
@@ -81,11 +82,15 @@ const CANONICAL_TOPIC_IDS = new Set(
 
 const INTERNAL_URL_SYNC_TTL_MS = 5_000;
 
+const COLLECTION_LABELS: Record<string, string> = {
+  books: "书籍", courses: "课程", cheat_sheets: "速查", interactive: "互动练习", github: "GitHub 项目",
+};
+
 const COLLECTION_CONTEXT: Record<string, string> = {
-  books: "Build durable foundations from long-form references.",
-  courses: "Follow structured instruction and guided lessons.",
-  cheat_sheets: "Recall syntax and patterns at the moment of use.",
-  interactive: "Practice concepts through exercises, playgrounds and visual tools.",
+  books: "适合系统阅读的书籍和参考资料。",
+  courses: "按课程内容循序学习。",
+  cheat_sheets: "查找语法和常用知识点。",
+  interactive: "通过练习、在线工具和可视化内容动手学习。",
 };
 
 function readMultiValueParam(
@@ -119,14 +124,14 @@ function PathPill({
 }) {
   return (
     <div className="inline-flex items-center gap-1.5 bg-teal-500/8 border border-teal-500/20 rounded-full px-3 py-1 text-xs animate-fade-in">
-      <span className="font-mono text-[10px] text-archive-subtle mr-0.5">path:</span>
+      <span className="text-xs text-archive-subtle mr-0.5">目录：</span>
       <span className="font-sans text-teal-300 font-medium truncate max-w-[220px]">
         {path.join(" → ")}
       </span>
       <button
         onClick={onClear}
         className="text-archive-subtle hover:text-teal-300 transition-colors font-mono font-bold text-xs ml-0.5 shrink-0"
-        title="Clear directory filter"
+        aria-label="清除目录筛选"
       >
         ×
       </button>
@@ -153,7 +158,7 @@ function GitHubFilterPill({
         type="button"
         onClick={onClear}
         className="ml-0.5 shrink-0 font-mono text-xs font-bold text-archive-subtle transition-colors hover:text-teal-300"
-        aria-label={`Clear ${label} filter`}
+        aria-label={`清除${label}筛选`}
       >
         ×
       </button>
@@ -182,7 +187,7 @@ function PublicFilterPill({
         type="button"
         onClick={onClear}
         className="ml-0.5 shrink-0 font-mono text-xs font-bold text-archive-subtle transition-colors hover:text-archive-accent"
-        aria-label={`Clear ${label} ${value}`}
+        aria-label={`清除${label}：${value}`}
       >
         ×
       </button>
@@ -204,6 +209,7 @@ function CollectionTab({
   return (
     <button
       onClick={onClick}
+      aria-pressed={isActive}
       className={`px-3 py-1.5 rounded-md text-sm font-medium transition-all duration-150 whitespace-nowrap border ${
         isActive
           ? "bg-archive-border/30 text-archive-accent border-archive-border shadow-sm"
@@ -232,8 +238,13 @@ export default function ResourceExplorer({
 
   // ── State: single source of truth for all dimensions ──────────────────────
   const [query, setQuery] = useState(() => searchParams.get("q") || "");
-  const [language, setLanguage] = useState<"all" | "zh" | "en">("all");
-  const [selectedCollection, setSelectedCollection] = useState<string>("books");
+  const [language, setLanguage] = useState<"all" | "zh" | "en">(() => {
+    const initialLanguage = searchParams.get("lang");
+    return initialLanguage === "zh" || initialLanguage === "en" ? initialLanguage : "all";
+  });
+  const [selectedCollection, setSelectedCollection] = useState<string>(
+    () => searchParams.get("col") || searchParams.get("collection") || "all",
+  );
   const [selectedTocPath, setSelectedTocPath] = useState<string[] | null>(null);
   const [selectedTopics, setSelectedTopics] = useState<CanonicalTopicId[]>([]);
   const [selectedSubcategories, setSelectedSubcategories] = useState<string[]>([]);
@@ -246,6 +257,8 @@ export default function ResourceExplorer({
   const [githubHealth, setGithubHealth] =
     useState<GitHubFavoriteHealth | "">("");
   const [isFilterDrawerOpen, setIsFilterDrawerOpen] = useState(false);
+  const closeFilterDrawer = useCallback(() => setIsFilterDrawerOpen(false), []);
+  const closeResourceDrawer = useCallback(() => setPreviewResource(null), []);
   const [, startTransition] = useTransition();
   const showPublicFacets = selectedCollection !== "github";
 
@@ -265,12 +278,15 @@ export default function ResourceExplorer({
   // count must include a favorite that shares an upstream Book/Course URL.
   const displayCollections = useMemo(
     () =>
-      collections.map((collection) =>
-        collection.id === "github"
-          ? { ...collection, count: githubFavorites.length }
-          : collection,
-      ),
-    [collections, githubFavorites.length],
+      [
+        { id: "all", label: "全部资源", count: resources.length },
+        ...collections.map((collection) => ({
+          ...collection,
+          label: COLLECTION_LABELS[collection.id] ?? collection.label,
+          count: collection.id === "github" ? githubFavorites.length : collection.count,
+        })),
+      ],
+    [collections, githubFavorites.length, resources.length],
   );
   const githubCapabilityOptions = useMemo(
     () => buildGitHubFacetOptions(githubFavorites, "capabilities"),
@@ -326,7 +342,7 @@ export default function ResourceExplorer({
     }
 
     const lang = (searchParams.get("lang") || "all") as "all" | "zh" | "en";
-    const col = searchParams.get("col") || "books";
+    const col = searchParams.get("col") || searchParams.get("collection") || "all";
     const pathVal = searchParams.get("path");
     const path = pathVal ? pathVal.split(":") : null;
     const topics = readMultiValueParam(searchParams, "topic").filter(
@@ -444,7 +460,7 @@ export default function ResourceExplorer({
       const params = new URLSearchParams();
       if (q.trim()) params.set("q", q);
       if (lang !== "all") params.set("lang", lang);
-      if (col !== "books") params.set("col", col);
+      if (col !== "all") params.set("col", col);
       if (path && path.length > 0) params.set("path", path.join(":"));
       if (col === "github") {
         const mode = githubOverrides.mode ?? stateRef.current.githubBrowseMode;
@@ -586,7 +602,7 @@ export default function ResourceExplorer({
   // ── Multi-dimension search/filter results ─────────────────────────────────
   const searchOutcome = useMemo(() => {
     if (selectedCollection === "github") {
-      return searchGitHubFavorites(
+      const outcome = searchGitHubFavorites(
         githubFavoriteLinks.resources,
         githubFavoriteLinks.favoritesByResourceId,
         {
@@ -598,6 +614,12 @@ export default function ResourceExplorer({
           limit: githubFavoriteLinks.resources.length,
         },
       );
+      return {
+        ...outcome,
+        resources: language === "all"
+          ? outcome.resources
+          : outcome.resources.filter((resource) => (resource.facet?.language ?? resource.language) === language),
+      };
     }
 
     return {
@@ -614,6 +636,7 @@ export default function ResourceExplorer({
     githubTechStack,
     githubHealth,
     githubBrowseMode,
+    language,
   ]);
   const results = searchOutcome.resources;
   const githubMatchReasonsById = searchOutcome.matchReasonsById;
@@ -631,7 +654,7 @@ export default function ResourceExplorer({
       observerRef.current = null;
     }
 
-    if (node) {
+    if (node && typeof IntersectionObserver !== "undefined") {
       observerRef.current = new IntersectionObserver(
         (entries) => {
           if (entries[0]?.isIntersecting) {
@@ -671,6 +694,12 @@ export default function ResourceExplorer({
 
     const lastClickedId = sessionStorage.getItem("postsoma_last_clicked_id");
     if (!lastClickedId) return;
+    const resultIndex = results.findIndex((resource) => resource.id === lastClickedId);
+    if (resultIndex < 0) return;
+    if (resultIndex >= visibleCount) {
+      setVisibleCount(Math.ceil((resultIndex + 1) / 24) * 24);
+      return;
+    }
 
     // Wait for the render loop to complete and element to be in the DOM
     const timer = setTimeout(() => {
@@ -703,7 +732,7 @@ export default function ResourceExplorer({
     }, 100);
 
     return () => clearTimeout(timer);
-  }, [results]);
+  }, [results, visibleCount]);
 
   const hasGitHubStructuredFilters =
     selectedCollection === "github" &&
@@ -898,19 +927,20 @@ export default function ResourceExplorer({
               value={query}
               onChange={handleQueryChange}
               resultCount={results.length}
-              totalCount={resources.length}
+              scopeLabel={displayCollections.find((collection) => collection.id === selectedCollection)?.label ?? "资源"}
             />
           </div>
           {(showPublicFacets || selectedCollection === "github") && (
             <button
+              type="button"
               onClick={() => setIsFilterDrawerOpen(true)}
               className="lg:hidden h-11 px-3.5 border border-archive-border bg-archive-surface rounded-sm text-archive-subtle hover:text-archive-text flex items-center justify-center gap-1.5 active:scale-95 active:bg-archive-muted/40 transition-all shrink-0 cursor-pointer"
-              title="Open resource filters"
+              aria-label="打开筛选"
             >
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} className="w-5 h-5">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 11-3 0m3 0a1.5 1.5 0 10-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-9.75 0h9.75" />
               </svg>
-              <span className="text-xs font-mono hidden sm:inline">Filters</span>
+              <span className="text-xs font-mono hidden sm:inline">筛选</span>
               {activeFilterCount > 0 && (
                 <span className="min-w-4 h-4 px-1 rounded-full bg-archive-accent text-archive-bg font-mono text-[9px] font-bold flex items-center justify-center">
                   {activeFilterCount}
@@ -964,7 +994,7 @@ export default function ResourceExplorer({
         {activeFilterCount > 0 && (
           <div className="flex items-center gap-2.5 flex-wrap min-h-[28px] empty:hidden py-1">
             <span className="font-mono text-[11px] text-archive-accent/90 select-none shrink-0 font-medium">
-              Active filters:
+              已选筛选：
             </span>
 
             {/* Path breadcrumb pill */}
@@ -981,7 +1011,7 @@ export default function ResourceExplorer({
             {language !== "all" && (
               <div className="inline-flex items-center gap-1.5 rounded-full border border-archive-border/60 bg-archive-surface/80 px-3 py-1 text-xs animate-fade-in">
                 <span className="font-mono text-[9px] uppercase tracking-wider text-archive-subtle/60">
-                  Language
+                  语言
                 </span>
                 <span className="font-sans text-archive-text font-medium">
                   {language === "zh" ? "中文" : "EN"}
@@ -990,7 +1020,7 @@ export default function ResourceExplorer({
                   type="button"
                   onClick={() => handleLanguageChange("all")}
                   className="ml-0.5 shrink-0 font-mono text-xs font-bold text-archive-subtle transition-colors hover:text-archive-accent"
-                  aria-label="Clear language filter"
+                  aria-label="清除语言筛选"
                 >
                   ×
                 </button>
@@ -1001,8 +1031,8 @@ export default function ResourceExplorer({
               selectedTopics.map((topic) => (
                 <PublicFilterPill
                   key={topic}
-                  label="Topic"
-                  value={getCanonicalTopicLabel(topic, "en")}
+                  label="主题"
+                  value={getCanonicalTopicLabel(topic, "zh")}
                   onClear={() => handleTopicToggle(topic)}
                 />
               ))}
@@ -1015,8 +1045,8 @@ export default function ResourceExplorer({
                 return (
                   <PublicFilterPill
                     key={subcategory}
-                    label="Category"
-                    value={option?.labelEn ?? humanizeId(subcategory)}
+                    label="分类"
+                    value={option?.labelZh ?? option?.labelEn ?? humanizeId(subcategory)}
                     onClear={() => handleSubcategoryToggle(subcategory)}
                   />
                 );
@@ -1030,8 +1060,8 @@ export default function ResourceExplorer({
                 return (
                   <PublicFilterPill
                     key={resourceType}
-                    label="Format"
-                    value={option?.labelEn ?? humanizeId(resourceType)}
+                    label="类型"
+                    value={TYPE_LABELS[resourceType] ?? humanizeId(resourceType)}
                     onClear={() => handleResourceTypeToggle(resourceType)}
                   />
                 );
@@ -1039,7 +1069,7 @@ export default function ResourceExplorer({
 
             {selectedCollection === "github" && githubCapability && (
               <GitHubFilterPill
-                label="Capability"
+                label="能力"
                 value={formatGitHubFacetLabel(githubCapability)}
                 onClear={() => handleGitHubCapabilityChange("")}
               />
@@ -1047,7 +1077,7 @@ export default function ResourceExplorer({
 
             {selectedCollection === "github" && githubTechStack && (
               <GitHubFilterPill
-                label="Stack"
+                label="技术栈"
                 value={formatGitHubFacetLabel(githubTechStack)}
                 onClear={() => handleGitHubTechStackChange("")}
               />
@@ -1055,7 +1085,7 @@ export default function ResourceExplorer({
 
             {selectedCollection === "github" && githubHealth && (
               <GitHubFilterPill
-                label="Health"
+                label="状态"
                 value={formatGitHubFacetLabel(githubHealth)}
                 onClear={() => handleGitHubHealthChange("")}
               />
@@ -1066,7 +1096,7 @@ export default function ResourceExplorer({
               onClick={handleClear}
               className="ml-auto font-mono text-xs text-archive-accent hover:text-archive-accent-glow hover:underline transition-colors shrink-0 cursor-pointer"
             >
-              Clear all ×
+              清除全部
             </button>
           </div>
         )}
@@ -1075,14 +1105,19 @@ export default function ResourceExplorer({
       {/* ── Results Count ────────────────────────────────────────────────── */}
       <div
         ref={resultsTopRef}
+        role="status"
+        aria-live="polite"
         className="flex items-center gap-4 border-t border-archive-border/50 pt-3 scroll-mt-8"
       >
         <span className="font-mono text-xs text-archive-subtle">
           <span className="text-archive-text font-semibold tabular-nums">
             {results.length.toLocaleString()}
           </span>{" "}
-          resources
-          {hasActiveFilters && " (matched)"}
+          项资源
+          {hasActiveFilters && "（符合当前条件）"}
+          {showPublicFacets && getSearchAlias(query) && (
+            <span className="block mt-1 text-archive-subtle">同时搜索英文：{getSearchAlias(query)}</span>
+          )}
         </span>
         {/* Active collection badge */}
         <span className="font-mono text-[10px] text-archive-subtle opacity-50 border border-archive-border/40 px-2 py-0.5 rounded-full">
@@ -1129,22 +1164,31 @@ export default function ResourceExplorer({
                     onClick={() => setVisibleCount((prev) => Math.min(prev + 24, results.length))}
                     className="px-6 py-2.5 rounded border border-archive-border hover:border-archive-muted text-xs font-mono text-archive-subtle hover:text-archive-text bg-archive-surface active:scale-95 transition-all cursor-pointer"
                   >
-                    Load more (showing {visibleCount} of {results.length})
+                    加载更多（已显示 {Math.min(visibleCount, results.length)} / {results.length}）
                   </button>
                 </div>
               )}
             </>
           ) : (
+            <div>
             <EmptyState
               icon="search"
-              title="No resources found"
+              title="没有找到资源"
               description={
                 query
-                  ? `No resources matching "${query}". Try broadening your search or resetting filters.`
-                  : "No resources match the current filter selection. Try resetting filters."
+                  ? `没有找到与“${query}”匹配的资源。试试其他关键词或清除筛选条件。`
+                  : "当前筛选条件下没有资源，请调整或清除筛选。"
               }
-              action={{ label: "Clear all filters ×", onClick: handleClear }}
+              action={{ label: "清除搜索和筛选", onClick: handleClear }}
             />
+            {selectedCollection !== "all" && (
+              <div className="text-center -mt-12 mb-12">
+                <button type="button" onClick={() => handleCollectionSelect("all")} className="text-sm text-archive-accent hover:underline">
+                  在全部资源中搜索 →
+                </button>
+              </div>
+            )}
+            </div>
           )}
         </div>
       </div>
@@ -1158,14 +1202,14 @@ export default function ResourceExplorer({
               : githubFavoritesById.get(previewResource.id)
           }
           language={language}
-          onClose={() => setPreviewResource(null)}
+          onClose={closeResourceDrawer}
         />
       )}
 
       {(showPublicFacets || selectedCollection === "github") && (
         <FilterDrawer
           isOpen={isFilterDrawerOpen}
-          onClose={() => setIsFilterDrawerOpen(false)}
+          onClose={closeFilterDrawer}
           isGitHub={selectedCollection === "github"}
           githubControls={
             <GitHubBrowseControls
@@ -1331,7 +1375,7 @@ function FilterDrawer({
         ref={drawerRef}
         role="dialog"
         aria-modal="true"
-        aria-label="Resource filters"
+        aria-label="筛选资源"
         className={`fixed left-0 right-0 bottom-0 z-[70] w-full max-h-[85vh] bg-archive-surface border-t border-archive-border rounded-t-xl shadow-2xl flex flex-col transition-transform duration-300 ease-out transform ${
           mounted ? "translate-y-0" : "translate-y-full"
         }`}
@@ -1344,12 +1388,12 @@ function FilterDrawer({
         {/* Header */}
         <div className="flex items-center justify-between px-5 pb-3 border-b border-archive-border/60 shrink-0">
           <h3 className="font-mono text-xs uppercase tracking-widest text-archive-accent font-semibold">
-            {"// REFINE ARCHIVE"}
+            筛选资源
           </h3>
           <button
             onClick={onClose}
-            className="w-9 h-9 flex items-center justify-center rounded-full border border-archive-border text-archive-subtle hover:text-archive-text hover:bg-archive-border/50 transition-all text-base font-mono cursor-pointer"
-            aria-label="Close filters"
+            className="w-11 h-11 flex items-center justify-center rounded-full border border-archive-border text-archive-subtle hover:text-archive-text hover:bg-archive-border/50 transition-all text-base font-mono cursor-pointer"
+            aria-label="关闭筛选"
           >
             ×
           </button>
@@ -1382,13 +1426,13 @@ function FilterDrawer({
             onClick={onClear}
             className="h-11 rounded border border-archive-border/80 px-4 font-mono text-xs text-archive-subtle transition-colors hover:text-archive-accent hover:border-archive-accent/50 cursor-pointer"
           >
-            Reset all ↺
+            清除筛选
           </button>
           <button
             onClick={onClose}
             className="flex h-11 flex-1 items-center justify-center rounded bg-archive-accent hover:bg-archive-accent-glow font-mono text-xs font-semibold text-archive-bg transition-all active:scale-[0.98] cursor-pointer shadow-sm"
           >
-            View {resultCount.toLocaleString()} resources →
+            查看 {resultCount.toLocaleString()} 项资源
           </button>
         </div>
       </div>
@@ -1397,7 +1441,7 @@ function FilterDrawer({
   );
 }
 
-// ─── Resource Preview Drawer Component ──────────────────────────────────────────
+// ─── 资源详情 Drawer Component ──────────────────────────────────────────
 
 interface ResourceDrawerProps {
   resource: Resource;
@@ -1478,7 +1522,7 @@ function ResourceDrawer({
   const detailUrl = `/resource/${resource.id}${queryString ? "?" + queryString : ""}`;
   const facetBreadcrumb = getResourceFacetBreadcrumb(
     resource,
-    language === "zh" ? "zh" : "en",
+    "zh",
   );
   const displayLanguage = resource.facet?.language ?? resource.language;
   const displayType = resource.facet?.resourceType ?? resource.type;
@@ -1502,25 +1546,22 @@ function ResourceDrawer({
         ref={drawerRef}
         role="dialog"
         aria-modal="true"
-        aria-label="Resource Details"
+        aria-label="资源详情"
         className={`fixed right-0 top-0 bottom-0 z-[70] w-full sm:w-[460px] h-dvh sm:h-full bg-archive-bg sm:bg-archive-surface sm:border-l sm:border-archive-border shadow-2xl flex flex-col transition-transform duration-300 ease-out transform ${
           mounted ? "translate-x-0" : "translate-x-full"
         }`}
       >
-        {/* Subtle background glow aesthetic */}
-        <div className="absolute -top-24 -right-24 w-64 h-64 bg-archive-accent opacity-[0.02] rounded-full blur-3xl pointer-events-none" />
-
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-archive-border/60 shrink-0 bg-archive-bg/10 relative z-10">
           <div className="flex items-center gap-2">
             <span className="font-mono text-[10px] uppercase tracking-widest text-archive-subtle">
-              Resource Preview
+              资源详情
             </span>
           </div>
           <button
             onClick={handleClose}
             className="w-11 h-11 md:w-8 md:h-8 flex items-center justify-center rounded-full border border-archive-border text-archive-subtle hover:text-archive-text hover:bg-archive-border/50 hover:border-archive-muted transition-all duration-150 text-lg font-mono"
-            aria-label="Close preview"
+            aria-label="关闭详情"
           >
             ×
           </button>
@@ -1533,7 +1574,7 @@ function ResourceDrawer({
             <span
               className={displayLanguage === "zh" ? "lang-badge-zh" : "lang-badge-en"}
             >
-              {displayLanguage === "zh" ? "中文" : "English"}
+              {displayLanguage === "zh" ? "中文" : "英文"}
             </span>
             <span className="type-badge capitalize">{TYPE_LABELS[displayType] || displayType}</span>
             {githubFavorite && (
@@ -1563,14 +1604,13 @@ function ResourceDrawer({
             <GitHubResearchDetails favorite={githubFavorite} />
           ) : (
             <div className="bg-archive-bg/40 p-4 border border-archive-border rounded-sm relative overflow-hidden">
-              <div className="absolute top-0 left-0 w-1 h-full bg-archive-accent/40" />
               {evidenceSummary ? (
                 <p className="font-sans text-xs text-archive-subtle leading-relaxed">
                   {evidenceSummary}
                 </p>
               ) : (
                 <p className="font-mono text-[10px] text-archive-subtle/60 leading-relaxed">
-                  Summary not yet curated. Open the original resource for verified details.
+                  暂无简介，可访问原站了解详情。
                 </p>
               )}
             </div>
@@ -1580,7 +1620,7 @@ function ResourceDrawer({
           <div className="space-y-4 pt-2">
             <div>
               <h4 className="font-mono text-[10px] uppercase tracking-widest text-archive-subtle mb-1">
-                Category
+                分类
               </h4>
               <p className="font-sans text-sm text-archive-text">
                 {facetBreadcrumb.map((segment, index) => (
@@ -1594,7 +1634,7 @@ function ResourceDrawer({
 
             <div>
               <h4 className="font-mono text-[10px] uppercase tracking-widest text-archive-subtle mb-1">
-                Provider
+                来源
               </h4>
               <p className="font-sans text-sm text-archive-text">
                 {getProviderLabel(resource.url)}
@@ -1603,7 +1643,7 @@ function ResourceDrawer({
 
             <div>
               <h4 className="font-mono text-[10px] uppercase tracking-widest text-archive-subtle mb-1">
-                Direct URL
+                原站链接
               </h4>
               <a
                 href={resource.url}
@@ -1620,7 +1660,7 @@ function ResourceDrawer({
           {/* Tags */}
           <div className="pt-2 border-t border-archive-border/40">
             <h4 className="font-mono text-[10px] uppercase tracking-widest text-archive-subtle mb-2">
-              {githubFavorite ? "Capabilities" : "Tags"}
+              {githubFavorite ? "能力标签" : "标签"}
             </h4>
             {githubFavorite ? (
               <GitHubCapabilityTags
@@ -1650,7 +1690,7 @@ function ResourceDrawer({
             rel="noopener noreferrer"
             className="w-full h-11 bg-archive-accent text-archive-bg text-sm font-sans font-medium flex items-center justify-center gap-2 rounded-sm hover:opacity-90 transition-opacity duration-150"
           >
-            Open Resource ↗
+            访问原站 ↗
           </a>
           
           <div className="flex gap-3">
@@ -1667,9 +1707,9 @@ function ResourceDrawer({
                 }
               }}
               className="px-4 rounded-sm border border-archive-border text-archive-subtle hover:text-archive-text hover:border-archive-muted text-xs font-sans font-medium flex items-center justify-center transition-all"
-              title="Open full page"
+              title="打开完整详情"
             >
-              Full Details
+              完整详情
             </Link>
           </div>
         </div>
