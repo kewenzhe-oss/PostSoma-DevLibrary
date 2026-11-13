@@ -45,6 +45,13 @@ jobs:
 
       - name: Build static site
         run: npm run build
+        env:
+          NEXT_PUBLIC_GA_ROLLUP_ID: ${{ vars.NEXT_PUBLIC_GA_ROLLUP_ID || 'G-NZ2V582QTN' }}
+          NEXT_PUBLIC_GA_PROJECT_ID: ${{ vars.NEXT_PUBLIC_GA_PROJECT_ID || 'G-DDSKE86NG1' }}
+          NEXT_PUBLIC_GA_PROJECT_NAME: ${{ vars.NEXT_PUBLIC_GA_PROJECT_NAME || 'dev_library' }}
+          NEXT_PUBLIC_GA_COGNITIVE_LAYER: ${{ vars.NEXT_PUBLIC_GA_COGNITIVE_LAYER || 'Craft' }}
+          NEXT_PUBLIC_UMAMI_WEBSITE_ID: ${{ vars.NEXT_PUBLIC_UMAMI_WEBSITE_ID || 'edb495ae-9e74-4b84-afe5-7482ed6a58d5' }}
+          NEXT_PUBLIC_UMAMI_SCRIPT_URL: ${{ vars.NEXT_PUBLIC_UMAMI_SCRIPT_URL || 'https://pulse.postsoma-2050.website/pulse.js' }}
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
