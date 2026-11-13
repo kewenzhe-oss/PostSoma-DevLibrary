@@ -50,6 +50,27 @@ export default function AppShell({
               <span>数据源</span>
               <Icon name="external" size={10} className="opacity-60" />
             </a>
+            <span className="opacity-30 select-none">/</span>
+            <a
+              href="/llms.txt"
+              className="hover:text-archive-accent transition-colors"
+            >
+              llms.txt
+            </a>
+            <span className="opacity-30 select-none">/</span>
+            <a
+              href="/llms-full.txt"
+              className="hover:text-archive-accent transition-colors"
+            >
+              llms-full.txt
+            </a>
+            <span className="opacity-30 select-none">/</span>
+            <a
+              href="/sitemap.xml"
+              className="hover:text-archive-accent transition-colors"
+            >
+              sitemap.xml
+            </a>
           </div>
 
         </div>

@@ -146,7 +146,41 @@ export default async function HomePage() {
               "url": absoluteSiteUrl("/"),
               "name": "PostSoma DevLibrary",
               "description": "A curated bilingual archive of free programming books, courses, cheat sheets, interactive tutorials, and GitHub open-source projects.",
-              "inLanguage": ["en", "zh"]
+              "inLanguage": ["en", "zh"],
+              "potentialAction": {
+                "@type": "SearchAction",
+                "target": absoluteSiteUrl("/resources?q={search_term_string}"),
+                "query-input": "required name=search_term_string"
+              }
+            },
+            {
+              "@type": "Organization",
+              "@id": absoluteSiteUrl("/#organization"),
+              "name": "PostSoma DevLibrary",
+              "url": absoluteSiteUrl("/"),
+              "logo": absoluteSiteUrl("/icon.png"),
+              "founder": {
+                "@type": "Person",
+                "name": "James5-cell",
+                "alternateName": "postsoma-2050"
+              }
+            },
+            {
+              "@type": "SoftwareApplication",
+              "@id": absoluteSiteUrl("/#software"),
+              "name": "PostSoma DevLibrary",
+              "operatingSystem": "Web",
+              "applicationCategory": "DeveloperApplication",
+              "url": absoluteSiteUrl("/"),
+              "description": "A curated bilingual archive of 5,000+ free programming books, courses, cheat sheets, and tutorials.",
+              "offers": {
+                "@type": "Offer",
+                "price": "0",
+                "priceCurrency": "USD"
+              },
+              "author": {
+                "@id": absoluteSiteUrl("/#organization")
+              }
             },
             {
               "@type": "WebPage",

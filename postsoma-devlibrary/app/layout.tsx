@@ -1,11 +1,7 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
-import Script from "next/script";
 import { SITE_URL } from "@/lib/config/site";
-import {
-  GA_MEASUREMENT_ID,
-  isGoogleAnalyticsEnabled,
-} from "@/lib/config/analytics";
+import PostSomaAnalytics from "@/components/analytics/PostSomaAnalytics";
 import "./globals.css";
 
 const dmSerifDisplay = localFont({
@@ -19,7 +15,21 @@ export const metadata: Metadata = {
   title: "PostSoma DevLibrary — Bilingual Programming Archive",
   description:
     "A curated bilingual (EN/ZH) archive of 5,000+ free programming books, courses, tutorials, and documentation. Search-first, dark mode, no noise.",
-  keywords: ["programming", "books", "tutorials", "free", "bilingual", "Chinese", "English"],
+  keywords: [
+    "PostSoma DevLibrary",
+    "Dev Library",
+    "programming books",
+    "free programming courses",
+    "developer archive",
+    "tutorials",
+    "documentation",
+    "bilingual",
+    "Chinese",
+    "English",
+    "雙語編程",
+    "開源教材",
+    "技術深度解析"
+  ],
   icons: {
     icon: [
       { url: "/favicon.ico?v=2" },
@@ -77,20 +87,7 @@ export default function RootLayout({
       }}
     >
       <body className="bg-archive-bg text-archive-text font-sans antialiased min-h-screen">
-        {isGoogleAnalyticsEnabled && (
-          <>
-            <Script
-              src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
-              strategy="afterInteractive"
-            />
-            <Script id="google-analytics" strategy="afterInteractive">
-              {`window.dataLayer = window.dataLayer || [];
-function gtag(){window.dataLayer.push(arguments);}
-gtag('js', new Date());
-gtag('config', '${GA_MEASUREMENT_ID}');`}
-            </Script>
-          </>
-        )}
+        <PostSomaAnalytics />
         {children}
       </body>
     </html>
